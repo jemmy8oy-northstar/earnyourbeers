@@ -9,5 +9,6 @@ Welcome to the documentation for **Earn Your Beers**.
 - [Debt Mechanics](debt_mechanics.md): How KM Debt and "Clearing" works.
 - [Leagues & Progression](leagues_progression.md): Tiered ranks and dynamic scaling.
 - [User Simulations](user_simulations.md): Testing balance across different lifestyles.
+- [Banking & Bottling](banking_philosophy.md): The Vault, Bailouts, and the Pint Score.
 
 *More documentation coming soon...*
