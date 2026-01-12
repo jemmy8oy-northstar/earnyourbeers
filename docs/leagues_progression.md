@@ -1,6 +1,6 @@
 # Universal Leagues & Progression
 
-Difficulty is universal across all activities to ensure balance, but titles reflect your specific athletic profile.
+Leagues are milestones of fitness and discipline. Promotion is a strategic choice, not an automatic event.
 
 ## Universal Difficulty Tiers
 Leagues are determined by **Lifetime Pints Earned**. 
@@ -9,12 +9,12 @@ Leagues are determined by **Lifetime Pints Earned**.
 > **Debt Mercy**: If your balance is negative (you are in debt), the multiplier is capped at **1.0x** regardless of your league. This helps you get back to zero faster.
 > **Credit Flex**: Once you are in credit, the multiplier kicks in, making it harder to "earn" more beers. This makes a high credit balance a serious flex.
 
-| League | Threshold to Bottle | Multiplier (Credit Only) | Difficulty Note (Running) |
+| League | Pints to Bottle | Multiplier (Credit Only) | Difficulty Note (Running) |
 | :--- | :--- | :--- | :--- |
-| **Bronze** | 20 Pints | 1.0x | 3km = 1 Pint |
+| **Bronze** | 50 Pints | 1.0x | 3km = 1 Pint |
 | **Silver** | 50 Pints | 1.6x | 5km = 1 Pint |
-| **Gold** | 100 Pints | 2.5x | 7.5km = 1 Pint |
-| **Platinum**| ∞ | 3.3x | 10km = 1 Pint |
+| **Gold** | 50 Pints | 2.5x | 7.5km = 1 Pint |
+| **Platinum**| 50 Pints | 3.3x | 10km = 1 Pint |
 
 ## Specialized Titles
 Titles are earned based on which activity contributes the most to your balance.
