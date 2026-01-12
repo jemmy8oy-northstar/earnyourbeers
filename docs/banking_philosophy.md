@@ -15,14 +15,16 @@ When you promote with **X Pints**, your balance resets to **0.0**, but you gain 
 - **Example**: Promote to Silver with **65 Pints**. Your new limit is **-65 Pints**.
 - **The Vault**: These "Bottled" pints are move to your **Lifetime Vault** for the leaderboard.
 
-## 3. Demotion (The Cold Shower)
-If your current balance hits your **Debt Floor** (e.g., -65):
-1. **Instant Demotion**: You are moved back to the previous league.
-2. **Rate Reset**: You regain the easier conversion rates to help you pay back the debt.
-3. **No Penalty**: Your Vault remains intact, but you must reach the promotion threshold again to level up.
+## 3. "Bottled It" (Automatic Demotion)
+If your current balance hits your **Debt Floor** (e.g., -65), the app triggers an automatic **"Bottled It"** event.
 
-## 3. The Credit Line (Dynamic Debt Ceiling)
-Your "Unsecured Debt" limit (how negative you can go) is determined by your **Vaulted Progress**.
+- **The Event**: You are immediately demoted to the previous league.
+- **The Cost**: You lose **one full bottle** (50 Pints) from your Vault.
+- **The Reset**: Your current balance is set to **0.0** in the lower league.
+- **The Status**: You must reach the 50-pint promotion threshold again to attempt re-promotion.
+
+> [!WARNING]
+> **"Bottled It"** is the most shameful event in the app. It means you couldn't handle the heat of the higher league and your previous hard work (the bottled pints) had to be "poured out" to cover your debt.
 
 - **Base Limit**: Everyone starts with a **-5 Pint** limit.
 - **The Loyalty Bonus**: You gain **+1 Pint** of allowable debt for every **10 Pints** in your Vault.

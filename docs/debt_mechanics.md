@@ -8,10 +8,10 @@ Every drink adds to the debt (negative balance), every activity earns pints (pos
 - A **Primary Weekly Counter** showing pints earned vs consumed this week.
 - A **Secondary Lifetime Balance** showing your all-time standing.
 
-## "Clearing Debt" Mechanism (Debt Mercy)
-- **The Mercy Rule**: While your lifetime balance is negative, activity earning rates stay at the **Base Level** (1.0x).
-- **The Celebration**: You can "Clear Debt" once your balance returns to **0**. 
-- **The Flex**: Once you "Clear Debt" and move into credit, your League's **Challenge Multiplier** activates, making it harder to earn more.
+## "Bottled It" (Automatic Rescue)
+- **The Floor**: If you hit your debt limit, you've officially "Bottled It."
+- **The Consequence**: One bottle (50 pints) is deducted from your Vault to pay off the debt, and you are demoted.
+- **The Outcome**: You start at 0.0 in the lower league, ready to try again.
 
 ## Metrics to Track
 1.  **Weekly Pint Balance**: (Pints Earned This Week - Pints Consumed This Week).
