@@ -1,23 +1,19 @@
-# Feature Deep Dive: KM Debt & Clearing
+# Feature Deep Dive: Pint Debt & Clearing
 
-## The "KM Debt" Concept
-Instead of just a daily balance, the app tracks a **Lifetime KM Debt**. 
-Every drink adds to the debt, every activity subtracts from it.
+## The "Pint Debt" Concept
+The app tracks a **Lifetime Pint Balance**. 
+Every drink adds to the debt (negative balance), every activity earns pints (positive credit).
 
 ### UI Representation
-- A giant "Debt Meter" on the dashboard.
-- Red color for "In Debt" (Negative Balance).
-- Green/Gold color for "In Credit" (Positive Balance).
+- A **Primary Weekly Counter** showing pints earned vs consumed this week.
+- A **Secondary Lifetime Balance** showing your all-time standing.
 
 ## "Clearing Debt" Mechanism
-Clearing debt can work in two ways. I suggest **System B** for more "fun":
-
-- **Option A (Manual Reset)**: You hit a button to set debt to zero. This is cheating!
-- **Option B (The Celebration)**: You can only "Clear Debt" when your balance hits **0 or higher**. 
-- **The Counter**: Once you hit >= 0, you can "Verify & Clear". This increments your "Times Cleared" count and resets your "Days Since Debt Cleared" streak.
+- **The Celebration**: You can "Clear Debt" once your lifetime balance returns to **0 or higher**. 
+- **The Reward**: Rolling over into a positive balance grants "Beer Credits" which can be used to purchase "Free Drinks" in the app (purely cosmetic logging).
 
 ## Metrics to Track
-1.  **Current KM Balance**: (Running Total of Activities - Running Total of Drinks).
-2.  **Debt Cleared Count**: How many times you've successfully returned to a zero balance.
-3.  **Days Since Last Cleared**: A streak-like metric. "It has been 12 days since you were last in Beer Debt."
-4.  **Longest 'Clean' Streak**: The record for the above.
+1.  **Weekly Pint Balance**: (Pints Earned This Week - Pints Consumed This Week).
+2.  **Lifetime Pint Balance**: All-time net total.
+3.  **Times Debt Cleared**: Counter of successful returns to zero.
+4.  **Days Since Last Debt**: Streak of keeping the balance >= 0.

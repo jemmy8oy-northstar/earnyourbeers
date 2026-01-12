@@ -1,30 +1,24 @@
-# Conversion Rates (Draft)
+# Conversion Rates
 
-To make the "Earn Your Beers" concept work, we need a standard "exchange rate" between activity and drinks. 
+The "Earn Your Beers" app uses **1 Pint** as the universal unit of account. All activities earn pints, and all drinks consume pints.
 
-> [!NOTE]
-> These are initial suggestions and can be tuned based on user feedback or intensity.
-
-## Drinks
-| Drink Type | Unit | "Cost" (Run Equivalent) |
+## Drinks (Pint Units)
+| Drink Type | Unit | Cost (Pints) |
 | :--- | :--- | :--- |
-| **Pint of Beer/Cider** | 1 Pint | 5 km |
-| **Bottle of Beer** | 330ml | 3 km |
-| **Glass of Wine** | 175ml | 3 km |
-| **Spirit & Mixer** | Single | 2 km |
-| **Double Spirit & Mixer**| Double | 4 km |
+| **Pint of Beer/Cider** | 1 Pint | 1.0 |
+| **Bottle of Beer** | 330ml | 0.6 |
+| **Glass of Wine** | 175ml | 0.6 |
+| **Spirit & Mixer** | Single | 0.4 |
+| **Double Spirit & Mixer**| Double | 0.8 |
 
-## Activities (To Run KM)
-| Activity | Ratio | Notes |
+## Activity Earning Rates (Base Level)
+| Activity | Rate | Note |
 | :--- | :--- | :--- |
-| **Running** | 1:1 | The baseline metric. |
-| **Cycling** | 4:1 | 20km cycle = 5km run (1 Pint). |
-| **Walking** | 2:1 | 10km walk = 5km run (1 Pint). |
-| **Swimming** | 1:4 | 1.25km swim = 5km run (1 Pint). |
-| **HIIT / Weights** | 10 mins = 1km | 50 mins session = 1 Pint. |
+| **Running** | 5 km = 1 Pint | |
+| **Cycling** | 20 km = 1 Pint | |
+| **Walking** | 10 km = 1 Pint| |
+| **Swimming** | 0.5 km = 1 Pint | |
+| **HIIT / Weights** | 45 mins = 1 Pint | |
 
 ## The "Balance" Formula
-`Balance = (Sum of Activities in Run KM) - (Sum of Drinks in Run KM)`
-
-- **Positive Balance**: You have "beer credits".
-- **Negative Balance**: You are in "beer debt" and need to exercise!
+`Balance (Pints) = Σ(Activities converted to Pints) - Σ(Drinks consumed)`

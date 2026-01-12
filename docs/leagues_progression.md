@@ -1,31 +1,32 @@
-# Leagues & Dynamic Progression
+# Universal Leagues & Progression
 
-To keep the app challenging and engaging as you get fitter, we introduce **Leagues** and **Dynamic Scaling**.
+Difficulty is universal across all activities to ensure balance, but titles reflect your specific athletic profile.
 
-## Running Leagues
-As your total lifetime KM Credit grows, you move up in leagues.
+## Universal Difficulty Tiers
+Leagues are determined by **Lifetime Pints Earned**.
 
-| League | Min Credit (KM) | Pint "Cost" (KM) | Title |
+| League | Min Pints | Challenge Multiplier | Difficulty Note |
 | :--- | :--- | :--- | :--- |
-| **Bronze** | 0 | 5 km | Casual Sipper |
-| **Silver** | 50 | 7 km | Pub Runner |
-| **Gold** | 150 | 10 km | Brewmaster Runner |
-| **Platinum**| 500 | 15 km | **[TBD - e.g. "The Beer Olympian"]** |
+| **Bronze** | 0 | 1.0x | 5km Run = 1 Pint |
+| **Silver** | 10 | 1.2x | 6km Run = 1 Pint |
+| **Gold** | 50 | 1.5x | 7.5km Run = 1 Pint |
+| **Platinum**| 100 | 2.0x | 10km Run = 1 Pint |
 
-## Cycling Leagues
-Separate progression for cyclists.
+## Specialized Titles
+Titles are earned based on which activity contributes the most to your balance.
 
-| League | Min Credit (KM) | Pint "Cost" (KM) | Title |
+| Profile Type | Runner Title | Cyclist Title | Hybrid Title |
 | :--- | :--- | :--- | :--- |
-| **Bronze** | 0 | 20 km | Weekend Pedaler |
-| **Silver** | 200 | 30 km | Peloton Pint-Sized |
-| **Gold** | 600 | 45 km | Tour de Beer |
+| **Bronze** | Casual Sipper | Weekend Pedaler | Social Mixer |
+| **Silver** | Pub Runner | Peloton Pint-Sizer| Multi-Sport Drunker |
+| **Gold** | Brewmaster RR | Tour de Beer | Decathlon Drinker |
+| **Platinum**| Marathon Brewer | Century Sipper | The Beer Olympian |
 
-## Weekly Reset & The "Primary" View
-- The **Weekly Balance** is the primary dashboard metric.
-- Every week starts at **0** (relative to your total debt/credit).
-- The goal is to finish the week in the **Green (+)**.
-- If you finish in the **Red (-)**, it adds to your **Total Debt**.
+## Activity Profiles
+The app analyzes your last 30 days of data to assign your "Profile Type":
+- **Runner**: >70% distance from running.
+- **Cyclist**: >70% distance from cycling.
+- **Hybrid**: Everything else.
 
 ## Why this works:
 1. **Prevents Boredom**: As you get fitter, "earning" a beer gets harder, keeping the stakes high.
