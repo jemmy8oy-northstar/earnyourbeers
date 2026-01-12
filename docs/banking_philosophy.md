@@ -5,9 +5,18 @@ Progression is calculated at the **End of the Week** (every Monday morning).
 - **The Choice**: If your total league credit exceeds **50 Pints**, you are prompted to promote.
 - **Strategic Buffering**: You can choose not to promote to maintain easier rates, with extra pints building your "Debt Floor" for the next league.
 
-> [!NOTE]
-> **Terminology Check**: Is "Bottled It" too shameful? 
-> We should consider alternatives like "Tapped Out", "Keg Drain", or "Last Orders" if user feedback suggests "Bottled It" is too negative.
+## 2. Specialized Bottles (Collector's Items)
+When you Bottle your pints, the bottle takes the "flavor" of your primary activity for that period.
+
+| Bottle Type | How to Earn | Prestige |
+| :--- | :--- | :--- |
+| **The Amber Ale** | >50% Running | Standard elite. |
+| **The Crisp Lager** | >50% Cycling | Distance endurance. |
+| **The Stout** | >50% Gym/Weights | Power & Strength. |
+| **The Cocktail** | Mixed activities | The "Hybrid" athlete. |
+
+- **Leaderboard**: Your Vault can now show your "Cellar" (e.g., 5 Running Bottles, 2 Gym Bottles). 
+- **The Weekend Saver**: You can "spend" a specific type of credit to offset a specific type of bender (purely cosmetic).
 
 ## 2. The Credit Line & The Floor
 When you promote with **X Pints**, your balance resets to **0.0**, but you gain a **Debt Floor of -X**. 
