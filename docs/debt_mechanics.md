@@ -8,9 +8,10 @@ Every drink adds to the debt (negative balance), every activity earns pints (pos
 - A **Primary Weekly Counter** showing pints earned vs consumed this week.
 - A **Secondary Lifetime Balance** showing your all-time standing.
 
-## "Clearing Debt" Mechanism
-- **The Celebration**: You can "Clear Debt" once your lifetime balance returns to **0 or higher**. 
-- **The Reward**: Rolling over into a positive balance grants "Beer Credits" which can be used to purchase "Free Drinks" in the app (purely cosmetic logging).
+## "Clearing Debt" Mechanism (Debt Mercy)
+- **The Mercy Rule**: While your lifetime balance is negative, activity earning rates stay at the **Base Level** (1.0x).
+- **The Celebration**: You can "Clear Debt" once your balance returns to **0**. 
+- **The Flex**: Once you "Clear Debt" and move into credit, your League's **Challenge Multiplier** activates, making it harder to earn more.
 
 ## Metrics to Track
 1.  **Weekly Pint Balance**: (Pints Earned This Week - Pints Consumed This Week).
