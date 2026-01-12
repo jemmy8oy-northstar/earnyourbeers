@@ -10,7 +10,7 @@ As your total lifetime KM Credit grows, you move up in leagues.
 | **Bronze** | 0 | 5 km | Casual Sipper |
 | **Silver** | 50 | 7 km | Pub Runner |
 | **Gold** | 150 | 10 km | Brewmaster Runner |
-| **Platinum**| 500 | 15 km | The Antigravity Liver |
+| **Platinum**| 500 | 15 km | **[TBD - e.g. "The Beer Olympian"]** |
 
 ## Cycling Leagues
 Separate progression for cyclists.
