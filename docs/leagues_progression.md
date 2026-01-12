@@ -1,6 +1,9 @@
 # Universal Leagues & Progression
 
-Leagues are milestones of fitness and discipline. Promotion is a strategic choice, not an automatic event.
+Leagues are milestones of fitness and discipline. Updates happen during the **Weekly Settlement**.
+
+## The Placement Week (Future Concept)
+*Potential Onboarding Level*: A "Placement Week" to calibrate the user's base fitness. During this week, rates are standard (1.0x) to determine which league they should start in (likely Bronze for most).
 
 ## Universal Difficulty Tiers
 Leagues are determined by **Lifetime Pints Earned**. 

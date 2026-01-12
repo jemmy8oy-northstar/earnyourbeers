@@ -8,10 +8,10 @@ Every drink adds to the debt (negative balance), every activity earns pints (pos
 - A **Primary Weekly Counter** showing pints earned vs consumed this week.
 - A **Secondary Lifetime Balance** showing your all-time standing.
 
-## "Bottled It" (Automatic Rescue)
-- **The Floor**: If you hit your debt limit, you've officially "Bottled It."
-- **The Consequence**: One bottle (50 pints) is deducted from your Vault to pay off the debt, and you are demoted.
-- **The Outcome**: You start at 0.0 in the lower league, ready to try again.
+## The Weekly Settlement
+- **Current Week**: The dashboard shows a "live" count for the current 7-day period.
+- **Monday Reset**: At the end of the week, the balance "Settles". 
+- **The Floor**: If the settlement brings you below your Debt Floor, you "Bottle It."
 
 ## Metrics to Track
 1.  **Weekly Pint Balance**: (Pints Earned This Week - Pints Consumed This Week).

@@ -1,13 +1,13 @@
-## 1. Bottling & Promotion (Manual Entry)
-Promotion is a **choice**. Once you reach the **Min Pints** (e.g., 50), the "Bottle & Promote" button appears.
+## 1. Bottling & Promotion (Weekly Settlement)
+Progression is calculated at the **End of the Week** (every Monday morning).
 
-- **Strategic Buffering**: You can choose *not* to promote and keep earning pints at the easier rate. 
-- **The Payoff**: Every pint you earn *above* the threshold becomes part of your **Credit Line** (Debt Ceiling) in the next league.
+- **Weekly Roll-over**: Your net weekly balance is added to your current league credit.
+- **The Choice**: If your total league credit exceeds **50 Pints**, you are prompted to promote.
+- **Strategic Buffering**: You can choose not to promote to maintain easier rates, with extra pints building your "Debt Floor" for the next league.
 
-| League | Min to Promote | Strategy |
-| :--- | :--- | :--- |
-| **Bronze** | 50 Pints | "Farm" here as long as you want to build a safety net. |
-| **Silver** | 50 Pints | Harder rates, but more prestige. |
+> [!NOTE]
+> **Terminology Check**: Is "Bottled It" too shameful? 
+> We should consider alternatives like "Tapped Out", "Keg Drain", or "Last Orders" if user feedback suggests "Bottled It" is too negative.
 
 ## 2. The Credit Line & The Floor
 When you promote with **X Pints**, your balance resets to **0.0**, but you gain a **Debt Floor of -X**. 
