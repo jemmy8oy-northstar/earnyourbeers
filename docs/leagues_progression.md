@@ -9,12 +9,12 @@ Leagues are determined by **Lifetime Pints Earned**.
 > **Debt Mercy**: If your balance is negative (you are in debt), the multiplier is capped at **1.0x** regardless of your league. This helps you get back to zero faster.
 > **Credit Flex**: Once you are in credit, the multiplier kicks in, making it harder to "earn" more beers. This makes a high credit balance a serious flex.
 
-| League | Min Lifetime Pints | Challenge Multiplier (Only if in Credit) | Difficulty Note |
+| League | Min Lifetime Pints | Challenge Multiplier (Only if in Credit) | Difficulty Note (Running) |
 | :--- | :--- | :--- | :--- |
-| **Bronze** | 0 | 1.0x | 5km Run = 1 Pint |
-| **Silver** | 10 | 1.5x | 7.5km Run = 1 Pint|
-| **Gold** | 50 | 2.0x | 10km Run = 1 Pint |
-| **Platinum**| 100 | 3.0x | 15km Run = 1 Pint |
+| **Bronze** | 0 | 1.0x | 3km = 1 Pint |
+| **Silver** | 10 | 1.6x | 5km = 1 Pint |
+| **Gold** | 50 | 2.5x | 7.5km = 1 Pint |
+| **Platinum**| 100 | 3.3x | 10km = 1 Pint |
 
 ## Specialized Titles
 Titles are earned based on which activity contributes the most to your balance.

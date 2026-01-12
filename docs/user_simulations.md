@@ -3,18 +3,18 @@
 To verify if the app is balanced for different types of users, we've simulated four personas over a 4-week period.
 
 ## Persona 1: "The Casual Sipper" (James)
-- **Activity**: 10km run / week (2 Pints).
+- **Activity**: 10km run / week (**3.3 Pints**).
 - **Drinking**: 3 pints / week.
 - **Goal**: Just wants to not feel guilty.
 
 | Week | Start Balance | Activity (Pints) | Drinks (Pints) | End Balance | Status | Note |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 1 | 0 | 2.0 (10km) | 3 | -1.0 | **Debt** | Moderate deficit. |
-| 2 | -1.0 | 2.0 (10km) | 2 | -1.0 | **Debt** | "Debt Mercy" (1x) keeps it stable. |
-| 3 | -1.0 | 4.0 (20km) | 1 | +2.0 | **Credit** | Big week! Hits Bronze credit. |
-| 4 | +2.0 | 2.0 (10km) | 3 | +1.0 | **Credit** | Bronze multiplier (1x) makes this easy. |
+| 1 | 0 | 3.3 (10km) | 3 | +0.3 | **Credit** | Instantly in credit! |
+| 2 | +0.3 | 3.3 (10km) | 3 | +0.6 | **Credit** | Sustains credit easily. |
+| 3 | +0.6 | 6.0 (18km) | 2 | +4.6 | **Credit** | Big week boost. |
+| 4 | +4.6 | 3.3 (10km) | 5 | +2.9 | **Credit** | Covers a heavy weekend. |
 
-**Verdict**: Fun. Debt Mercy prevents a "spiral of doom," and a single big week feels rewarding.
+**Verdict**: Much more fun. A standard 10km week actually feels like it covers the beer.
 
 ---
 

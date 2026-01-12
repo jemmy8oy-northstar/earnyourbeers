@@ -11,14 +11,14 @@ The "Earn Your Beers" app uses **1 Pint** as the universal unit of account. All 
 | **Spirit & Mixer** | Single | 0.4 |
 | **Double Spirit & Mixer**| Double | 0.8 |
 
-## Activity Earning Rates (Base Level)
+## Activity Earning Rates (Base Level - Bronze)
 | Activity | Rate | Note |
 | :--- | :--- | :--- |
-| **Running** | 5 km = 1 Pint | |
-| **Cycling** | 20 km = 1 Pint | |
-| **Walking** | 10 km = 1 Pint| |
-| **Swimming** | 0.5 km = 1 Pint | |
-| **HIIT / Weights** | 45 mins = 1 Pint | |
+| **Running** | 3 km = 1 Pint | More attainable for casual users. |
+| **Cycling** | 12 km = 1 Pint| 4:1 ratio vs running. |
+| **Walking** | 6 km = 1 Pint | 2:1 ratio vs running. |
+| **Swimming** | 0.4 km = 1 Pint | |
+| **HIIT / Weights** | 30 mins = 1 Pint | |
 
 ## The "Balance" Formula
 `Balance (Pints) = Σ(Activities converted to Pints) - Σ(Drinks consumed)`
