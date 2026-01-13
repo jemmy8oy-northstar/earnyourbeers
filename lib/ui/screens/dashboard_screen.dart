@@ -111,94 +111,186 @@ class DashboardScreen extends StatelessWidget {
                               ? item.amount
                               : (item as Drink).amount;
                           final id = isActivity ? item.id : (item as Drink).id;
-                          final label = isActivity
-                              ? '${amount.toStringAsFixed(1)} km Run'
-                              : '${amount.toInt()} Pint${amount.toInt() == 1 ? '' : 's'}';
-
                           final isMostRecent = item == logs[0];
 
-                          return ListTile(
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                            ),
-                            leading: Icon(
-                              isActivity
-                                  ? Icons.directions_run
-                                  : Icons.sports_bar,
-                              color: isActivity
-                                  ? AppTheme.primaryBeer
-                                  : AppTheme.deepAmber,
-                              size: 20,
-                            ),
-                            title: Text(
-                              label,
-                              style: const TextStyle(
-                                color: Colors.white70,
-                                fontSize: 13,
-                              ),
-                            ),
-                            subtitle: Text(
-                              '${item.timestamp.hour}:${item.timestamp.minute.toString().padLeft(2, '0')}',
-                              style: const TextStyle(
-                                color: Colors.white24,
-                                fontSize: 10,
-                              ),
-                            ),
-                            trailing: isMostRecent
-                                ? Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      _ActionButton(
-                                        icon: Icons.remove,
-                                        onPressed: () {
-                                          if (isActivity) {
-                                            if (amount > 0.5)
-                                              state.updateActivity(
-                                                item,
-                                                amount - 0.5,
-                                              );
-                                          } else {
-                                            if (amount > 1)
-                                              state.updateDrink(
-                                                item as Drink,
-                                                amount - 1,
-                                              );
-                                          }
-                                        },
+                          final label = isActivity
+                              ? '${amount.toStringAsFixed(1)} km Run'
+                              : '${amount % 1 == 0 ? amount.toInt() : amount.toStringAsFixed(1)} Pint${amount == 1 ? '' : 's'}';
+
+                          return AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 600),
+                            switchInCurve: Curves.easeOutBack,
+                            switchOutCurve: Curves.easeIn,
+                            transitionBuilder: (child, animation) {
+                              final isCurrent =
+                                  child.key is ValueKey &&
+                                  (child.key as ValueKey).value
+                                      .toString()
+                                      .contains('active');
+                              if (isCurrent) {
+                                return ScaleTransition(
+                                  scale: animation,
+                                  child: FadeTransition(
+                                    opacity: animation,
+                                    child: child,
+                                  ),
+                                );
+                              }
+                              return FadeTransition(
+                                opacity: animation,
+                                child: SizeTransition(
+                                  sizeFactor: animation,
+                                  child: child,
+                                ),
+                              );
+                            },
+                            child: isMostRecent
+                                ? Card(
+                                    key: ValueKey('active-$id'),
+                                    margin: const EdgeInsets.symmetric(
+                                      horizontal: 4,
+                                      vertical: 8,
+                                    ),
+                                    color: Colors.white.withOpacity(0.04),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(16),
+                                      side: BorderSide(
+                                        color: Colors.white.withOpacity(0.08),
                                       ),
-                                      _ActionButton(
-                                        icon: Icons.add,
-                                        onPressed: () {
-                                          if (isActivity) {
-                                            state.updateActivity(
-                                              item,
-                                              amount + 0.5,
-                                            );
-                                          } else {
-                                            state.updateDrink(
-                                              item as Drink,
-                                              amount + 1,
-                                            );
-                                          }
-                                        },
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Icon(
+                                                isActivity
+                                                    ? Icons.directions_run
+                                                    : Icons.sports_bar,
+                                                color: AppTheme.primaryBeer,
+                                                size: 28,
+                                              ),
+                                              const SizedBox(width: 12),
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      label,
+                                                      style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      'Logged at ${item.timestamp.hour}:${item.timestamp.minute.toString().padLeft(2, '0')}',
+                                                      style: const TextStyle(
+                                                        color: Colors.white38,
+                                                        fontSize: 12,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 16),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              _ActionButton(
+                                                icon: Icons.remove,
+                                                onPressed: () {
+                                                  if (isActivity) {
+                                                    if (amount > 0.5)
+                                                      state.updateActivity(
+                                                        item,
+                                                        amount - 0.5,
+                                                      );
+                                                  } else {
+                                                    if (amount > 1)
+                                                      state.updateDrink(
+                                                        item as Drink,
+                                                        amount - 1,
+                                                      );
+                                                  }
+                                                },
+                                              ),
+                                              _ActionButton(
+                                                icon: Icons.add,
+                                                onPressed: () {
+                                                  if (isActivity) {
+                                                    state.updateActivity(
+                                                      item,
+                                                      amount + 0.5,
+                                                    );
+                                                  } else {
+                                                    state.updateDrink(
+                                                      item as Drink,
+                                                      amount + 1,
+                                                    );
+                                                  }
+                                                },
+                                              ),
+                                              _ActionButton(
+                                                icon: Icons.edit,
+                                                onPressed: () =>
+                                                    _showEditDialog(
+                                                      context,
+                                                      item,
+                                                    ),
+                                              ),
+                                              _ActionButton(
+                                                icon: Icons.delete_outline,
+                                                onPressed: () {
+                                                  if (isActivity) {
+                                                    state.deleteActivity(id);
+                                                  } else {
+                                                    state.deleteDrink(id);
+                                                  }
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        ],
                                       ),
-                                      IconButton(
-                                        icon: const Icon(
-                                          Icons.delete_outline,
-                                          size: 16,
-                                          color: Colors.white10,
-                                        ),
-                                        onPressed: () {
-                                          if (isActivity) {
-                                            state.deleteActivity(id);
-                                          } else {
-                                            state.deleteDrink(id);
-                                          }
-                                        },
-                                      ),
-                                    ],
+                                    ),
                                   )
-                                : null,
+                                : ListTile(
+                                    key: ValueKey('history-$id'),
+                                    dense: true,
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                    ),
+                                    leading: Icon(
+                                      isActivity
+                                          ? Icons.directions_run
+                                          : Icons.sports_bar,
+                                      color: AppTheme.primaryBeer.withOpacity(
+                                        0.7,
+                                      ),
+                                      size: 20,
+                                    ),
+                                    title: Text(
+                                      label,
+                                      style: const TextStyle(
+                                        color: Colors.white70,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    trailing: Text(
+                                      '${item.timestamp.hour}:${item.timestamp.minute.toString().padLeft(2, '0')}',
+                                      style: const TextStyle(
+                                        color: Colors.white24,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
                           );
                         }),
                       ],
@@ -227,6 +319,53 @@ class DashboardScreen extends StatelessWidget {
             label: const Text('Log Run (5k)'),
             icon: const Icon(Icons.directions_run),
             backgroundColor: AppTheme.primaryBeer,
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showEditDialog(BuildContext context, dynamic item) {
+    final isActivity = item is Activity;
+    final controller = TextEditingController(
+      text: item.amount % 1 == 0
+          ? item.amount.toInt().toString()
+          : item.amount.toStringAsFixed(1),
+    );
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Edit ${isActivity ? 'Run (km)' : 'Pints'}'),
+        content: TextField(
+          controller: controller,
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          autofocus: true,
+          decoration: InputDecoration(
+            hintText: 'Enter amount...',
+            suffixText: isActivity ? 'km' : 'pints',
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('CANCEL'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              final val = double.tryParse(controller.text);
+              if (val != null && val >= 0) {
+                if (isActivity) {
+                  context.read<AppState>().updateActivity(item, val);
+                } else {
+                  // Round to 1 decimal for drinks
+                  final rounded = (val * 10).roundToDouble() / 10;
+                  context.read<AppState>().updateDrink(item as Drink, rounded);
+                }
+              }
+              Navigator.pop(context);
+            },
+            child: const Text('SAVE'),
           ),
         ],
       ),
