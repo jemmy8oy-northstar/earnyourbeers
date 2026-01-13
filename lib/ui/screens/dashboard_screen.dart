@@ -176,41 +176,35 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             switchInCurve: Curves.easeInOut,
                             switchOutCurve: Curves.easeInOut,
                             transitionBuilder: (child, animation) {
-                              // TRUE CUBOID ROTATION:
-                              // Axis is at CENTER of cube = 70px BEHIND the card
-                              // This creates a real Rubik's cube face rotation!
-
-                              final isExiting =
-                                  animation.status == AnimationStatus.reverse;
+                              // TRUE CUBOID ROTATION
                               const double halfHeight = 70.0;
+
+                              // Detect if this is the entering (new) or exiting (old) widget
+                              // by checking if animation is driving forward or dismissed/reversing
+                              final isEntering =
+                                  animation.status == AnimationStatus.forward ||
+                                  animation.status == AnimationStatus.completed;
 
                               return AnimatedBuilder(
                                 animation: animation,
                                 child: child,
                                 builder: (context, child) {
+                                  // For entering: start at -90° (tilted back), go to 0° (facing us)
+                                  // For exiting: start at 0° (facing us), go to +90° (tilted forward)
                                   double angle;
-                                  if (isExiting) {
-                                    // Exiting: 0° → +90° (tilts FORWARD/down toward table)
-                                    angle = (1.0 - animation.value) * 1.5708;
-                                  } else {
-                                    // Entering: -90° → 0° (starts tilted BACKWARD, rotates forward into view)
+                                  if (isEntering) {
+                                    // Entering: -90° → 0° (rotates forward from behind)
                                     angle = -(1.0 - animation.value) * 1.5708;
+                                  } else {
+                                    // Exiting: 0° → +90° (tilts forward/down)
+                                    angle = animation.value * 1.5708;
                                   }
 
-                                  // Key: translate Z BEFORE rotating to put axis behind card
                                   final transform = Matrix4.identity()
-                                    ..setEntry(3, 2, 0.001) // Perspective
-                                    ..translate(
-                                      0.0,
-                                      0.0,
-                                      -halfHeight,
-                                    ) // Push axis back
+                                    ..setEntry(3, 2, 0.001)
+                                    ..translate(0.0, 0.0, -halfHeight)
                                     ..rotateX(angle)
-                                    ..translate(
-                                      0.0,
-                                      0.0,
-                                      halfHeight,
-                                    ); // Bring card forward
+                                    ..translate(0.0, 0.0, halfHeight);
 
                                   return Transform(
                                     transform: transform,
