@@ -5,8 +5,11 @@ The banking system handles how your short-term hard work becomes long-term prest
 ## 1. Bottling & Promotion (Primary Discipline)
 Promotion is a strategic choice made at the **Weekly Settlement**.
 
-- **The Threshold**: Once your total earnings across all tracks reach **25 Pints**, you can "Bottle & Promote."
-- **Primary Promotion**: The track that contributed the **most pints** to that 25-pint goal is the one that promotes to the next league level. 
+- **The Threshold**: Once your **Net Savings** (Pints Earned - Pints Drunk) across all tracks reach **25 Pints**, you can "Bottle & Promote."
+- **The Philosophy**: This 25-pint target is a "Savings Goal."
+    - A **Light Drinker** (2 pints/week) can promote in 2-3 weeks of moderate running.
+    - A **Heavy Drinker** (20 pints/week) must exercise significantly more to "save" those 25 pints, reflecting the higher burden of their lifestyle.
+- **Primary Promotion**: The track that contributed the **most pints** (gross) to the 25-pint savings is the one that promotes. 
 - **The Boost**: This rewards multi-discipline athletes by allowing them to progress using any activity, while ensuring their "strongest" activity gets harder to prevent it from carrying them forever.
 
 ## 2. The Vault & The Debt Floor
