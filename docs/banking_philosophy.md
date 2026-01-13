@@ -17,11 +17,14 @@ When you promote with **X Pints**:
 - **Vault**: Those X pints are moved to your **Lifetime Vault** as a specific bottle (e.g., a "Silver Running Bottle").
 - **Debt Floor**: Your current balance resets to 0.0, and you gain a **Debt Floor of -X**. 
 
-## 3. "Tapped Out" (Automatic Demotion)
+## 3. "Bottled It" (Automatic Demotion)
+> [!NOTE]
+> **Sensitivity Check**: Is "Bottled It" too insensitive? While it fits the brewery theme of the app perfectly, we must ensure it doesn't cross the line from "fun rivalry" to "discouragement." We will monitor this during testing.
+
 If your weekly settlement brings your total balance below your **Debt Floor**:
 1. **Automatic Demotion**: You are demoted in your highest-league track.
 2. **Bottle Loss**: One bottle (**25 pints**) is removed from your Vault to pay the debt.
 3. **Reset**: You start at 0.0 in the lower league.
 
-> [!NOTE]
-> **Tapped Out** is the safety valve. It resets the difficulty so you can find your feet again, but at the cost of your "banked" progress.
+> [!WARNING]
+> **"Bottled It"** is the safety valve. It resets the difficulty so you can find your feet again, but at the cost of your "banked" progress.

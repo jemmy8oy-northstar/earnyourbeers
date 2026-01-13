@@ -11,7 +11,7 @@ Every drink adds to the debt (negative balance), every activity earns pints (pos
 ## The Weekly Settlement
 - **Current Week**: The dashboard shows a "live" count for the current 7-day period.
 - **Monday Reset**: At the end of the week, the balance "Settles". 
-- **The Floor**: If the settlement brings you below your Debt Floor, you are officially **"Tapped Out."**
+- **The Floor**: If the settlement brings you below your Debt Floor, you have officially **"Bottled It."**
 
 ## Metrics to Track
 1.  **Weekly Pint Balance**: (Pints Earned This Week - Pints Consumed This Week).

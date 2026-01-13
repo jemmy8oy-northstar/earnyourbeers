@@ -17,11 +17,11 @@ We follow a 6-stage iterative approach, focusing on the "Logic First" engineerin
 - **History View**: Review past logs and weekly performance.
 
 ## Stage 3: The Brewery Bank 🏦
-**Goal**: Progression, Strategic Bottling, and the "Tapped Out" mechanic.
+**Goal**: Progression, Strategic Bottling, and the "Bottled It" mechanic.
 - **12-Tier Master Brewer Journey**: Implementation of levels from **Yeast** to **Olympian**.
 - **Bottling (Promotions)**: The 25-pint "Savings" requirement to level up.
 - **The Cellar (Vault)**: A trophy room for your earned bottles.
-- **Tapped Out (Demotions)**: Automatic safety net logic for excessive debt.
+- **Bottled It (Demotions)**: Automatic safety net logic for excessive debt.
 
 ## Stage 4: Simple Onboarding 📋
 **Goal**: Get users into the right league from Day 1.
@@ -36,5 +36,5 @@ We follow a 6-stage iterative approach, focusing on the "Logic First" engineerin
 ## Stage 6: Premium Polish ✨
 **Goal**: Visual excellence and high-end UX.
 - **Vibrant UI/UX**: Glassmorphism, animations, and high-end themes.
-- **Promotion/Demotion Scenes**: High-reward feedback loops.
+- **Promotion/"Bottled It" Scenes**: High-reward feedback loops.
 - **Asset Polish**: Custom icons and beer-themed graphics.
