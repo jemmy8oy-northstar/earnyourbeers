@@ -1,13 +1,21 @@
-# Agile Roadmap: Earn Your Beers 🍻
+# Agile Roadmap: Run for Fun 🏃
+*Formerly "Earn Your Beers" - rebranding for App Store compliance*
 
-We follow a 6-stage iterative approach, focusing on the "Logic First" engineering philosophy.
+We follow a staged iterative approach, focusing on the "Logic First" engineering philosophy.
 
 ## Stage 1: Absolute MVP 🚀
-**Goal**: Log physical activity and drinks, and see a basic balance.
+**Goal**: Log physical activity and rewards, and see a basic balance.
 - **Flutter Framework Setup**: Basic project structure and navigation.
-- **Manual Logging**: Simple forms for entering runs (KM) and drinks (Pints).
-- **Core Calculation**: `Net Pints = (KM / 3) - Drinks`.
+- **Manual Logging**: Simple forms for entering runs (KM) and rewards.
+- **Core Calculation**: `Net Rewards = (KM / 5) - Spent`.
 - **Local Persistence**: Save logs locally.
+
+## Stage 1.5: Rebrand & Multi-Rewards 🎯
+**Goal**: Pivot to "Run for Fun" with multiple reward options.
+- **Multi-Reward System**: Pints, Treats, or Gaming as reward currencies.
+- **Reward Selection**: User picks their reward type at onboarding.
+- **Neutral Messaging**: App Store-friendly language throughout.
+- See [Pivot Documentation](pivot.md) for details.
 
 ## Stage 2: The Core Loop 🔄
 **Goal**: Weekly cycles and dual-discipline support.
