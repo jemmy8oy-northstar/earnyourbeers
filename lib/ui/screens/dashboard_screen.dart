@@ -56,20 +56,31 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final logs = context.read<AppState>().logs;
     final isActive = logs.isNotEmpty && logs[0] == item;
     final id = item is Activity ? item.id : (item as Drink).id;
+    final history = _getHistory(logs);
 
     if (isActive) {
-      // Deleting the active item - just remove from state
-      // The next item will automatically become active
+      // Deleting the active item
+      // The top history item will become the new active, so animate it out of history
+      if (history.isNotEmpty) {
+        final topHistoryItem = history[0];
+        _historyListKey.currentState?.removeItem(
+          0,
+          (context, animation) =>
+              _buildHistoryTile(topHistoryItem, animation, isRemoving: true),
+          duration: const Duration(milliseconds: 400),
+        );
+      }
+
+      // Actually delete from state
       if (item is Activity) {
         context.read<AppState>().deleteActivity(id);
       } else {
         context.read<AppState>().deleteDrink(id);
       }
-      // Update history tracking
+      // Update history tracking (new history is logs[1:] after active is removed)
       _previousHistory = _getHistory(context.read<AppState>().logs);
     } else {
       // Deleting from history list - animate out
-      final history = _getHistory(logs);
       final historyIndex = history.indexOf(item);
       if (historyIndex >= 0) {
         _historyListKey.currentState?.removeItem(
