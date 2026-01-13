@@ -244,10 +244,13 @@ class _LogItemState extends State<_LogItem>
     super.dispose();
   }
 
-  void _handleDelete() async {
-    await _controller.reverse();
-    if (!mounted) return;
+  void _handleDelete() {
+    // Start the shrink animation but don't wait for it
+    _controller.reverse();
 
+    // Delete from state immediately - this triggers the rebuild
+    // where the next item starts morphing to become active.
+    // Both animations now run in parallel.
     final id = widget.item is Activity
         ? widget.item.id
         : (widget.item as Drink).id;
