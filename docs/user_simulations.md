@@ -1,69 +1,22 @@
-# User Simulations: The Fun Factor
+# User Simulations: Multi-Discipline Balance
 
-To verify if the app is balanced for different types of users, we've simulated four personas over a 4-week period.
+## Persona 6: "The Efficient Hybrid"
+- **Status**: Silver Runner (5km = 1 Pint), Bronze Cyclist (12km = 1 Pint).
+- **Goal**: Hit the 50-pint Bottling Threshold.
 
-## Persona 1: "The Casual Sipper" (James)
-- **Activity**: 10km run / week (**3.3 Pints**).
-- **Drinking**: 3 pints / week.
-- **Goal**: Just wants to not feel guilty.
+| Activities | Pints Earned | Contrib % | Result |
+| :--- | :--- | :--- | :--- |
+| 150 km Cycling | 12.5 | 25% | - |
+| 150 km Running | 30.0 | **60%** | **Primary Track** |
+| 5 Gym Sessions | 7.5 | 15% | - |
+| **Total** | **50.0** | 100% | **Promotion!** |
 
-| Week | Start Balance | Activity (Pints) | Drinks (Pints) | End Balance | Status | Note |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 1 | 0 | 3.3 (10km) | 3 | +0.3 | **Credit** | Instantly in credit! |
-| 2 | +0.3 | 3.3 (10km) | 3 | +0.6 | **Credit** | Sustains credit easily. |
-| 3 | +0.6 | 6.0 (18km) | 2 | +4.6 | **Credit** | Big week boost. |
-| 4 | +4.6 | 3.3 (10km) | 5 | +2.9 | **Credit** | Covers a heavy weekend. |
+**Promotion Outcome**: 
+- Because **Running** was the primary contributor (60%), the user promotes to **Gold Runner**. 
+- Their Cycling and Gym tracks stay at Bronze/Silver levels.
+- Running now gets harder (7.5km = 1 Pint), encouraging the user to either run more or lean more on their other disciplines next time.
 
-**Verdict**: Much more fun. A standard 10km week actually feels like it covers the beer.
-
----
-
-## Persona 2: "The Social Athlete" (Consistent Runner)
-- **Activity**: 25km run / week (5 Pints).
-- **Drinking**: 4 pints / week.
-- **Goal**: Build a "Beer Buffer" for the holidays.
-
-| Week | Start Balance | Activity (Pints) | Drinks (Pints) | End Balance | League | Note |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 1 | 0 | 5.0 | 4 | +1.0 | Bronze | Slow build. |
-| 2 | +1.0 | 5.0 | 2 | +4.0 | Bronze | Getting ahead. |
-| 3 | +4.0 | 5.0 | 2 | +7.0 | Bronze | Almost Silver. |
-| 4 | +7.0 | 5.0 | 0 | +12.0 | **Silver** | Silver Flex (1.5x) starts now! |
-
-**Verdict**: Highly rewarding. The transition to Silver feels like "Leveling Up."
-
----
-
-## Persona 3: "The Elite Flexer" (High Mileage)
-- **Activity**: 50km run / week.
-- **Drinking**: 5 pints / week.
-- **Goal**: Reach Platinum and stay there.
-
-| Week | Start Balance | Activity (Actual KM) | Multiplier | Pints Earned | Drinks | End Balance |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 1 (Silver) | +12.0 | 50 km | 1.5x | 6.6 | 5 | +13.6 |
-| 2 (Silver) | +13.6 | 50 km | 1.5x | 6.6 | 2 | +18.2 |
-| 3 (Gold) | +50.0 | 50 km | 2.0x | 5.0 | 5 | +50.0 |
-| 4 (Gold) | +50.0 | 50 km | 2.0x | 5.0 | 8 | +47.0 |
-
-**Verdict**: The "Credit Flex" works! In Gold, 50km of running *barely* covers 5 pints. It's a true maintenance challenge.
-
----
-
-## Persona 4: "The Binge & Sprint"
-- **Activity**: 0km for 2 weeks, then 40km in 1 week.
-- **Drinking**: 10 pints in a weekend.
-
-| Week | Start Balance | Activity | Drinks | End Balance | Status | Note |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 1 | 0 | 0 | 10 | -10.0 | **Deep Debt** | "The Hangover." |
-| 2 | -10.0 | 0 | 2 | -12.0 | **Deep Debt** | The hole gets deeper. |
-| 3 | -12.0 | 40 km | 0 | -4.0 | **Mercy** | 40km (8 pints) pays 2/3 of debt. |
-| 4 | -4.0 | 20 km | 2 | 0.0 | **Cleared** | Back to zero! |
-
-**Verdict**: The Debt Mercy is essential here. Without it (if they were Silver/Gold), they might never get out of the hole, which would make them quit the app.
-
-## Philosophical Conclusion
-- **Debt Mercy** is the "Engagement Engine" (stops people quitting).
-- **Credit Flex** is the "Endgame" (stops people getting bored).
-- **Universal Unit (Pints)** makes the mental math instant for the user.
+## Why this is balanced:
+1. **No Hacking**: You can't use 10% running to promote your running track. The track that does the heavy lifting is the one that levels up.
+2. **Hybrid Reward**: It doesn't matter *how* you get the 50 pints; you still get to "Bottle" them and move to higher prestige.
+3. **Natural Evolution**: If you start cycling more to "avoid" the hard running rates, eventually Cycling will become your primary and *it* will level up, keeping the challenge alive.

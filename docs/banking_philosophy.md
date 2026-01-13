@@ -1,66 +1,24 @@
-## 1. Bottling & Promotion (Weekly Settlement)
-Progression is calculated at the **End of the Week** (every Monday morning).
+# The Brewery Bank & Bottling
 
-- **Weekly Roll-over**: Your net weekly balance is added to your current league credit.
-- **The Choice**: If your total league credit exceeds **50 Pints**, you are prompted to promote.
-- **Strategic Buffering**: You can choose not to promote to maintain easier rates, with extra pints building your "Debt Floor" for the next league.
+The banking system handles how your short-term hard work becomes long-term prestige.
 
-## 2. Specialized Bottles (Collector's Items)
-When you Bottle your pints, the bottle takes the "flavor" of your primary activity for that period.
+## 1. Bottling & Promotion (Primary Discipline)
+Promotion is a strategic choice made at the **Weekly Settlement**.
 
-| Bottle Type | How to Earn | Prestige |
-| :--- | :--- | :--- |
-| **The Amber Ale** | >50% Running | Standard elite. |
-| **The Crisp Lager** | >50% Cycling | Distance endurance. |
-| **The Stout** | >50% Gym/Weights | Power & Strength. |
-| **The Cocktail** | Mixed activities | The "Hybrid" athlete. |
+- **The Threshold**: Once your total earnings across all tracks reach **50 Pints**, you can "Bottle & Promote."
+- **Primary Promotion**: The track that contributed the **most pints** to that 50-pint goal is the one that promotes to the next league level. 
+- **The Boost**: This rewards multi-discipline athletes by allowing them to progress using any activity, while ensuring their "strongest" activity gets harder to prevent it from carrying them forever.
 
-- **Leaderboard**: Your Vault can now show your "Cellar" (e.g., 5 Running Bottles, 2 Gym Bottles). 
-- **The Weekend Saver**: You can "spend" a specific type of credit to offset a specific type of bender (purely cosmetic).
+## 2. The Vault & The Debt Floor
+When you promote with **X Pints**:
+- **Vault**: Those X pints are moved to your **Lifetime Vault** as a specific bottle (e.g., a "Silver Running Bottle").
+- **Debt Floor**: Your current balance resets to 0.0, and you gain a **Debt Floor of -X**. 
 
-## 2. The Credit Line & The Floor
-When you promote with **X Pints**, your balance resets to **0.0**, but you gain a **Debt Floor of -X**. 
+## 3. "Tapped Out" (Automatic Demotion)
+If your weekly settlement brings your total balance below your **Debt Floor**:
+1. **Automatic Demotion**: You are demoted in your highest-league track.
+2. **Bottle Loss**: One bottle (50 pints) is removed from your Vault to pay the debt.
+3. **Reset**: You start at 0.0 in the lower league.
 
-- **Example**: Promote to Silver with **65 Pints**. Your new limit is **-65 Pints**.
-- **The Vault**: These "Bottled" pints are move to your **Lifetime Vault** for the leaderboard.
-
-## 3. "Bottled It" (Automatic Demotion)
-If your current balance hits your **Debt Floor** (e.g., -65), the app triggers an automatic **"Bottled It"** event.
-
-- **The Event**: You are immediately demoted to the previous league.
-- **The Cost**: You lose **one full bottle** (50 Pints) from your Vault.
-- **The Reset**: Your current balance is set to **0.0** in the lower league.
-- **The Status**: You must reach the 50-pint promotion threshold again to attempt re-promotion.
-
-> [!WARNING]
-> **"Bottled It"** is the most shameful event in the app. It means you couldn't handle the heat of the higher league and your previous hard work (the bottled pints) had to be "poured out" to cover your debt.
-
-- **Base Limit**: Everyone starts with a **-5 Pint** limit.
-- **The Loyalty Bonus**: You gain **+1 Pint** of allowable debt for every **10 Pints** in your Vault.
-- **Example**: If you have 50 pints in your Vault, your limit is **-10 Pints**.
-
-### Reaching the Ceiling
-If you hit your debt limit:
-1. You cannot log more drinks.
-2. The app triggers a **"Bailout Required"** state.
-3. You must either exercise to get back above the limit, or use a **Bailout** (spend Vaulted Pints) to reset to 0.
-
-## 4. The Bailout (Debt Protection)
-If you are at or beyond your limit, you can "Break a Bottle" from your Vault.
-- **Cost**: 10 Vaulted Pints.
-- **Result**: Current balance resets to **0.0**.
-- **Note**: This is an expensive way out, designed to preserve your streak but at the cost of your "net worth."
-
-`Pint Score = Σ (Vaulted Pints * League Multiplier) + (Current Credit * League Multiplier)`
-
-### Example Scenarios:
-- **User A (Bronze)**: 50 Vaulted Pints. `50 * 1.0 = 50 Score`.
-- **User B (Gold)**: 10 Vaulted Pints. `10 * 2.5 = 25 Score`.
-- **User C (Silver)**: 25 Vaulted Pints. `25 * 1.6 = 40 Score`.
-
-**Result**: User A is leading the leaderboard because they have been consistently "earning" more at a lower intensity, but User B is gaining fast because their multiplier is 2.5x.
-
-## Why this is fun:
-1. **Strategic Decisions**: "Should I promote to Silver now, or stay in Bronze to farm some easy points for the leaderboard?"
-2. **Safety Net**: Heavy drinking weekends don't end your journey; they just "cost" your banked progress.
-3. **True Competition**: It’s not just about how fast you run, but how much you "save" over time.
+> [!NOTE]
+> **Tapped Out** is the safety valve. It resets the difficulty so you can find your feet again, but at the cost of your "banked" progress.
