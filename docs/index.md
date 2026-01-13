@@ -11,5 +11,6 @@ Welcome to the documentation for **Earn Your Beers**.
 - [User Simulations](file:///Users/jamesbalenthiran/coding/earn_your_beers/docs/user_simulations.md)
 - [Banking Philosophy](file:///Users/jamesbalenthiran/coding/earn_your_beers/docs/banking_philosophy.md)
 - [Agile Roadmap](file:///Users/jamesbalenthiran/coding/earn_your_beers/docs/roadmap.md)
+- [Milestone 1 Breakdown](file:///Users/jamesbalenthiran/coding/earn_your_beers/docs/milestone_1.md)
 
 *More documentation coming soon...*
