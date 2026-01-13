@@ -15,8 +15,9 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   final GlobalKey<AnimatedListState> _historyListKey =
       GlobalKey<AnimatedListState>();
-  List<dynamic> _previousHistory =
-      []; // History = all logs except the first one
+  List<dynamic> _previousHistory = [];
+  bool _isDeleting =
+      false; // Track if last action was delete (for rotation direction)
 
   @override
   void didChangeDependencies() {
@@ -53,6 +54,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void _deleteItem(dynamic item) {
+    setState(() => _isDeleting = true); // Set delete direction for animation
     final logs = context.read<AppState>().logs;
     final isActive = logs.isNotEmpty && logs[0] == item;
     final id = item is Activity ? item.id : (item as Drink).id;
@@ -189,15 +191,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 animation: animation,
                                 child: child,
                                 builder: (context, child) {
-                                  // For entering: start at -90° (tilted back), go to 0° (facing us)
-                                  // For exiting: start at 0° (facing us), go to +90° (tilted forward)
+                                  // Flip rotation direction based on add vs delete
+                                  final direction = _isDeleting ? -1.0 : 1.0;
                                   double angle;
                                   if (isEntering) {
-                                    // Entering: -90° → 0° (rotates forward from behind)
-                                    angle = -(1.0 - animation.value) * 1.5708;
+                                    angle =
+                                        -direction *
+                                        (1.0 - animation.value) *
+                                        1.5708;
                                   } else {
-                                    // Exiting: 0° → +90° (tilts forward/down)
-                                    angle = (1.0 - animation.value) * 1.5708;
+                                    angle =
+                                        direction *
+                                        (1.0 - animation.value) *
+                                        1.5708;
                                   }
 
                                   final transform = Matrix4.identity()
@@ -297,6 +303,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         children: [
           FloatingActionButton.extended(
             onPressed: () {
+              setState(() => _isDeleting = false); // Add direction
               context.read<AppState>().addDrink(1.0);
               WidgetsBinding.instance.addPostFrameCallback(
                 (_) => _syncHistoryList(),
@@ -309,6 +316,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           const SizedBox(height: 12),
           FloatingActionButton.extended(
             onPressed: () {
+              setState(() => _isDeleting = false); // Add direction
               context.read<AppState>().addActivity(5.0);
               WidgetsBinding.instance.addPostFrameCallback(
                 (_) => _syncHistoryList(),
