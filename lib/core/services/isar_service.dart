@@ -24,31 +24,31 @@ class IsarService {
 
   Future<void> saveActivity(Activity activity) async {
     final isar = await db;
-    isar.writeTxnSync(() => isar.activities.putSync(activity));
+    isar.writeTxnSync(() => isar.collection<Activity>().putSync(activity));
   }
 
   Future<void> saveDrink(Drink drink) async {
     final isar = await db;
-    isar.writeTxnSync(() => isar.drinks.putSync(drink));
+    isar.writeTxnSync(() => isar.collection<Drink>().putSync(drink));
   }
 
   Future<List<Activity>> getAllActivities() async {
     final isar = await db;
-    return await isar.activities.where().findAll();
+    return await isar.collection<Activity>().where().findAll();
   }
 
   Future<List<Drink>> getAllDrinks() async {
     final isar = await db;
-    return await isar.drinks.where().findAll();
+    return await isar.collection<Drink>().where().findAll();
   }
 
   Stream<List<Activity>> watchActivities() async* {
     final isar = await db;
-    yield* isar.activities.where().watch(fireImmediately: true);
+    yield* isar.collection<Activity>().where().watch(fireImmediately: true);
   }
 
   Stream<List<Drink>> watchDrinks() async* {
     final isar = await db;
-    yield* isar.drinks.where().watch(fireImmediately: true);
+    yield* isar.collection<Drink>().where().watch(fireImmediately: true);
   }
 }
