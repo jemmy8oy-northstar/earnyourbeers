@@ -192,7 +192,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 child: child,
                                 builder: (context, child) {
                                   // Flip rotation direction based on add vs delete
-                                  final direction = _isDeleting ? -1.0 : 1.0;
+                                  final direction = _isDeleting ? 1.0 : -1.0;
                                   double angle;
                                   if (isEntering) {
                                     angle =
