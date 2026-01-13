@@ -172,41 +172,55 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           height:
                               140, // Fixed height so history list doesn't jump
                           child: AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 500),
-                            switchInCurve: Curves.easeInOut,
-                            switchOutCurve: Curves.easeInOut,
+                            duration: const Duration(milliseconds: 600),
+                            switchInCurve: Curves.easeInOutCubic,
+                            switchOutCurve: Curves.easeInOutCubic,
                             transitionBuilder: (child, animation) {
-                              // 3D cube rotation effect
-                              final rotateAnim = Tween<double>(
-                                begin: 0.5, // Start rotated 90° (pi/2)
-                                end: 0.0, // End at 0°
-                              ).animate(animation);
+                              // True 3D cube rotation - pivot from bottom edge
+                              final isEntering =
+                                  animation.status == AnimationStatus.forward ||
+                                  animation.status == AnimationStatus.completed;
 
                               return AnimatedBuilder(
-                                animation: rotateAnim,
+                                animation: animation,
                                 child: child,
                                 builder: (context, child) {
-                                  // Rotation around X-axis (horizontal axis)
+                                  // Rotation angle: 0 to pi/2 (0° to 90°)
                                   final angle =
-                                      rotateAnim.value *
-                                      3.14159; // Convert to radians
+                                      (1.0 - animation.value) * 1.5708; // pi/2
+
+                                  // Strong perspective for depth
                                   final transform = Matrix4.identity()
-                                    ..setEntry(3, 2, 0.001) // Perspective
-                                    ..rotateX(angle);
+                                    ..setEntry(
+                                      3,
+                                      2,
+                                      0.002,
+                                    ) // Strong perspective
+                                    ..translate(
+                                      0.0,
+                                      70.0 * (1 - animation.value),
+                                    ) // Move pivot to bottom
+                                    ..rotateX(
+                                      isEntering ? angle : -angle,
+                                    ); // Rotate around X-axis
 
                                   return Transform(
                                     transform: transform,
-                                    alignment: Alignment.center,
-                                    child: Opacity(
-                                      // Fade out when rotated more than 45°
-                                      opacity: (1 - rotateAnim.value * 2).clamp(
-                                        0.0,
-                                        1.0,
-                                      ),
-                                      child: child,
-                                    ),
+                                    alignment: Alignment
+                                        .bottomCenter, // Pivot from bottom
+                                    child: child,
                                   );
                                 },
+                              );
+                            },
+                            layoutBuilder: (currentChild, previousChildren) {
+                              // Stack both cards during transition
+                              return Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  ...previousChildren,
+                                  if (currentChild != null) currentChild,
+                                ],
                               );
                             },
                             child: activeItem != null
