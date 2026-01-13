@@ -13,6 +13,14 @@ class AppState extends ChangeNotifier {
   List<Activity> _activities = [];
   List<Drink> _drinks = [];
 
+  List<dynamic> get logs {
+    final combined = [..._activities, ..._drinks];
+    combined.sort(
+      (a, b) => (b as dynamic).timestamp.compareTo((a as dynamic).timestamp),
+    );
+    return combined;
+  }
+
   AppState(this._isarService) {
     _init();
   }
