@@ -2,7 +2,7 @@ import '../models/activity.dart';
 import '../models/drink.dart';
 
 class PintCalculator {
-  static const double kmPerPint = 3.0; // MVP Rule: 3km = 1 Pint
+  static const double kmPerPint = 5.0; // 5km = 1 Pint
 
   static double calculateBalance(
     List<Activity> activities,
