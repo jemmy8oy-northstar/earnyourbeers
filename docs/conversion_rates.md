@@ -11,15 +11,15 @@ The "Earn Your Beers" app uses **1 Pint** as the universal unit of account. All 
 | **Spirit & Mixer** | Single | 0.4 |
 | **Double Spirit & Mixer**| Double | 0.8 |
 
-## Activity Earning Rates (League 1 - Iron)
+## Activity Earning Rates (League 1 - Yeast)
 | Activity | Rate | Note |
 | :--- | :--- | :--- |
-| **Running** | 1 km = 1 Pint | Extremely generous entry level. |
-| **Cycling** | 4 km = 1 Pint | |
-| **Walking** | 2 km = 1 Pint | |
-| **Swimming** | 100 m = 1 Pint | |
-| **HIIT / Gym** | 10 mins = 1 Pint | |
-| **Yoga/Resto**| 20 mins = 1 Pint | |
+| **Running** | 0.2 km = 1 Pint | 1km Run = 5 Pints! |
+| **Cycling** | 0.8 km = 1 Pint | 4km Cycle = 5 Pints. |
+| **Walking** | 0.4 km = 1 Pint | 2km Walk = 5 Pints. |
+| **Swimming** | 20 m = 1 Pint | |
+| **HIIT / Gym** | 2 mins = 1 Pint | 10 mins = 5 Pints. |
+| **Yoga/Resto**| 4 mins = 1 Pint | |
 
 ## The "Specialist" Multiplier
 To encourage cross-training and provide a "Week Saver," users get a **Novelty Bonus** for their non-primary activities.

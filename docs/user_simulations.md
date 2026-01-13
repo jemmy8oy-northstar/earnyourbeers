@@ -13,6 +13,19 @@
 
 **Verdict**: At the Iron level, the app feels incredibly rewarding. It only takes ~3-4 weeks for a casual runner to hit the first promotion.
 
+## Persona 7: "The Party Animal" (Starter Calibration)
+- **Status**: Yeast League (L1).
+- **Drinking Habits**: 25 Pints/week (5 pints a day, 5 days).
+- **Activity**: 1 hour walk per day (5km @ 5km/hr).
+
+| Day | Walk (km) | Pints Earned | Drinks | Net |
+| :--- | :--- | :--- | :--- | :--- |
+| Mon-Fri | 5.0 | 12.5 | 5.0 | +7.5 |
+| Sat-Sun | 0.0 | 0.0 | 0.0 | 0.0 |
+| **Total** | **25 km** | **62.5** | **25.0** | **+37.5** |
+
+**Verdict**: At League 1 (**Yeast**), even a heavy drinker can build a massive surplus just by walking an hour a day. This ensures they promote quickly to more challenging levels, but never feel that the debt is "insurmountable" at the start.
+
 ## Persona 6: "The Efficient Hybrid"
 - **Status**: Silver Runner (5km = 1 Pint), Bronze Cyclist (12km = 1 Pint).
 - **Goal**: Hit the **25-pint** Bottling Threshold.
