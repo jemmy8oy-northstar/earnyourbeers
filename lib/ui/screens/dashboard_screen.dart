@@ -56,7 +56,13 @@ class DashboardScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final item = logs[index];
                     final isActivity = item is Activity;
+                    final amount = isActivity
+                        ? item.amount
+                        : (item as Drink).amount;
+                    final id = isActivity ? item.id : (item as Drink).id;
+
                     return ListTile(
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 8),
                       leading: Icon(
                         isActivity ? Icons.directions_run : Icons.sports_bar,
                         color: isActivity
@@ -65,13 +71,60 @@ class DashboardScreen extends StatelessWidget {
                       ),
                       title: Text(
                         isActivity
-                            ? '${item.amount} km Run'
-                            : '${item.amount} Pint Drink',
-                        style: const TextStyle(color: Colors.white70),
+                            ? '${amount.toStringAsFixed(1)} km Run'
+                            : '${amount.toInt()} Pint Drink',
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontSize: 14,
+                        ),
                       ),
-                      trailing: Text(
+                      subtitle: Text(
                         '${item.timestamp.hour}:${item.timestamp.minute.toString().padLeft(2, '0')}',
-                        style: const TextStyle(color: Colors.white24),
+                        style: const TextStyle(
+                          color: Colors.white24,
+                          fontSize: 10,
+                        ),
+                      ),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.remove, size: 18),
+                            onPressed: () {
+                              if (isActivity) {
+                                if (amount > 0.5)
+                                  state.updateActivity(item, amount - 0.5);
+                              } else {
+                                if (amount > 1)
+                                  state.updateDrink(item as Drink, amount - 1);
+                              }
+                            },
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.add, size: 18),
+                            onPressed: () {
+                              if (isActivity) {
+                                state.updateActivity(item, amount + 0.5);
+                              } else {
+                                state.updateDrink(item as Drink, amount + 1);
+                              }
+                            },
+                          ),
+                          IconButton(
+                            icon: const Icon(
+                              Icons.delete_outline,
+                              size: 18,
+                              color: Colors.white24,
+                            ),
+                            onPressed: () {
+                              if (isActivity) {
+                                state.deleteActivity(id);
+                              } else {
+                                state.deleteDrink(id);
+                              }
+                            },
+                          ),
+                        ],
                       ),
                     );
                   },
@@ -85,54 +138,17 @@ class DashboardScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton.extended(
-            onPressed: () => _showLogDialog(context, 'Run', 'Enter KM'),
-            label: const Text('Log Run'),
+            onPressed: () => context.read<AppState>().addActivity(5.0),
+            label: const Text('Log Run (5k)'),
             icon: const Icon(Icons.directions_run),
             backgroundColor: AppTheme.primaryBeer,
           ),
           const SizedBox(height: 16),
           FloatingActionButton.extended(
-            onPressed: () => _showLogDialog(context, 'Drink', 'Enter Pints'),
-            label: const Text('Log Drink'),
+            onPressed: () => context.read<AppState>().addDrink(1.0),
+            label: const Text('Log Pint'),
             icon: const Icon(Icons.sports_bar),
             backgroundColor: AppTheme.deepAmber,
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showLogDialog(BuildContext context, String type, String hint) {
-    final controller = TextEditingController();
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Log $type'),
-        content: TextField(
-          controller: controller,
-          keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          decoration: InputDecoration(hintText: hint),
-          autofocus: true,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              final value = double.tryParse(controller.text) ?? 0.0;
-              if (value > 0) {
-                final state = Provider.of<AppState>(context, listen: false);
-                if (type == 'Run') {
-                  state.addActivity(value);
-                } else {
-                  state.addDrink(value);
-                }
-              }
-              Navigator.pop(context);
-            },
-            child: const Text('Save'),
           ),
         ],
       ),
