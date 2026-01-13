@@ -167,54 +167,60 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Column(
                       children: [
-                        // ACTIVE CARD - Fixed height, 3D cube rotation transition
+                        // ACTIVE CARD - Fixed height, TRUE CUBOID rotation
                         SizedBox(
                           height:
                               140, // Fixed height so history list doesn't jump
                           child: AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 600),
-                            switchInCurve: Curves.easeInOutCubic,
-                            switchOutCurve: Curves.easeInOutCubic,
+                            duration: const Duration(milliseconds: 500),
+                            switchInCurve: Curves.easeInOut,
+                            switchOutCurve: Curves.easeInOut,
                             transitionBuilder: (child, animation) {
-                              // True 3D cube rotation - pivot from bottom edge
-                              final isEntering =
-                                  animation.status == AnimationStatus.forward ||
-                                  animation.status == AnimationStatus.completed;
+                              // TRUE CUBOID ROTATION:
+                              // Axis is at CENTER of cube = 70px BEHIND the card
+                              // This creates a real Rubik's cube face rotation!
+
+                              final isExiting =
+                                  animation.status == AnimationStatus.reverse;
+                              const double halfHeight = 70.0;
 
                               return AnimatedBuilder(
                                 animation: animation,
                                 child: child,
                                 builder: (context, child) {
-                                  // Rotation angle: 0 to pi/2 (0° to 90°)
-                                  final angle =
-                                      (1.0 - animation.value) * 1.5708; // pi/2
+                                  double angle;
+                                  if (isExiting) {
+                                    // Exiting: 0° → +90° (rotates down toward table)
+                                    angle = (1.0 - animation.value) * 1.5708;
+                                  } else {
+                                    // Entering: -90° → 0° (rotates up from top of cube)
+                                    angle = -(1.0 - animation.value) * 1.5708;
+                                  }
 
-                                  // Strong perspective for depth
+                                  // Key: translate Z BEFORE rotating to put axis behind card
                                   final transform = Matrix4.identity()
-                                    ..setEntry(
-                                      3,
-                                      2,
-                                      0.002,
-                                    ) // Strong perspective
+                                    ..setEntry(3, 2, 0.001) // Perspective
                                     ..translate(
                                       0.0,
-                                      70.0 * (1 - animation.value),
-                                    ) // Move pivot to bottom
-                                    ..rotateX(
-                                      isEntering ? angle : -angle,
-                                    ); // Rotate around X-axis
+                                      0.0,
+                                      -halfHeight,
+                                    ) // Push axis back
+                                    ..rotateX(angle)
+                                    ..translate(
+                                      0.0,
+                                      0.0,
+                                      halfHeight,
+                                    ); // Bring card forward
 
                                   return Transform(
                                     transform: transform,
-                                    alignment: Alignment
-                                        .bottomCenter, // Pivot from bottom
+                                    alignment: Alignment.center,
                                     child: child,
                                   );
                                 },
                               );
                             },
                             layoutBuilder: (currentChild, previousChildren) {
-                              // Stack both cards during transition
                               return Stack(
                                 alignment: Alignment.center,
                                 children: [
