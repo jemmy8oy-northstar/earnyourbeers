@@ -202,9 +202,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                                   final transform = Matrix4.identity()
                                     ..setEntry(3, 2, 0.001)
-                                    ..translate(0.0, 0.0, -halfHeight)
+                                    ..translate(
+                                      0.0,
+                                      0.0,
+                                      halfHeight,
+                                    ) // Push axis FORWARD
                                     ..rotateX(angle)
-                                    ..translate(0.0, 0.0, halfHeight);
+                                    ..translate(
+                                      0.0,
+                                      0.0,
+                                      -halfHeight,
+                                    ); // Push card BACK
 
                                   return Transform(
                                     transform: transform,
