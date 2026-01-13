@@ -69,9 +69,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     Animation<double> animation, {
     bool isRemoving = false,
   }) {
-    final logs = context.read<AppState>().logs;
-    final isTop = logs.isNotEmpty && logs[0] == item;
-
     return SizeTransition(
       sizeFactor: animation,
       axisAlignment: -1.0,
@@ -79,7 +76,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         opacity: animation,
         child: _LogItemContent(
           item: item,
-          isMostRecent: isTop && !isRemoving,
+          isRemoving: isRemoving,
           onEdit: () => _showEditDialog(context, item),
           onDelete: isRemoving
               ? null
@@ -227,21 +224,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
 }
 
 /// The content widget for a log item. Animation is handled by AnimatedList.
+/// This widget watches state directly to react to position changes.
 class _LogItemContent extends StatelessWidget {
   final dynamic item;
-  final bool isMostRecent;
   final VoidCallback onEdit;
   final VoidCallback? onDelete;
+  final bool isRemoving; // If true, skip watching state (item is being removed)
 
   const _LogItemContent({
     required this.item,
-    required this.isMostRecent,
     required this.onEdit,
     this.onDelete,
+    this.isRemoving = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    // Watch state to reactively update when position changes
+    final logs = isRemoving ? <dynamic>[] : context.watch<AppState>().logs;
+    final isMostRecent = !isRemoving && logs.isNotEmpty && logs[0] == item;
+
     final isActivity = item is Activity;
     final amount = isActivity ? item.amount : (item as Drink).amount;
     final state = context.read<AppState>();
