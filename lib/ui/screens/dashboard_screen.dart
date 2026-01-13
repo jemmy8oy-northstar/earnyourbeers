@@ -212,16 +212,51 @@ class _LogItem extends StatefulWidget {
   State<_LogItem> createState() => _LogItemState();
 }
 
-class _LogItemState extends State<_LogItem> {
-  bool _isVisible = false;
+class _LogItemState extends State<_LogItem>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _sizeAnimation;
+  late Animation<double> _opacityAnimation;
 
   @override
   void initState() {
     super.initState();
-    // Delay setting visible to trigger entrance animation
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) setState(() => _isVisible = true);
-    });
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+    // Curved animation for size - can overshoot slightly which is fine for size
+    _sizeAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOutCubic,
+    );
+    // Linear animation for opacity - must stay strictly 0.0-1.0
+    _opacityAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(_controller);
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _handleDelete() async {
+    await _controller.reverse();
+    if (!mounted) return;
+
+    final id = widget.item is Activity
+        ? widget.item.id
+        : (widget.item as Drink).id;
+    final state = context.read<AppState>();
+    if (widget.item is Activity) {
+      state.deleteActivity(id);
+    } else {
+      state.deleteDrink(id);
+    }
   }
 
   @override
@@ -230,7 +265,6 @@ class _LogItemState extends State<_LogItem> {
     final amount = isActivity
         ? widget.item.amount
         : (widget.item as Drink).amount;
-    final id = isActivity ? widget.item.id : (widget.item as Drink).id;
     final state = context.read<AppState>();
 
     final label = isActivity
@@ -238,6 +272,7 @@ class _LogItemState extends State<_LogItem> {
         : '${amount % 1 == 0 ? amount.toInt() : amount.toStringAsFixed(1)} Pint${amount == 1 ? '' : 's'}';
 
     final activeCard = Card(
+      key: const ValueKey('active'),
       margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
       color: Colors.white.withOpacity(0.04),
       shape: RoundedRectangleBorder(
@@ -309,13 +344,7 @@ class _LogItemState extends State<_LogItem> {
                 _ActionButton(icon: Icons.edit, onPressed: widget.onEdit),
                 _ActionButton(
                   icon: Icons.delete_outline,
-                  onPressed: () {
-                    if (isActivity) {
-                      state.deleteActivity(id);
-                    } else {
-                      state.deleteDrink(id);
-                    }
-                  },
+                  onPressed: _handleDelete,
                 ),
               ],
             ),
@@ -325,6 +354,7 @@ class _LogItemState extends State<_LogItem> {
     );
 
     final historyTile = ListTile(
+      key: const ValueKey('history'),
       dense: true,
       contentPadding: const EdgeInsets.symmetric(horizontal: 8),
       leading: Icon(
@@ -336,34 +366,39 @@ class _LogItemState extends State<_LogItem> {
         label,
         style: const TextStyle(color: Colors.white70, fontSize: 14),
       ),
-      trailing: Text(
-        '${widget.item.timestamp.hour}:${widget.item.timestamp.minute.toString().padLeft(2, '0')}',
-        style: const TextStyle(color: Colors.white24, fontSize: 12),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            '${widget.item.timestamp.hour}:${widget.item.timestamp.minute.toString().padLeft(2, '0')}',
+            style: const TextStyle(color: Colors.white24, fontSize: 12),
+          ),
+          const SizedBox(width: 4),
+          IconButton(
+            icon: const Icon(Icons.close, size: 14, color: Colors.white10),
+            onPressed: _handleDelete,
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+          ),
+        ],
       ),
     );
 
-    // Simplified entrance bloom
-    return AnimatedOpacity(
-      opacity: _isVisible ? 1.0 : 0.0,
-      duration: const Duration(milliseconds: 300),
-      child: AnimatedScale(
-        scale: _isVisible ? 1.0 : 0.9,
-        duration: const Duration(milliseconds: 600),
-        curve: Curves.easeOutBack,
-        child: AnimatedSize(
-          duration: const Duration(milliseconds: 400),
-          curve: Curves.easeInOut,
-          child: AnimatedCrossFade(
-            firstChild: activeCard,
-            secondChild: historyTile,
-            crossFadeState: widget.isMostRecent
-                ? CrossFadeState.showFirst
-                : CrossFadeState.showSecond,
-            duration: const Duration(milliseconds: 500),
-            sizeCurve: Curves.easeInOut,
-            firstCurve: Curves.easeIn,
-            secondCurve: Curves.easeOut,
-          ),
+    return SizeTransition(
+      sizeFactor: _sizeAnimation,
+      axisAlignment: -1.0,
+      child: FadeTransition(
+        opacity: _opacityAnimation,
+        child: AnimatedCrossFade(
+          firstChild: activeCard,
+          secondChild: historyTile,
+          crossFadeState: widget.isMostRecent
+              ? CrossFadeState.showFirst
+              : CrossFadeState.showSecond,
+          duration: const Duration(milliseconds: 500),
+          sizeCurve: Curves.easeInOutCubic,
+          firstCurve: Curves.easeIn,
+          secondCurve: Curves.easeOut,
         ),
       ),
     );
