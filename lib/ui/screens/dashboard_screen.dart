@@ -27,6 +27,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final currentLogs = context.read<AppState>().logs;
 
     // Find insertions (items in current but not in previous)
+    bool didInsert = false;
     for (int i = 0; i < currentLogs.length; i++) {
       final item = currentLogs[i];
       final itemId = item is Activity ? item.id : (item as Drink).id;
@@ -39,10 +40,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
           i,
           duration: const Duration(milliseconds: 500),
         );
+        didInsert = true;
       }
     }
 
     _previousLogs = List.from(currentLogs);
+
+    // Force rebuild of all items so they recalculate isMostRecent
+    if (didInsert) {
+      setState(() {});
+    }
   }
 
   void _removeItem(int index, dynamic item) {
