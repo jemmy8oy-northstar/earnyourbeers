@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'ui/theme.dart';
 import 'ui/screens/dashboard_screen.dart';
 
 void main() {
-  runApp(
-    const EarnYourBeersApp(),
-  );
+  runApp(const EarnYourBeersApp());
 }
 
 class EarnYourBeersApp extends StatelessWidget {
