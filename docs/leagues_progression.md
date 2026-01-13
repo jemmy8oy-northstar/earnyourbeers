@@ -1,43 +1,25 @@
-# Universal Leagues & Progression
+# Multi-Track Leagues & Progression
 
 Leagues are milestones of fitness and discipline. Updates happen during the **Weekly Settlement**.
 
-## Onboarding: The Placement Draft
-To ensure the app starts at the right difficulty, users undergo a **Placement Draft** during setup:
+## The 12-Tier Exponential Curve
+Difficulty increases by ~25% per league. Multipliers apply *only* to the specific track they belong to.
 
-1.  **The Questionnaire**:
-    - "How many pints do you typically drink in a week?"
-    - "How many km do you run/cycle in a week?"
-    - "What is your primary fitness goal?"
-2.  **Initial Seeding**:
-    - A high-activity, low-drinker might start in **Silver** or **Gold** (to immediately feel the challenge).
-    - A high-drinker, low-activity user starts in **Bronze** (to focus on building the habit).
-3.  **The Placement Week (Optional)**: If the user is unsure, the first week uses standard **3km = 1 Pint** rates to calibrate their baseline.
-
-## Multi-Track Leagues
-Every athlete has a level in each major discipline.
-
-| Track | Base Rate (1.0x) | Example Title (Gold) |
-| :--- | :--- | :--- |
-| **Running** | 3 km = 1 Pint | Brewmaster Runner |
-| **Cycling** | 12 km = 1 Pint | Tour de Beer |
-| **Gym/Weights** | 30 mins = 1 Pint | The Stout Lifter |
-| **Swim** | 0.4 km = 1 Pint | The Liquid Refiller |
-
-## Difficulty Multipliers
-Progression spans 8 leagues per discipline. Multipliers apply *only* to the specific track they belong to.
-
-| League Level | Multiplier (Credit Only) | Difficulty Note (Running) |
-| :--- | :--- | :--- |
-| **Bronze** | 1.0x | 3.0km = 1 Pint |
-| **Silver** | 1.3x | 4.0km = 1 Pint |
-| **Gold** | 1.7x | 5.0km = 1 Pint |
-| **Platinum**| 2.0x | 6.0km = 1 Pint |
-| **Diamond** | 2.5x | 7.5km = 1 Pint |
-| **Master**  | 3.0x | 9.0km = 1 Pint |
-| **Grandmaster**| 3.5x | 10.5km = 1 Pint |
-| **Legend**  | 4.0x | 12.0km = 1 Pint |
+| Level | League Name | Multiplier | Running (KM) | Cycling (KM) | Gym (Mins) |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 1 | **Iron** | 1.0x | 1.0 | 4.0 | 10 |
+| 2 | **Bronze** | 1.25x | 1.3 | 5.2 | 13 |
+| 3 | **Silver** | 1.6x | 1.6 | 6.4 | 16 |
+| 4 | **Gold** | 2.0x | 2.0 | 8.0 | 20 |
+| 5 | **Platinum** | 2.5x | 2.5 | 10.0 | 25 |
+| 6 | **Emerald** | 3.2x | 3.2 | 12.8 | 32 |
+| 7 | **Diamond** | 4.0x | 4.0 | 16.0 | 40 |
+| 8 | **Master** | 5.0x | 5.0 | 20.0 | 50 |
+| 9 | **Grandmaster**| 6.4x | 6.4 | 25.6 | 64 |
+| 10 | **Legend** | 8.0x | 8.0 | 32.0 | 80 |
+| 11 | **Immortal** | 10.0x | 10.0 | 40.0 | 100 |
+| 12 | **Olympian** | 12.5x | 12.5 | 50.0 | 125 |
 
 > [!TIP]
-> **The Mix-and-Match Strategy**: You can earn pints across any combination of tracks. 
-> To promote your **Running** league, it just needs to be your most-used discipline in a successful 25-pint bottling cycle.
+> **Rounding**: Rates in the app are rounded to the nearest 100m or minute for UX.
+> **The Mix-and-Match Strategy**: You promote the track that contributed the most to your 25-pint "Bottle" during the weekly settlement.

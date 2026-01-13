@@ -1,5 +1,18 @@
 # User Simulations: Multi-Discipline Balance
 
+## Persona 1: "The Casual Sipper" (James @ Iron League)
+- **Activity**: 10km run / week (**10 Pints!**).
+- **Drinking**: 3 pints / week.
+- **Net Profit**: +7 Pints / week.
+
+| Week | Start Balance | Activity (Pints) | Drinks (Pints) | End Balance | Status | Note |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 1 | 0 | 10 | 3 | +7.0 | **Credit** | Huge surplus. |
+| 2 | +7.0 | 10 | 5 | +12.0 | **Credit** | Halfway to Silver. |
+| 3 | +12.0 | 15 | 2 | +25.0 | **Credit** | **Bottled & Promoted!** |
+
+**Verdict**: At the Iron level, the app feels incredibly rewarding. It only takes ~3-4 weeks for a casual runner to hit the first promotion.
+
 ## Persona 6: "The Efficient Hybrid"
 - **Status**: Silver Runner (5km = 1 Pint), Bronze Cyclist (12km = 1 Pint).
 - **Goal**: Hit the **25-pint** Bottling Threshold.
@@ -11,12 +24,12 @@
 | 3 Gym Sessions | 4.5 | 18% | - |
 | **Total** | **25.5** | 100% | **Promotion!** |
 
-**Promotion Outcome**: 
+**Promotion Outcome**:
 - Promotes to **Gold Runner** after roughly 3 weeks of consistent effort.
 - This feels much tighter and more rewarding than a 50-pint multi-month grind.
 
-**Promotion Outcome**: 
-- Because **Running** was the primary contributor (60%), the user promotes to **Gold Runner**. 
+**Promotion Outcome**:
+- Because **Running** was the primary contributor (60%), the user promotes to **Gold Runner**.
 - Their Cycling and Gym tracks stay at Bronze/Silver levels.
 - Running now gets harder (7.5km = 1 Pint), encouraging the user to either run more or lean more on their other disciplines next time.
 
