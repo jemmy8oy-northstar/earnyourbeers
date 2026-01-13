@@ -193,8 +193,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     // Exiting: 0° → +90° (rotates down toward table)
                                     angle = (1.0 - animation.value) * 1.5708;
                                   } else {
-                                    // Entering: -90° → 0° (rotates up from top of cube)
-                                    angle = -(1.0 - animation.value) * 1.5708;
+                                    // Entering: +90° → 0° (starts on TOP, rotates down to face you)
+                                    angle = (1.0 - animation.value) * 1.5708;
                                   }
 
                                   // Key: translate Z BEFORE rotating to put axis behind card
