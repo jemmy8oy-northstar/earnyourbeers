@@ -167,19 +167,46 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Column(
                       children: [
-                        // ACTIVE CARD - Fixed height container, fade-only transition
+                        // ACTIVE CARD - Fixed height, 3D cube rotation transition
                         SizedBox(
                           height:
                               140, // Fixed height so history list doesn't jump
                           child: AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 300),
-                            switchInCurve: Curves.easeOut,
-                            switchOutCurve: Curves.easeIn,
+                            duration: const Duration(milliseconds: 500),
+                            switchInCurve: Curves.easeInOut,
+                            switchOutCurve: Curves.easeInOut,
                             transitionBuilder: (child, animation) {
-                              // Fade only - no size changes
-                              return FadeTransition(
-                                opacity: animation,
+                              // 3D cube rotation effect
+                              final rotateAnim = Tween<double>(
+                                begin: 0.5, // Start rotated 90° (pi/2)
+                                end: 0.0, // End at 0°
+                              ).animate(animation);
+
+                              return AnimatedBuilder(
+                                animation: rotateAnim,
                                 child: child,
+                                builder: (context, child) {
+                                  // Rotation around X-axis (horizontal axis)
+                                  final angle =
+                                      rotateAnim.value *
+                                      3.14159; // Convert to radians
+                                  final transform = Matrix4.identity()
+                                    ..setEntry(3, 2, 0.001) // Perspective
+                                    ..rotateX(angle);
+
+                                  return Transform(
+                                    transform: transform,
+                                    alignment: Alignment.center,
+                                    child: Opacity(
+                                      // Fade out when rotated more than 45°
+                                      opacity: (1 - rotateAnim.value * 2).clamp(
+                                        0.0,
+                                        1.0,
+                                      ),
+                                      child: child,
+                                    ),
+                                  );
+                                },
                               );
                             },
                             child: activeItem != null
