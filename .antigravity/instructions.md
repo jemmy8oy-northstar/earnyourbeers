@@ -18,3 +18,4 @@ This directory contains context and instructions for AI agents working on this p
 - **Verification Loop**: After applying a change, check for IDE lint errors and perform a quick `view_file` if the outcome is complex.
 - **Granular Edits**: Prefer smaller, focused replacement chunks over large blocks to minimize failure points.
 - **State Awareness**: If a file has been modified multiple times in one turn, always use the most recent line numbers from the tool outputs.
+- **Auto-Formatting Awareness**: This project uses a Git Pre-Commit hook for formatting instead of "Format on Save". See [dev_guidelines.md](file:///Users/jamesbalenthiran/coding/earn_your_beers/docs/dev_guidelines.md) for details.

@@ -106,191 +106,14 @@ class DashboardScreen extends StatelessWidget {
                           ),
                         ),
                         ...items.map((item) {
-                          final isActivity = item is Activity;
-                          final amount = isActivity
-                              ? item.amount
-                              : (item as Drink).amount;
-                          final id = isActivity ? item.id : (item as Drink).id;
-                          final isMostRecent = item == logs[0];
-
-                          final label = isActivity
-                              ? '${amount.toStringAsFixed(1)} km Run'
-                              : '${amount % 1 == 0 ? amount.toInt() : amount.toStringAsFixed(1)} Pint${amount == 1 ? '' : 's'}';
-
-                          return AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 600),
-                            switchInCurve: Curves.easeOutBack,
-                            switchOutCurve: Curves.easeIn,
-                            transitionBuilder: (child, animation) {
-                              final isCurrent =
-                                  child.key is ValueKey &&
-                                  (child.key as ValueKey).value
-                                      .toString()
-                                      .contains('active');
-                              if (isCurrent) {
-                                return ScaleTransition(
-                                  scale: animation,
-                                  child: FadeTransition(
-                                    opacity: animation,
-                                    child: child,
-                                  ),
-                                );
-                              }
-                              return FadeTransition(
-                                opacity: animation,
-                                child: SizeTransition(
-                                  sizeFactor: animation,
-                                  child: child,
-                                ),
-                              );
-                            },
-                            child: isMostRecent
-                                ? Card(
-                                    key: ValueKey('active-$id'),
-                                    margin: const EdgeInsets.symmetric(
-                                      horizontal: 4,
-                                      vertical: 8,
-                                    ),
-                                    color: Colors.white.withOpacity(0.04),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(16),
-                                      side: BorderSide(
-                                        color: Colors.white.withOpacity(0.08),
-                                      ),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(16),
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Icon(
-                                                isActivity
-                                                    ? Icons.directions_run
-                                                    : Icons.sports_bar,
-                                                color: AppTheme.primaryBeer,
-                                                size: 28,
-                                              ),
-                                              const SizedBox(width: 12),
-                                              Expanded(
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      label,
-                                                      style: const TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      'Logged at ${item.timestamp.hour}:${item.timestamp.minute.toString().padLeft(2, '0')}',
-                                                      style: const TextStyle(
-                                                        color: Colors.white38,
-                                                        fontSize: 12,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 16),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              _ActionButton(
-                                                icon: Icons.remove,
-                                                onPressed: () {
-                                                  if (isActivity) {
-                                                    if (amount > 0.5)
-                                                      state.updateActivity(
-                                                        item,
-                                                        amount - 0.5,
-                                                      );
-                                                  } else {
-                                                    if (amount > 1)
-                                                      state.updateDrink(
-                                                        item as Drink,
-                                                        amount - 1,
-                                                      );
-                                                  }
-                                                },
-                                              ),
-                                              _ActionButton(
-                                                icon: Icons.add,
-                                                onPressed: () {
-                                                  if (isActivity) {
-                                                    state.updateActivity(
-                                                      item,
-                                                      amount + 0.5,
-                                                    );
-                                                  } else {
-                                                    state.updateDrink(
-                                                      item as Drink,
-                                                      amount + 1,
-                                                    );
-                                                  }
-                                                },
-                                              ),
-                                              _ActionButton(
-                                                icon: Icons.edit,
-                                                onPressed: () =>
-                                                    _showEditDialog(
-                                                      context,
-                                                      item,
-                                                    ),
-                                              ),
-                                              _ActionButton(
-                                                icon: Icons.delete_outline,
-                                                onPressed: () {
-                                                  if (isActivity) {
-                                                    state.deleteActivity(id);
-                                                  } else {
-                                                    state.deleteDrink(id);
-                                                  }
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  )
-                                : ListTile(
-                                    key: ValueKey('history-$id'),
-                                    dense: true,
-                                    contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                    ),
-                                    leading: Icon(
-                                      isActivity
-                                          ? Icons.directions_run
-                                          : Icons.sports_bar,
-                                      color: AppTheme.primaryBeer.withOpacity(
-                                        0.7,
-                                      ),
-                                      size: 20,
-                                    ),
-                                    title: Text(
-                                      label,
-                                      style: const TextStyle(
-                                        color: Colors.white70,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    trailing: Text(
-                                      '${item.timestamp.hour}:${item.timestamp.minute.toString().padLeft(2, '0')}',
-                                      style: const TextStyle(
-                                        color: Colors.white24,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ),
+                          final isTop = item == logs[0];
+                          return _LogItem(
+                            key: ValueKey(
+                              item is Activity ? item.id : (item as Drink).id,
+                            ),
+                            item: item,
+                            isMostRecent: isTop,
+                            onEdit: () => _showEditDialog(context, item),
                           );
                         }),
                       ],
@@ -368,6 +191,180 @@ class DashboardScreen extends StatelessWidget {
             child: const Text('SAVE'),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _LogItem extends StatefulWidget {
+  final dynamic item;
+  final bool isMostRecent;
+  final VoidCallback onEdit;
+
+  const _LogItem({
+    super.key,
+    required this.item,
+    required this.isMostRecent,
+    required this.onEdit,
+  });
+
+  @override
+  State<_LogItem> createState() => _LogItemState();
+}
+
+class _LogItemState extends State<_LogItem> {
+  bool _isVisible = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Delay setting visible to trigger entrance animation
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) setState(() => _isVisible = true);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isActivity = widget.item is Activity;
+    final amount = isActivity
+        ? widget.item.amount
+        : (widget.item as Drink).amount;
+    final id = isActivity ? widget.item.id : (widget.item as Drink).id;
+    final state = context.read<AppState>();
+
+    final label = isActivity
+        ? '${amount.toStringAsFixed(1)} km Run'
+        : '${amount % 1 == 0 ? amount.toInt() : amount.toStringAsFixed(1)} Pint${amount == 1 ? '' : 's'}';
+
+    final activeCard = Card(
+      margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+      color: Colors.white.withOpacity(0.04),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(color: Colors.white.withOpacity(0.08)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Icon(
+                  isActivity ? Icons.directions_run : Icons.sports_bar,
+                  color: AppTheme.primaryBeer,
+                  size: 28,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        label,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        'Logged at ${widget.item.timestamp.hour}:${widget.item.timestamp.minute.toString().padLeft(2, '0')}',
+                        style: const TextStyle(
+                          color: Colors.white38,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _ActionButton(
+                  icon: Icons.remove,
+                  onPressed: () {
+                    if (isActivity) {
+                      if (amount > 0.5)
+                        state.updateActivity(widget.item, amount - 0.5);
+                    } else {
+                      if (amount > 1)
+                        state.updateDrink(widget.item as Drink, amount - 1);
+                    }
+                  },
+                ),
+                _ActionButton(
+                  icon: Icons.add,
+                  onPressed: () {
+                    if (isActivity) {
+                      state.updateActivity(widget.item, amount + 0.5);
+                    } else {
+                      state.updateDrink(widget.item as Drink, amount + 1);
+                    }
+                  },
+                ),
+                _ActionButton(icon: Icons.edit, onPressed: widget.onEdit),
+                _ActionButton(
+                  icon: Icons.delete_outline,
+                  onPressed: () {
+                    if (isActivity) {
+                      state.deleteActivity(id);
+                    } else {
+                      state.deleteDrink(id);
+                    }
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+
+    final historyTile = ListTile(
+      dense: true,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+      leading: Icon(
+        isActivity ? Icons.directions_run : Icons.sports_bar,
+        color: AppTheme.primaryBeer.withOpacity(0.7),
+        size: 20,
+      ),
+      title: Text(
+        label,
+        style: const TextStyle(color: Colors.white70, fontSize: 14),
+      ),
+      trailing: Text(
+        '${widget.item.timestamp.hour}:${widget.item.timestamp.minute.toString().padLeft(2, '0')}',
+        style: const TextStyle(color: Colors.white24, fontSize: 12),
+      ),
+    );
+
+    // Simplified entrance bloom
+    return AnimatedOpacity(
+      opacity: _isVisible ? 1.0 : 0.0,
+      duration: const Duration(milliseconds: 300),
+      child: AnimatedScale(
+        scale: _isVisible ? 1.0 : 0.9,
+        duration: const Duration(milliseconds: 600),
+        curve: Curves.easeOutBack,
+        child: AnimatedSize(
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.easeInOut,
+          child: AnimatedCrossFade(
+            firstChild: activeCard,
+            secondChild: historyTile,
+            crossFadeState: widget.isMostRecent
+                ? CrossFadeState.showFirst
+                : CrossFadeState.showSecond,
+            duration: const Duration(milliseconds: 500),
+            sizeCurve: Curves.easeInOut,
+            firstCurve: Curves.easeIn,
+            secondCurve: Curves.easeOut,
+          ),
+        ),
       ),
     );
   }
