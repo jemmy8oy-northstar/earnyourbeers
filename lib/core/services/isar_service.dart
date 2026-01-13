@@ -32,6 +32,16 @@ class IsarService {
     isar.writeTxnSync(() => isar.collection<Drink>().putSync(drink));
   }
 
+  Future<void> deleteActivity(int id) async {
+    final isar = await db;
+    isar.writeTxnSync(() => isar.collection<Activity>().deleteSync(id));
+  }
+
+  Future<void> deleteDrink(int id) async {
+    final isar = await db;
+    isar.writeTxnSync(() => isar.collection<Drink>().deleteSync(id));
+  }
+
   Future<List<Activity>> getAllActivities() async {
     final isar = await db;
     return await isar.collection<Activity>().where().findAll();
