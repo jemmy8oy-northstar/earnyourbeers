@@ -13,65 +13,83 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
-  List<dynamic> _previousLogs = [];
+  final GlobalKey<AnimatedListState> _historyListKey =
+      GlobalKey<AnimatedListState>();
+  List<dynamic> _previousHistory =
+      []; // History = all logs except the first one
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Sync AnimatedList with state changes
-    _syncList();
+    _syncHistoryList();
   }
 
-  void _syncList() {
-    final currentLogs = context.read<AppState>().logs;
+  /// Get history items (all except the most recent)
+  List<dynamic> _getHistory(List<dynamic> logs) {
+    return logs.length > 1 ? logs.sublist(1) : [];
+  }
 
-    // Find insertions (items in current but not in previous)
-    bool didInsert = false;
-    for (int i = 0; i < currentLogs.length; i++) {
-      final item = currentLogs[i];
+  void _syncHistoryList() {
+    final logs = context.read<AppState>().logs;
+    final currentHistory = _getHistory(logs);
+
+    // Find new items in history (items that weren't there before)
+    for (int i = 0; i < currentHistory.length; i++) {
+      final item = currentHistory[i];
       final itemId = item is Activity ? item.id : (item as Drink).id;
-      final wasInPrevious = _previousLogs.any((prev) {
+      final wasInPrevious = _previousHistory.any((prev) {
         final prevId = prev is Activity ? prev.id : (prev as Drink).id;
         return prevId == itemId;
       });
       if (!wasInPrevious) {
-        _listKey.currentState?.insertItem(
+        _historyListKey.currentState?.insertItem(
           i,
-          duration: const Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 400),
         );
-        didInsert = true;
       }
     }
 
-    _previousLogs = List.from(currentLogs);
-
-    // Force rebuild of all items so they recalculate isMostRecent
-    if (didInsert) {
-      setState(() {});
-    }
+    _previousHistory = List.from(currentHistory);
   }
 
-  void _removeItem(int index, dynamic item) {
-    final removedItem = item;
-    _listKey.currentState?.removeItem(
-      index,
-      (context, animation) =>
-          _buildItem(removedItem, animation, isRemoving: true),
-      duration: const Duration(milliseconds: 500),
-    );
-
-    // Actually delete from state
+  void _deleteItem(dynamic item) {
+    final logs = context.read<AppState>().logs;
+    final isActive = logs.isNotEmpty && logs[0] == item;
     final id = item is Activity ? item.id : (item as Drink).id;
-    if (item is Activity) {
-      context.read<AppState>().deleteActivity(id);
+
+    if (isActive) {
+      // Deleting the active item - just remove from state
+      // The next item will automatically become active
+      if (item is Activity) {
+        context.read<AppState>().deleteActivity(id);
+      } else {
+        context.read<AppState>().deleteDrink(id);
+      }
+      // Update history tracking
+      _previousHistory = _getHistory(context.read<AppState>().logs);
     } else {
-      context.read<AppState>().deleteDrink(id);
+      // Deleting from history list - animate out
+      final history = _getHistory(logs);
+      final historyIndex = history.indexOf(item);
+      if (historyIndex >= 0) {
+        _historyListKey.currentState?.removeItem(
+          historyIndex,
+          (context, animation) =>
+              _buildHistoryTile(item, animation, isRemoving: true),
+          duration: const Duration(milliseconds: 400),
+        );
+      }
+      // Actually delete from state
+      if (item is Activity) {
+        context.read<AppState>().deleteActivity(id);
+      } else {
+        context.read<AppState>().deleteDrink(id);
+      }
+      _previousHistory = _getHistory(context.read<AppState>().logs);
     }
-    _previousLogs = List.from(context.read<AppState>().logs);
   }
 
-  Widget _buildItem(
+  Widget _buildHistoryTile(
     dynamic item,
     Animation<double> animation, {
     bool isRemoving = false,
@@ -81,17 +99,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
       axisAlignment: -1.0,
       child: FadeTransition(
         opacity: animation,
-        child: _LogItemContent(
+        child: _HistoryTile(
           item: item,
-          isRemoving: isRemoving,
+          onDelete: isRemoving ? null : () => _deleteItem(item),
           onEdit: () => _showEditDialog(context, item),
-          onDelete: isRemoving
-              ? null
-              : () {
-                  final currentLogs = context.read<AppState>().logs;
-                  final index = currentLogs.indexOf(item);
-                  if (index >= 0) _removeItem(index, item);
-                },
         ),
       ),
     );
@@ -101,6 +112,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     final balance = context.watch<AppState>().balance;
     final logs = context.watch<AppState>().logs;
+    final activeItem = logs.isNotEmpty ? logs[0] : null;
+    final history = _getHistory(logs);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Earn Your Beers 🍻')),
@@ -129,6 +142,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           const SizedBox(height: 30),
           const Divider(indent: 32, endIndent: 32),
+
+          // Activity Feed
           Expanded(
             child: logs.isEmpty
                 ? const Center(
@@ -137,17 +152,79 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       style: TextStyle(color: Colors.white24),
                     ),
                   )
-                : AnimatedList(
-                    key: _listKey,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 16,
+                : Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      children: [
+                        // ACTIVE CARD - Separate widget with AnimatedSwitcher
+                        AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 400),
+                          switchInCurve: Curves.easeOut,
+                          switchOutCurve: Curves.easeIn,
+                          transitionBuilder: (child, animation) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: SizeTransition(
+                                sizeFactor: animation,
+                                axisAlignment: -1.0,
+                                child: child,
+                              ),
+                            );
+                          },
+                          child: activeItem != null
+                              ? _ActiveCard(
+                                  key: ValueKey(
+                                    activeItem is Activity
+                                        ? activeItem.id
+                                        : (activeItem as Drink).id,
+                                  ),
+                                  item: activeItem,
+                                  onDelete: () => _deleteItem(activeItem),
+                                  onEdit: () =>
+                                      _showEditDialog(context, activeItem),
+                                )
+                              : const SizedBox.shrink(),
+                        ),
+
+                        // HISTORY LIST - AnimatedList of tiles only
+                        if (history.isNotEmpty) ...[
+                          const Padding(
+                            padding: EdgeInsets.only(
+                              left: 8,
+                              top: 16,
+                              bottom: 8,
+                            ),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'HISTORY',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 1.5,
+                                  color: Colors.white24,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: AnimatedList(
+                              key: _historyListKey,
+                              initialItemCount: history.length,
+                              itemBuilder: (context, index, animation) {
+                                if (index >= history.length)
+                                  return const SizedBox.shrink();
+                                return _buildHistoryTile(
+                                  history[index],
+                                  animation,
+                                );
+                              },
+                            ),
+                          ),
+                        ] else
+                          const Spacer(),
+                      ],
                     ),
-                    initialItemCount: logs.length,
-                    itemBuilder: (context, index, animation) {
-                      if (index >= logs.length) return const SizedBox.shrink();
-                      return _buildItem(logs[index], animation);
-                    },
                   ),
           ),
         ],
@@ -160,8 +237,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           FloatingActionButton.extended(
             onPressed: () {
               context.read<AppState>().addDrink(1.0);
-              // Trigger sync on next frame
-              WidgetsBinding.instance.addPostFrameCallback((_) => _syncList());
+              WidgetsBinding.instance.addPostFrameCallback(
+                (_) => _syncHistoryList(),
+              );
             },
             label: const Text('Log Pint'),
             icon: const Icon(Icons.sports_bar),
@@ -171,8 +249,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           FloatingActionButton.extended(
             onPressed: () {
               context.read<AppState>().addActivity(5.0);
-              // Trigger sync on next frame
-              WidgetsBinding.instance.addPostFrameCallback((_) => _syncList());
+              WidgetsBinding.instance.addPostFrameCallback(
+                (_) => _syncHistoryList(),
+              );
             },
             label: const Text('Log Run (5k)'),
             icon: const Icon(Icons.directions_run),
@@ -230,27 +309,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 }
 
-/// The content widget for a log item. Animation is handled by AnimatedList.
-/// This widget watches state directly to react to position changes.
-class _LogItemContent extends StatelessWidget {
+/// The active card - always displayed as a full card
+class _ActiveCard extends StatelessWidget {
   final dynamic item;
+  final VoidCallback onDelete;
   final VoidCallback onEdit;
-  final VoidCallback? onDelete;
-  final bool isRemoving; // If true, skip watching state (item is being removed)
 
-  const _LogItemContent({
+  const _ActiveCard({
+    super.key,
     required this.item,
+    required this.onDelete,
     required this.onEdit,
-    this.onDelete,
-    this.isRemoving = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    // Watch state to reactively update when position changes
-    final logs = isRemoving ? <dynamic>[] : context.watch<AppState>().logs;
-    final isMostRecent = !isRemoving && logs.isNotEmpty && logs[0] == item;
-
     final isActivity = item is Activity;
     final amount = isActivity ? item.amount : (item as Drink).amount;
     final state = context.read<AppState>();
@@ -259,8 +332,7 @@ class _LogItemContent extends StatelessWidget {
         ? '${amount.toStringAsFixed(1)} km Run'
         : '${amount % 1 == 0 ? amount.toInt() : amount.toStringAsFixed(1)} Pint${amount == 1 ? '' : 's'}';
 
-    final activeCard = Card(
-      key: const ValueKey('active'),
+    return Card(
       margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
       color: Colors.white.withOpacity(0.04),
       shape: RoundedRectangleBorder(
@@ -330,20 +402,34 @@ class _LogItemContent extends StatelessWidget {
                   },
                 ),
                 _ActionButton(icon: Icons.edit, onPressed: onEdit),
-                if (onDelete != null)
-                  _ActionButton(
-                    icon: Icons.delete_outline,
-                    onPressed: onDelete!,
-                  ),
+                _ActionButton(icon: Icons.delete_outline, onPressed: onDelete),
               ],
             ),
           ],
         ),
       ),
     );
+  }
+}
 
-    final historyTile = ListTile(
-      key: const ValueKey('history'),
+/// History tile - always displayed as a compact tile
+class _HistoryTile extends StatelessWidget {
+  final dynamic item;
+  final VoidCallback? onDelete;
+  final VoidCallback onEdit;
+
+  const _HistoryTile({required this.item, this.onDelete, required this.onEdit});
+
+  @override
+  Widget build(BuildContext context) {
+    final isActivity = item is Activity;
+    final amount = isActivity ? item.amount : (item as Drink).amount;
+
+    final label = isActivity
+        ? '${amount.toStringAsFixed(1)} km Run'
+        : '${amount % 1 == 0 ? amount.toInt() : amount.toStringAsFixed(1)} Pint${amount == 1 ? '' : 's'}';
+
+    return ListTile(
       dense: true,
       contentPadding: const EdgeInsets.symmetric(horizontal: 8),
       leading: Icon(
@@ -373,18 +459,7 @@ class _LogItemContent extends StatelessWidget {
           ],
         ],
       ),
-    );
-
-    return AnimatedCrossFade(
-      firstChild: activeCard,
-      secondChild: historyTile,
-      crossFadeState: isMostRecent
-          ? CrossFadeState.showFirst
-          : CrossFadeState.showSecond,
-      duration: const Duration(milliseconds: 500),
-      sizeCurve: Curves.easeInOutCubic,
-      firstCurve: Curves.easeIn,
-      secondCurve: Curves.easeOut,
+      onTap: onEdit,
     );
   }
 }
