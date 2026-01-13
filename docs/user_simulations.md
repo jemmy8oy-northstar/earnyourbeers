@@ -2,14 +2,18 @@
 
 ## Persona 6: "The Efficient Hybrid"
 - **Status**: Silver Runner (5km = 1 Pint), Bronze Cyclist (12km = 1 Pint).
-- **Goal**: Hit the 50-pint Bottling Threshold.
+- **Goal**: Hit the **25-pint** Bottling Threshold.
 
 | Activities | Pints Earned | Contrib % | Result |
 | :--- | :--- | :--- | :--- |
-| 150 km Cycling | 12.5 | 25% | - |
-| 150 km Running | 30.0 | **60%** | **Primary Track** |
-| 5 Gym Sessions | 7.5 | 15% | - |
-| **Total** | **50.0** | 100% | **Promotion!** |
+| 72 km Cycling | 6.0 | 24% | - |
+| 75 km Running | 15.0 | **60%** | **Primary Track** |
+| 3 Gym Sessions | 4.5 | 18% | - |
+| **Total** | **25.5** | 100% | **Promotion!** |
+
+**Promotion Outcome**: 
+- Promotes to **Gold Runner** after roughly 3 weeks of consistent effort.
+- This feels much tighter and more rewarding than a 50-pint multi-month grind.
 
 **Promotion Outcome**: 
 - Because **Running** was the primary contributor (60%), the user promotes to **Gold Runner**. 

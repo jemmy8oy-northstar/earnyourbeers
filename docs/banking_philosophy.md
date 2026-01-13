@@ -5,8 +5,8 @@ The banking system handles how your short-term hard work becomes long-term prest
 ## 1. Bottling & Promotion (Primary Discipline)
 Promotion is a strategic choice made at the **Weekly Settlement**.
 
-- **The Threshold**: Once your total earnings across all tracks reach **50 Pints**, you can "Bottle & Promote."
-- **Primary Promotion**: The track that contributed the **most pints** to that 50-pint goal is the one that promotes to the next league level. 
+- **The Threshold**: Once your total earnings across all tracks reach **25 Pints**, you can "Bottle & Promote."
+- **Primary Promotion**: The track that contributed the **most pints** to that 25-pint goal is the one that promotes to the next league level. 
 - **The Boost**: This rewards multi-discipline athletes by allowing them to progress using any activity, while ensuring their "strongest" activity gets harder to prevent it from carrying them forever.
 
 ## 2. The Vault & The Debt Floor
@@ -17,7 +17,7 @@ When you promote with **X Pints**:
 ## 3. "Tapped Out" (Automatic Demotion)
 If your weekly settlement brings your total balance below your **Debt Floor**:
 1. **Automatic Demotion**: You are demoted in your highest-league track.
-2. **Bottle Loss**: One bottle (50 pints) is removed from your Vault to pay the debt.
+2. **Bottle Loss**: One bottle (**25 pints**) is removed from your Vault to pay the debt.
 3. **Reset**: You start at 0.0 in the lower league.
 
 > [!NOTE]

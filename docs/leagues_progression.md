@@ -15,12 +15,12 @@ Every athlete has a level in each major discipline.
 ## Difficulty Multipliers
 Multipliers apply *only* to the specific track they belong to.
 
-| League Level | Multiplier (Credit Only) | Difficulty Note (Running) |
-| :--- | :--- | :--- |
-| **Bronze** | 1.0x | 3km = 1 Pint |
-| **Silver** | 1.6x | 5km = 1 Pint |
-| **Gold** | 2.5x | 7.5km = 1 Pint |
-| **Platinum**| 3.3x | 10km = 1 Pint |
+| League Level | Pints to Bottle | Multiplier (Credit Only) | Difficulty Note (Running) |
+| :--- | :--- | :--- | :--- |
+| **Bronze** | 25 Pints | 1.0x | 3km = 1 Pint |
+| **Silver** | 25 Pints | 1.6x | 5km = 1 Pint |
+| **Gold** | 25 Pints | 2.5x | 7.5km = 1 Pint |
+| **Platinum**| 25 Pints | 3.3x | 10km = 1 Pint |
 
 > [!TIP]
 > **The Mix-and-Match Strategy**: You can earn pints across any combination of tracks. 
