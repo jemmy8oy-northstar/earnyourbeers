@@ -38,3 +38,10 @@ We follow a 6-stage iterative approach, focusing on the "Logic First" engineerin
 - **Vibrant UI/UX**: Glassmorphism, animations, and high-end themes.
 - **Promotion/"Bottled It" Scenes**: High-reward feedback loops.
 - **Asset Polish**: Custom icons and beer-themed graphics.
+
+## Future Vision: Expansion & Integration 🚀
+**Goal**: Move beyond a standalone tool into a connected ecosystem.
+- **Wearable Integration**: Sync activities directly from **Strava**, **Garmin**, **Apple Health**, and **Nike Run Club**.
+- **Social Cellars**: Share your "Cellar" with friends or join a global leaderboard.
+- **Beer Clubs**: Create groups to compete on "Net Savings" over a month.
+- **Local Brewery Sync**: Integration with real-world brewery data.
