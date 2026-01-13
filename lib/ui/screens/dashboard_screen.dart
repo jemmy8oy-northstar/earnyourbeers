@@ -156,34 +156,35 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Column(
                       children: [
-                        // ACTIVE CARD - Separate widget with AnimatedSwitcher
-                        AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 400),
-                          switchInCurve: Curves.easeOut,
-                          switchOutCurve: Curves.easeIn,
-                          transitionBuilder: (child, animation) {
-                            return FadeTransition(
-                              opacity: animation,
-                              child: SizeTransition(
-                                sizeFactor: animation,
-                                axisAlignment: -1.0,
+                        // ACTIVE CARD - Fixed height container, fade-only transition
+                        SizedBox(
+                          height:
+                              140, // Fixed height so history list doesn't jump
+                          child: AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 300),
+                            switchInCurve: Curves.easeOut,
+                            switchOutCurve: Curves.easeIn,
+                            transitionBuilder: (child, animation) {
+                              // Fade only - no size changes
+                              return FadeTransition(
+                                opacity: animation,
                                 child: child,
-                              ),
-                            );
-                          },
-                          child: activeItem != null
-                              ? _ActiveCard(
-                                  key: ValueKey(
-                                    activeItem is Activity
-                                        ? activeItem.id
-                                        : (activeItem as Drink).id,
-                                  ),
-                                  item: activeItem,
-                                  onDelete: () => _deleteItem(activeItem),
-                                  onEdit: () =>
-                                      _showEditDialog(context, activeItem),
-                                )
-                              : const SizedBox.shrink(),
+                              );
+                            },
+                            child: activeItem != null
+                                ? _ActiveCard(
+                                    key: ValueKey(
+                                      activeItem is Activity
+                                          ? activeItem.id
+                                          : (activeItem as Drink).id,
+                                    ),
+                                    item: activeItem,
+                                    onDelete: () => _deleteItem(activeItem),
+                                    onEdit: () =>
+                                        _showEditDialog(context, activeItem),
+                                  )
+                                : const SizedBox.shrink(),
+                          ),
                         ),
 
                         // HISTORY LIST - AnimatedList of tiles only
