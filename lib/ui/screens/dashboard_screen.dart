@@ -112,11 +112,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       axisAlignment: -1.0,
       child: FadeTransition(
         opacity: animation,
-        child: _HistoryTile(
-          item: item,
-          onDelete: isRemoving ? null : () => _deleteItem(item),
-          onEdit: () => _showEditDialog(context, item),
-        ),
+        child: _HistoryTile(item: item),
       ),
     );
   }
@@ -264,7 +260,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                'HISTORY',
+                                'TODAY',
                                 style: TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.bold,
@@ -484,10 +480,8 @@ class _ActiveCard extends StatelessWidget {
 /// History tile - always displayed as a compact tile
 class _HistoryTile extends StatelessWidget {
   final dynamic item;
-  final VoidCallback? onDelete;
-  final VoidCallback onEdit;
 
-  const _HistoryTile({required this.item, this.onDelete, required this.onEdit});
+  const _HistoryTile({required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -510,25 +504,10 @@ class _HistoryTile extends StatelessWidget {
         label,
         style: const TextStyle(color: Colors.white70, fontSize: 14),
       ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            '${item.timestamp.hour}:${item.timestamp.minute.toString().padLeft(2, '0')}',
-            style: const TextStyle(color: Colors.white24, fontSize: 12),
-          ),
-          if (onDelete != null) ...[
-            const SizedBox(width: 4),
-            IconButton(
-              icon: const Icon(Icons.close, size: 14, color: Colors.white10),
-              onPressed: onDelete,
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(),
-            ),
-          ],
-        ],
+      trailing: Text(
+        '${item.timestamp.hour}:${item.timestamp.minute.toString().padLeft(2, '0')}',
+        style: const TextStyle(color: Colors.white24, fontSize: 12),
       ),
-      onTap: onEdit,
     );
   }
 }
