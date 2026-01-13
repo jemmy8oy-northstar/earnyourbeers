@@ -197,7 +197,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     angle = -(1.0 - animation.value) * 1.5708;
                                   } else {
                                     // Exiting: 0° → +90° (tilts forward/down)
-                                    angle = animation.value * 1.5708;
+                                    angle = (1.0 - animation.value) * 1.5708;
                                   }
 
                                   final transform = Matrix4.identity()
