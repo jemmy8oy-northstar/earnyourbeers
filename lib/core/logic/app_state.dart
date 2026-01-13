@@ -1,39 +1,48 @@
 import 'package:flutter/foundation.dart';
 import '../models/activity.dart';
 import '../models/drink.dart';
+import '../services/isar_service.dart';
+import 'pint_calculator.dart';
 
 class AppState extends ChangeNotifier {
+  final IsarService _isarService;
+
   double _balance = 0.0;
   double get balance => _balance;
 
-  final List<Activity> _activities = [];
-  final List<Drink> _drinks = [];
+  List<Activity> _activities = [];
+  List<Drink> _drinks = [];
 
-  void addActivity(Activity activity) {
-    _activities.add(activity);
-    _calculateBalance();
-    notifyListeners();
+  AppState(this._isarService) {
+    _init();
   }
 
-  void addDrink(Drink drink) {
-    _drinks.add(drink);
-    _calculateBalance();
-    notifyListeners();
+  void _init() {
+    _isarService.watchActivities().listen((activities) {
+      _activities = activities;
+      _calculateBalance();
+    });
+
+    _isarService.watchDrinks().listen((drinks) {
+      _drinks = drinks;
+      _calculateBalance();
+    });
+  }
+
+  Future<void> addActivity(double km) async {
+    final activity = Activity.run(km);
+    await _isarService.saveActivity(activity);
+    // UI will update via the stream listener
+  }
+
+  Future<void> addDrink(double pints) async {
+    final drink = Drink.pint(pints);
+    await _isarService.saveDrink(drink);
+    // UI will update via the stream listener
   }
 
   void _calculateBalance() {
-    double totalEarned = 0;
-    for (var a in _activities) {
-      if (a.type == 'Run') {
-        totalEarned += (a.amount / 3.0); // MVP Rate: 3km = 1 Pint
-      }
-    }
-
-    double totalConsumed = 0;
-    for (var d in _drinks) {
-      totalConsumed += d.amount;
-    }
-
-    _balance = totalEarned - totalConsumed;
+    _balance = PintCalculator.calculateBalance(_activities, _drinks);
+    notifyListeners();
   }
 }
