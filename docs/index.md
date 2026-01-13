@@ -8,7 +8,8 @@ Welcome to the documentation for **Earn Your Beers**.
 - [Conversion Rates](conversion_rates.md): Exchange rates for drinks vs activities.
 - [Debt Mechanics](debt_mechanics.md): How KM Debt and "Clearing" works.
 - [Leagues & Progression](leagues_progression.md): Tiered ranks and dynamic scaling.
-- [User Simulations](user_simulations.md): Testing balance across different lifestyles.
-- [Banking & Bottling](banking_philosophy.md): The Vault, Bailouts, and the Pint Score.
+- [User Simulations](file:///Users/jamesbalenthiran/coding/earn_your_beers/docs/user_simulations.md)
+- [Banking Philosophy](file:///Users/jamesbalenthiran/coding/earn_your_beers/docs/banking_philosophy.md)
+- [Agile Roadmap](file:///Users/jamesbalenthiran/coding/earn_your_beers/docs/roadmap.md)
 
 *More documentation coming soon...*
