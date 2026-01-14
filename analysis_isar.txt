@@ -1,0 +1,12 @@
+Analyzing earn_your_beers...                                    
+
+   info • 'translate' is deprecated and shouldn't be used. Use translateByVector3, translateByVector4, or translateByDouble instead • lib/ui/screens/dashboard_screen.dart:206:39 • deprecated_member_use
+   info • 'translate' is deprecated and shouldn't be used. Use translateByVector3, translateByVector4, or translateByDouble instead • lib/ui/screens/dashboard_screen.dart:212:39 • deprecated_member_use
+   info • Statements in an if should be enclosed in a block • lib/ui/screens/dashboard_screen.dart:278:35 • curly_braces_in_flow_control_structures
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/ui/screens/dashboard_screen.dart:401:27 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/ui/screens/dashboard_screen.dart:404:46 • deprecated_member_use
+   info • Statements in an if should be enclosed in a block • lib/ui/screens/dashboard_screen.dart:451:25 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block • lib/ui/screens/dashboard_screen.dart:454:25 • curly_braces_in_flow_control_structures
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/ui/screens/dashboard_screen.dart:499:37 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/ui/screens/dashboard_screen.dart:527:29 • deprecated_member_use
+
