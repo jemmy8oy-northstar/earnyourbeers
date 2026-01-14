@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/logic/app_state.dart';
-import '../../core/models/activity.dart';
-import '../../core/models/drink.dart';
+import '../../core/services/database.dart';
 import '../theme.dart';
 
 class DashboardScreen extends StatefulWidget {

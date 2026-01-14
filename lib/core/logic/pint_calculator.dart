@@ -1,5 +1,4 @@
-import '../models/activity.dart';
-import '../models/drink.dart';
+import '../services/database.dart';
 
 class PintCalculator {
   static const double kmPerPint = 5.0; // 5km = 1 Pint

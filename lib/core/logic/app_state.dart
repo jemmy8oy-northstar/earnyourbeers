@@ -1,11 +1,10 @@
 import 'package:flutter/foundation.dart';
-import '../models/activity.dart';
-import '../models/drink.dart';
-import '../services/isar_service.dart';
+import 'package:drift/drift.dart' show Value;
+import '../services/database.dart';
 import 'pint_calculator.dart';
 
 class AppState extends ChangeNotifier {
-  final IsarService _isarService;
+  final AppDatabase _database;
 
   double _balance = 0.0;
   double get balance => _balance;
@@ -21,48 +20,56 @@ class AppState extends ChangeNotifier {
     return combined;
   }
 
-  AppState(this._isarService) {
+  AppState(this._database) {
     _init();
   }
 
   void _init() {
-    _isarService.watchActivities().listen((activities) {
+    _database.watchActivities().listen((activities) {
       _activities = activities;
       _calculateBalance();
     });
 
-    _isarService.watchDrinks().listen((drinks) {
+    _database.watchDrinks().listen((drinks) {
       _drinks = drinks;
       _calculateBalance();
     });
   }
 
   Future<void> addActivity([double units = 5.0]) async {
-    final activity = Activity.run(units);
-    await _isarService.saveActivity(activity);
+    await _database.saveActivity(
+      ActivitiesCompanion.insert(
+        type: 'Run',
+        amount: units,
+        timestamp: DateTime.now(),
+      ),
+    );
   }
 
   Future<void> addDrink([double units = 1.0]) async {
-    final drink = Drink.pint(units);
-    await _isarService.saveDrink(drink);
+    await _database.saveDrink(
+      DrinksCompanion.insert(amount: units, timestamp: DateTime.now()),
+    );
   }
 
   Future<void> updateActivity(Activity activity, double newAmount) async {
-    activity.amount = newAmount;
-    await _isarService.saveActivity(activity);
+    await _database.saveActivity(
+      activity.toCompanion(false).copyWith(amount: Value(newAmount)),
+    );
   }
 
   Future<void> updateDrink(Drink drink, double newAmount) async {
-    drink.amount = newAmount;
-    await _isarService.saveDrink(drink);
+    await _database.saveDrink(
+      drink.toCompanion(false).copyWith(amount: Value(newAmount)),
+    );
   }
 
   Future<void> deleteActivity(int id) async {
-    await _isarService.deleteActivity(id);
+    await _database.deleteActivity(id);
   }
 
   Future<void> deleteDrink(int id) async {
-    await _isarService.deleteDrink(id);
+    await _database.deleteDrink(id);
   }
 
   void _calculateBalance() {
