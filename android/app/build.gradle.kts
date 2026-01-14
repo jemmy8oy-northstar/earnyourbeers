@@ -30,12 +30,25 @@ android {
 
     signingConfigs {
         create("release") {
-            keyAlias = keystoreProperties["keyAlias"] as String? ?: System.getenv("CM_KEY_ALIAS")
-            keyPassword = keystoreProperties["keyPassword"] as String? ?: System.getenv("CM_KEY_PASSWORD")
-            storePassword = keystoreProperties["storePassword"] as String? ?: System.getenv("CM_KEYSTORE_PASSWORD")
-            
-            val storeFilePath = keystoreProperties["storeFile"] as String? ?: System.getenv("CM_KEYSTORE_PATH")
-            storeFile = storeFilePath?.let { file(it) }
+            val cmKeyAlias = System.getenv("CM_KEY_ALIAS")
+            val cmKeyPassword = System.getenv("CM_KEY_PASSWORD")
+            val cmStorePassword = System.getenv("CM_KEYSTORE_PASSWORD")
+            val cmStoreFile = System.getenv("CM_KEYSTORE_PATH")
+
+            if (!cmKeyAlias.isNullOrBlank()) {
+                // We are on Codemagic
+                keyAlias = cmKeyAlias
+                keyPassword = cmKeyPassword
+                storePassword = cmStorePassword
+                storeFile = file(cmStoreFile)
+            } else {
+                // Fallback for local building
+                keyAlias = keystoreProperties["keyAlias"] as String?
+                keyPassword = keystoreProperties["keyPassword"] as String?
+                storePassword = keystoreProperties["storePassword"] as String?
+                val path = keystoreProperties["storeFile"] as String?
+                if (path != null) storeFile = file(path)
+            }        
         }
     }
 
