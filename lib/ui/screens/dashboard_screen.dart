@@ -362,65 +362,66 @@ class _WeeklyPageState extends State<WeeklyPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
                     children: [
-                      // ACTIVE CARD
-                      SizedBox(
-                        height: 140,
-                        child: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 500),
-                          switchInCurve: Curves.easeInOut,
-                          switchOutCurve: Curves.easeInOut,
-                          transitionBuilder: (child, animation) {
-                            // TRUE CUBOID ROTATION Logic
-                            final isEntering =
-                                animation.status == AnimationStatus.forward ||
-                                animation.status == AnimationStatus.completed;
+                      // ACTIVE CARD (only for current week)
+                      if (activeItem != null)
+                        SizedBox(
+                          height: 140,
+                          child: AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 500),
+                            switchInCurve: Curves.easeInOut,
+                            switchOutCurve: Curves.easeInOut,
+                            transitionBuilder: (child, animation) {
+                              // TRUE CUBOID ROTATION Logic
+                              final isEntering =
+                                  animation.status == AnimationStatus.forward ||
+                                  animation.status == AnimationStatus.completed;
 
-                            return AnimatedBuilder(
-                              animation: animation,
-                              child: child,
-                              builder: (context, child) {
-                                final direction = _isDeleting ? 1.0 : -1.0;
-                                double angle;
-                                if (isEntering) {
-                                  angle =
-                                      -direction *
-                                      (1.0 - animation.value) *
-                                      1.5708;
-                                } else {
-                                  angle =
-                                      direction *
-                                      (1.0 - animation.value) *
-                                      1.5708;
-                                }
-                                final transform = Matrix4.identity()
-                                  ..setEntry(3, 2, 0.001)
-                                  ..translate(0.0, 0.0, 70.0)
-                                  ..rotateX(angle)
-                                  ..translate(0.0, 0.0, -70.0);
-                                return Transform(
-                                  transform: transform,
-                                  alignment: Alignment.center,
-                                  child: child,
-                                );
-                              },
-                            );
-                          },
-                          child: activeItem != null
-                              ? _ActiveCard(
-                                  key: ValueKey(
-                                    activeItem is Activity
-                                        ? activeItem.id
-                                        : (activeItem as Drink).id,
-                                  ),
-                                  item: activeItem,
-                                  onDelete: () =>
-                                      _deleteItem(context, activeItem),
-                                  onEdit: () =>
-                                      _showEditDialog(context, activeItem),
-                                )
-                              : const SizedBox.shrink(),
+                              return AnimatedBuilder(
+                                animation: animation,
+                                child: child,
+                                builder: (context, child) {
+                                  final direction = _isDeleting ? 1.0 : -1.0;
+                                  double angle;
+                                  if (isEntering) {
+                                    angle =
+                                        -direction *
+                                        (1.0 - animation.value) *
+                                        1.5708;
+                                  } else {
+                                    angle =
+                                        direction *
+                                        (1.0 - animation.value) *
+                                        1.5708;
+                                  }
+                                  final transform = Matrix4.identity()
+                                    ..setEntry(3, 2, 0.001)
+                                    ..translate(0.0, 0.0, 70.0)
+                                    ..rotateX(angle)
+                                    ..translate(0.0, 0.0, -70.0);
+                                  return Transform(
+                                    transform: transform,
+                                    alignment: Alignment.center,
+                                    child: child,
+                                  );
+                                },
+                              );
+                            },
+                            child: activeItem != null
+                                ? _ActiveCard(
+                                    key: ValueKey(
+                                      activeItem is Activity
+                                          ? activeItem.id
+                                          : (activeItem as Drink).id,
+                                    ),
+                                    item: activeItem,
+                                    onDelete: () =>
+                                        _deleteItem(context, activeItem),
+                                    onEdit: () =>
+                                        _showEditDialog(context, activeItem),
+                                  )
+                                : const SizedBox.shrink(),
+                          ),
                         ),
-                      ),
 
                       // HISTORY LIST
                       if (history.isNotEmpty) ...[
@@ -589,10 +590,12 @@ class _ActiveCard extends StatelessWidget {
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-      color: Colors.white.withOpacity(0.04),
+      color: Theme.of(context).colorScheme.surfaceContainerHighest,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: Colors.white.withOpacity(0.08)),
+        side: BorderSide(
+          color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
+        ),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -747,7 +750,7 @@ class _ActionButton extends StatelessWidget {
       width: 28,
       height: 28,
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
         shape: BoxShape.circle,
       ),
       child: IconButton(
