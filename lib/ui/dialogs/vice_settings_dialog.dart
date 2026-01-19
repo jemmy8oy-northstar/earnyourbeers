@@ -12,7 +12,6 @@ class ViceSettingsDialog extends StatefulWidget {
 
 class _ViceSettingsDialogState extends State<ViceSettingsDialog> {
   late TextEditingController _emojiController;
-  late TextEditingController _nameController;
   late ThemeMode _selectedTheme;
 
   @override
@@ -20,26 +19,20 @@ class _ViceSettingsDialogState extends State<ViceSettingsDialog> {
     super.initState();
     final state = context.read<AppState>();
     _emojiController = TextEditingController(text: state.viceEmoji);
-    _nameController = TextEditingController(text: state.viceName);
     _selectedTheme = state.themeMode;
   }
 
   @override
   void dispose() {
     _emojiController.dispose();
-    _nameController.dispose();
     super.dispose();
   }
 
   void _save() {
     final state = context.read<AppState>();
     final emoji = _emojiController.text.trim();
-    final name = _nameController.text.trim();
     // Default to Pizza if empty
-    state.updateVice(
-      name.isEmpty ? 'Pizza' : name,
-      emoji.isEmpty ? '🍕' : emoji,
-    );
+    state.updateVice(emoji.isEmpty ? '🍕' : emoji);
     state.updateTheme(_selectedTheme);
     Navigator.of(context).pop();
   }
@@ -65,7 +58,7 @@ class _ViceSettingsDialogState extends State<ViceSettingsDialog> {
               style: const TextStyle(fontSize: 48),
               maxLength: 2, // Emojis can be 2 chars (surrogate pairs)
               inputFormatters: [
-                // Filter out standard keyboard characters (ASCII + common punctuation)
+                // Filter out standard keyboard characters (ASCII)
                 FilteringTextInputFormatter.deny(RegExp(r'[\x00-\x7F]')),
               ],
               decoration: const InputDecoration(
@@ -80,42 +73,13 @@ class _ViceSettingsDialogState extends State<ViceSettingsDialog> {
             Wrap(
               spacing: 8,
               children: [
-                _QuickPick(
-                  emoji: '🍕',
-                  name: 'Pizza',
-                  onTap: () => _updateVice('🍕', 'Pizza'),
-                ),
-                _QuickPick(
-                  emoji: '🎮',
-                  name: 'Gaming',
-                  onTap: () => _updateVice('🎮', 'Gaming'),
-                ),
-                _QuickPick(
-                  emoji: '🍩',
-                  name: 'Treat',
-                  onTap: () => _updateVice('🍩', 'Treat'),
-                ),
-                _QuickPick(
-                  emoji: '🥤',
-                  name: 'Soda',
-                  onTap: () => _updateVice('🥤', 'Soda'),
-                ),
+                _QuickPick(emoji: '🍕', onTap: () => _setEmoji('🍕')),
+                _QuickPick(emoji: '🎮', onTap: () => _setEmoji('🎮')),
+                _QuickPick(emoji: '🍩', onTap: () => _setEmoji('🍩')),
+                _QuickPick(emoji: '🥤', onTap: () => _setEmoji('🥤')),
+                _QuickPick(emoji: '🍫', onTap: () => _setEmoji('🍫')),
+                _QuickPick(emoji: '☕', onTap: () => _setEmoji('☕')),
               ],
-            ),
-            const SizedBox(height: 24),
-
-            // Name Input (Optional)
-            const Text(
-              'Name (Optional)',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: _nameController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'e.g. Pizza',
-              ),
             ),
             const SizedBox(height: 24),
 
@@ -163,27 +127,24 @@ class _ViceSettingsDialogState extends State<ViceSettingsDialog> {
     );
   }
 
-  void _updateVice(String emoji, String name) {
+  void _setEmoji(String emoji) {
     setState(() {
       _emojiController.text = emoji;
-      _nameController.text = name;
     });
   }
 }
 
 class _QuickPick extends StatelessWidget {
   final String emoji;
-  final String name;
   final VoidCallback onTap;
 
-  const _QuickPick({
-    required this.emoji,
-    required this.name,
-    required this.onTap,
-  });
+  const _QuickPick({required this.emoji, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return ActionChip(avatar: Text(emoji), label: Text(name), onPressed: onTap);
+    return ActionChip(
+      label: Text(emoji, style: const TextStyle(fontSize: 24)),
+      onPressed: onTap,
+    );
   }
 }

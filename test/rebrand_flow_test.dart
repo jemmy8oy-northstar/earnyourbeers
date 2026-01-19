@@ -28,16 +28,13 @@ void main() {
     });
 
     test('updates vice and persists to database', () async {
-      await appState.updateVice('Gaming', '🎮');
+      await appState.updateVice('🎮');
 
       expect(appState.viceEmoji, '🎮');
-      expect(appState.viceName, 'Gaming');
 
       // Verify persistence
       final savedEmoji = await database.getSetting('vice_emoji');
       expect(savedEmoji, '🎮');
-      final savedName = await database.getSetting('vice_name');
-      expect(savedName, 'Gaming');
     });
 
     test('updates theme mode', () async {

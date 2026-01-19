@@ -107,11 +107,9 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateVice(String name, String emoji) async {
-    _viceName = name;
+  Future<void> updateVice(String emoji) async {
     _viceEmoji = emoji;
     notifyListeners();
-    await _database.saveSetting('vice_name', name);
     await _database.saveSetting('vice_emoji', emoji);
   }
 
