@@ -88,30 +88,31 @@ class _DashboardScreenState extends State<DashboardScreen> {
             },
           ),
           // DEV: Time Travel Button (tap = +1 week, long-press = reset)
-          GestureDetector(
-            onLongPress: () {
-              context.read<AppState>().resetTimeTravel();
+          InkWell(
+            onTap: () {
+              context.read<AppState>().simulateAdvanceWeek();
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Time Travel Reset'),
+                SnackBar(
+                  content: Text(
+                    'Simulated: ${context.read<AppState>().simulatedNow.toString().split('.')[0]}',
+                  ),
                   behavior: SnackBarBehavior.fixed,
                 ),
               );
             },
-            child: IconButton(
-              icon: const Icon(Icons.fast_forward),
-              tooltip: 'Tap: +1 Week | Hold: Reset',
-              onPressed: () {
-                context.read<AppState>().simulateAdvanceWeek();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      'Simulated: ${context.read<AppState>().simulatedNow.toString().split('.')[0]}',
-                    ),
-                    behavior: SnackBarBehavior.fixed,
-                  ),
-                );
-              },
+            onLongPress: () {
+              context.read<AppState>().resetTimeTravel();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Time Travel Reset ⏱️'),
+                  behavior: SnackBarBehavior.fixed,
+                ),
+              );
+            },
+            borderRadius: BorderRadius.circular(20),
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Icon(Icons.fast_forward),
             ),
           ),
         ],
