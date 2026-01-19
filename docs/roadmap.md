@@ -10,19 +10,19 @@ We follow a staged iterative approach, focusing on the "Logic First" engineering
 - **Core Calculation**: `Net Rewards = (KM / 5) - Spent`.
 - **Local Persistence**: Save logs locally.
 
-## Stage 1.5: Rebrand & Multi-Rewards 🎯
-**Goal**: Pivot to "Run for Fun" with multiple reward options.
-- **Multi-Reward System**: Pints, Treats, or Gaming as reward currencies.
-- **Reward Selection**: User picks their reward type at onboarding.
-- **Neutral Messaging**: App Store-friendly language throughout.
-- See [Pivot Documentation](pivot.md) for details.
-
 ## Stage 2: The Core Loop 🔄
 **Goal**: Weekly cycles and dual-discipline support.
 - **Universal Unit**: All logs displayed as Pints.
 - **Weekly Settlement**: Automatic Monday reset of the weekly tracker.
 - **Running & Cycling**: Refined tracking for the two primary disciplines.
 - **History View**: Review past logs and weekly performance.
+
+## Stage 3: Rebrand & Multi-Rewards 🎯
+**Goal**: Pivot to "Run for Fun" with multiple reward options.
+- **Multi-Reward System**: Pints, Treats, or Gaming as reward currencies.
+- **Reward Selection**: User picks their reward type at onboarding.
+- **Neutral Messaging**: App Store-friendly language throughout.
+- **See [Pivot Documentation](pivot.md) for details.**
 
 ## Stage 3: The Brewery Bank 🏦
 **Goal**: Progression, Strategic Bottling, and the "Bottled It" mechanic.

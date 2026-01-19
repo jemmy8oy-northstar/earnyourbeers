@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/logic/app_state.dart';
 import '../../core/services/database.dart';
+import '../../core/logic/pint_calculator.dart';
 import '../theme.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -118,7 +119,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final balance = context.watch<AppState>().balance;
+    // Stage 2: Use Weekly Balance logic
+    final activities = context.watch<AppState>().activities;
+    final drinks = context.watch<AppState>().drinks;
+    final balance = PintCalculator.getWeeklyBalance(activities, drinks);
+
     final logs = context.watch<AppState>().logs;
     final activeItem = logs.isNotEmpty ? logs[0] : null;
     final history = _getHistory(logs);
@@ -138,10 +143,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           Text(
             balance > 0
-                ? 'PINTS IN CREDIT'
+                ? 'WEEKLY POINTS IN CREDIT'
                 : balance < 0
-                ? 'PINTS IN DEBT'
-                : 'SQUARE AT THE BAR',
+                ? 'WEEKLY POINTS IN DEBT'
+                : 'SQUARE FOR THE WEEK',
             style: const TextStyle(
               fontSize: 18,
               letterSpacing: 2,
@@ -298,27 +303,62 @@ class _DashboardScreenState extends State<DashboardScreen> {
         children: [
           FloatingActionButton.extended(
             onPressed: () {
-              setState(() => _isDeleting = false); // Add direction
+              setState(() => _isDeleting = false);
               context.read<AppState>().addDrink(1.0);
               WidgetsBinding.instance.addPostFrameCallback(
                 (_) => _syncHistoryList(),
               );
             },
-            label: const Text('Log Pint'),
+            label: const Text('Pint'),
             icon: const Icon(Icons.sports_bar),
             backgroundColor: AppTheme.primaryBeer,
           ),
           const SizedBox(height: 12),
           FloatingActionButton.extended(
             onPressed: () {
-              setState(() => _isDeleting = false); // Add direction
-              context.read<AppState>().addActivity(5.0);
+              setState(() => _isDeleting = false);
+              context.read<AppState>().addActivity(
+                'Run',
+                5.0,
+              ); // Default 5km Run
               WidgetsBinding.instance.addPostFrameCallback(
                 (_) => _syncHistoryList(),
               );
             },
-            label: const Text('Log Run (5k)'),
+            label: const Text('Run (5k)'),
             icon: const Icon(Icons.directions_run),
+            backgroundColor: AppTheme.primaryBeer,
+          ),
+          const SizedBox(height: 12),
+          FloatingActionButton.extended(
+            onPressed: () {
+              setState(() => _isDeleting = false);
+              context.read<AppState>().addActivity(
+                'Cycle',
+                15.0,
+              ); // Default 15km Cycle
+              WidgetsBinding.instance.addPostFrameCallback(
+                (_) => _syncHistoryList(),
+              );
+            },
+            label: const Text('Cycle (15k)'),
+            icon: const Icon(Icons.directions_bike),
+            backgroundColor: AppTheme.primaryBeer,
+          ),
+          const SizedBox(height: 12),
+          FloatingActionButton.extended(
+            onPressed: () {
+              setState(() => _isDeleting = false);
+              context.read<AppState>().addActivity(
+                'Swim',
+                30.0,
+              ); // Default 30 lengths?
+              WidgetsBinding.instance.addPostFrameCallback(
+                (_) => _syncHistoryList(),
+              );
+            },
+            label: const Text('Swim (30)'),
+            icon: const Icon(Icons.pool),
             backgroundColor: AppTheme.primaryBeer,
           ),
         ],
@@ -328,6 +368,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   void _showEditDialog(BuildContext context, dynamic item) {
     final isActivity = item is Activity;
+    final type = isActivity ? item.type : 'Pint';
+    final unit = isActivity ? (type == 'Swim' ? 'lengths' : 'km') : 'pints';
+
     final controller = TextEditingController(
       text: item.amount % 1 == 0
           ? item.amount.toInt().toString()
@@ -337,14 +380,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Edit ${isActivity ? 'Run (km)' : 'Pints'}'),
+        title: Text('Edit ${isActivity ? '$type ($unit)' : 'Pints'}'),
         content: TextField(
           controller: controller,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
           autofocus: true,
           decoration: InputDecoration(
             hintText: 'Enter amount...',
-            suffixText: isActivity ? 'km' : 'pints',
+            suffixText: unit,
           ),
         ),
         actions: [
@@ -393,7 +436,7 @@ class _ActiveCard extends StatelessWidget {
     final state = context.read<AppState>();
 
     final label = isActivity
-        ? '${amount.toStringAsFixed(1)} km Run'
+        ? '${amount.toStringAsFixed(1)} ${(item).type == 'Swim' ? 'lengths' : 'km'} ${(item).type}'
         : '${amount % 1 == 0 ? amount.toInt() : amount.toStringAsFixed(1)} Pint${amount == 1 ? '' : 's'}';
 
     return Card(
@@ -410,7 +453,13 @@ class _ActiveCard extends StatelessWidget {
             Row(
               children: [
                 Icon(
-                  isActivity ? Icons.directions_run : Icons.sports_bar,
+                  !isActivity
+                      ? Icons.sports_bar
+                      : ((item).type == 'Cycle'
+                            ? Icons.directions_bike
+                            : ((item).type == 'Swim'
+                                  ? Icons.pool
+                                  : Icons.directions_run)),
                   color: AppTheme.primaryBeer,
                   size: 28,
                 ),
@@ -495,7 +544,13 @@ class _HistoryTile extends StatelessWidget {
       dense: true,
       contentPadding: const EdgeInsets.symmetric(horizontal: 8),
       leading: Icon(
-        isActivity ? Icons.directions_run : Icons.sports_bar,
+        !isActivity
+            ? Icons.sports_bar
+            : ((item).type == 'Cycle'
+                  ? Icons.directions_bike
+                  : ((item).type == 'Swim'
+                        ? Icons.pool
+                        : Icons.directions_run)),
         color: AppTheme.primaryBeer.withOpacity(0.7),
         size: 20,
       ),

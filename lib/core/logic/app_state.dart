@@ -12,6 +12,9 @@ class AppState extends ChangeNotifier {
   List<Activity> _activities = [];
   List<Drink> _drinks = [];
 
+  List<Activity> get activities => _activities;
+  List<Drink> get drinks => _drinks;
+
   List<dynamic> get logs {
     final combined = [..._activities, ..._drinks];
     combined.sort(
@@ -36,11 +39,11 @@ class AppState extends ChangeNotifier {
     });
   }
 
-  Future<void> addActivity([double units = 5.0]) async {
+  Future<void> addActivity(String type, double amount) async {
     await _database.saveActivity(
       ActivitiesCompanion.insert(
-        type: 'Run',
-        amount: units,
+        type: type,
+        amount: amount,
         timestamp: DateTime.now(),
       ),
     );
