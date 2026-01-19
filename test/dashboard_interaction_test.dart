@@ -54,6 +54,16 @@ void main() {
     expect(find.text('Cycle'), findsNothing);
     expect(find.text('CURRENT WEEK'), findsOneWidget);
 
+    // Verify Next Arrow is hidden on Page 0
+    expect(
+      find.byTooltip('Next Week'),
+      findsOneWidget,
+    ); // Exists in tree (Visibility maintainSize)
+    expect(
+      find.byTooltip('Next Week').hitTestable(),
+      findsNothing,
+    ); // But not interactive/visible
+
     // 4. Navigate to Previous Week via Header Arrow
     await tester.tap(find.byTooltip('Previous Week'));
     await tester.pumpAndSettle();
@@ -72,9 +82,12 @@ void main() {
     // "Previous Week" arrow is the LEFT arrow.
     // In our UI code: onPressed: canGoBack ? ... : null
 
-    // Attempt to tap Previous Week again
-    await tester.tap(find.byTooltip('Previous Week'));
-    await tester.pumpAndSettle();
+    // Verify Previous Arrow is hidden on Last Page
+    expect(find.byTooltip('Previous Week'), findsOneWidget); // Exists
+    expect(
+      find.byTooltip('Previous Week').hitTestable(),
+      findsNothing,
+    ); // Hidden
 
     // Should still be on Last Week (Cycle visible)
     expect(find.text('Cycle'), findsOneWidget);

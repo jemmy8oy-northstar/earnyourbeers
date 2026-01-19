@@ -98,11 +98,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IconButton(
-                  icon: const Icon(Icons.chevron_left, color: Colors.white54),
-                  onPressed: canGoBack ? _goPreviousWeek : null,
-                  tooltip: 'Previous Week',
-                  color: canGoBack ? Colors.white54 : Colors.transparent,
+                Visibility(
+                  visible: canGoBack,
+                  maintainSize: true,
+                  maintainAnimation: true,
+                  maintainState: true,
+                  child: IconButton(
+                    icon: const Icon(Icons.chevron_left, color: Colors.white54),
+                    onPressed: _goPreviousWeek,
+                    tooltip: 'Previous Week',
+                  ),
                 ),
                 Text(
                   headerText,
@@ -113,13 +118,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.chevron_right, color: Colors.white54),
-                  onPressed: _currentPageIndex > 0 ? _goNextWeek : null,
-                  tooltip: 'Next Week',
-                  color: _currentPageIndex > 0
-                      ? Colors.white54
-                      : Colors.transparent, // Hide if disabled
+                Visibility(
+                  visible: _currentPageIndex > 0,
+                  maintainSize: true,
+                  maintainAnimation: true,
+                  maintainState: true,
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.chevron_right,
+                      color: Colors.white54,
+                    ),
+                    onPressed: _goNextWeek,
+                    tooltip: 'Next Week',
+                  ),
                 ),
               ],
             ),
