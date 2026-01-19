@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../core/logic/app_state.dart';
 
@@ -63,6 +64,10 @@ class _ViceSettingsDialogState extends State<ViceSettingsDialog> {
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 48),
               maxLength: 2, // Emojis can be 2 chars (surrogate pairs)
+              inputFormatters: [
+                // Filter out standard keyboard characters (ASCII + common punctuation)
+                FilteringTextInputFormatter.deny(RegExp(r'[\x00-\x7F]')),
+              ],
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: '🍕',
