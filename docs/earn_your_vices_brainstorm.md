@@ -22,7 +22,7 @@ Instead of us defining what a "Vice" is, **the user defines it**.
 3.  **Global Appeal**: Emojis are universal.
 
 ### The "Default"
-*   We can still provide presets for quick selection (e.g. "Gaming 🎮", "Treat 🍩", "Drink 🍺"), but the core data model is just `String emoji`.
+*   We can still provide presets for quick selection (e.g. "Gaming 🎮", "Treat 🍩", "Soda 🥤"), but the core data model is just `String emoji`.
 
 ---
 
