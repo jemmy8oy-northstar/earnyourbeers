@@ -32,7 +32,13 @@ class _ViceSettingsDialogState extends State<ViceSettingsDialog> {
 
   void _save() {
     final state = context.read<AppState>();
-    state.updateVice(_nameController.text, _emojiController.text);
+    final emoji = _emojiController.text.trim();
+    final name = _nameController.text.trim();
+    // Default to Pizza if empty
+    state.updateVice(
+      name.isEmpty ? 'Pizza' : name,
+      emoji.isEmpty ? '🍕' : emoji,
+    );
     state.updateTheme(_selectedTheme);
     Navigator.of(context).pop();
   }
@@ -56,9 +62,11 @@ class _ViceSettingsDialogState extends State<ViceSettingsDialog> {
               controller: _emojiController,
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 48),
+              maxLength: 2, // Emojis can be 2 chars (surrogate pairs)
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: '🍕',
+                counterText: '', // Hide character counter
               ),
             ),
             const SizedBox(height: 16),
