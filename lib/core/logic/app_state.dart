@@ -19,6 +19,12 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  void resetTimeTravel() {
+    _debugTimeOffset = Duration.zero;
+    _calculateBalance();
+    notifyListeners();
+  }
+
   List<Activity> _activities = [];
   List<Drink> _drinks = [];
 

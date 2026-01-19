@@ -87,21 +87,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
               );
             },
           ),
-          // DEV: Time Travel Button
-          IconButton(
-            icon: const Icon(Icons.fast_forward),
-            tooltip: 'Simulate +1 Week',
-            onPressed: () {
-              context.read<AppState>().simulateAdvanceWeek();
+          // DEV: Time Travel Button (tap = +1 week, long-press = reset)
+          GestureDetector(
+            onLongPress: () {
+              context.read<AppState>().resetTimeTravel();
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    'Simulated Time: ${context.read<AppState>().simulatedNow.toString().split('.')[0]}',
-                  ),
+                const SnackBar(
+                  content: Text('Time Travel Reset'),
                   behavior: SnackBarBehavior.fixed,
                 ),
               );
             },
+            child: IconButton(
+              icon: const Icon(Icons.fast_forward),
+              tooltip: 'Tap: +1 Week | Hold: Reset',
+              onPressed: () {
+                context.read<AppState>().simulateAdvanceWeek();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Simulated: ${context.read<AppState>().simulatedNow.toString().split('.')[0]}',
+                    ),
+                    behavior: SnackBarBehavior.fixed,
+                  ),
+                );
+              },
+            ),
           ),
         ],
       ),
@@ -119,15 +130,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   maintainAnimation: true,
                   maintainState: true,
                   child: IconButton(
-                    icon: const Icon(Icons.chevron_left, color: Colors.white54),
+                    icon: Icon(
+                      Icons.chevron_left,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withValues(alpha: 0.54),
+                    ),
                     onPressed: _goPreviousWeek,
                     tooltip: 'Previous Week',
                   ),
                 ),
                 Text(
                   headerText,
-                  style: const TextStyle(
-                    color: Colors.white38,
+                  style: TextStyle(
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withValues(alpha: 0.38),
                     letterSpacing: 1.5,
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
@@ -139,9 +157,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   maintainAnimation: true,
                   maintainState: true,
                   child: IconButton(
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.chevron_right,
-                      color: Colors.white54,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withValues(alpha: 0.54),
                     ),
                     onPressed: _goNextWeek,
                     tooltip: 'Next Week',
@@ -287,8 +307,13 @@ class _WeeklyPageState extends State<WeeklyPage> {
       }
     });
 
-    final activeItem = weeklyLogs.isNotEmpty ? weeklyLogs[0] : null;
-    final history = _getHistory(weeklyLogs);
+    // For current week (weekOffset == 0): first item is active/editable
+    // For past weeks (weekOffset > 0): all items are read-only history
+    final isCurrentWeek = widget.weekOffset == 0;
+    final activeItem = isCurrentWeek && weeklyLogs.isNotEmpty
+        ? weeklyLogs[0]
+        : null;
+    final history = isCurrentWeek ? _getHistory(weeklyLogs) : weeklyLogs;
 
     return Column(
       children: [
@@ -308,10 +333,12 @@ class _WeeklyPageState extends State<WeeklyPage> {
               : balance < 0
               ? 'POINTS IN DEBT'
               : 'SQUARE',
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 18,
             letterSpacing: 2,
-            color: Colors.white54,
+            color: Theme.of(
+              context,
+            ).colorScheme.onSurface.withValues(alpha: 0.54),
           ),
         ),
         const SizedBox(height: 30),
@@ -320,10 +347,14 @@ class _WeeklyPageState extends State<WeeklyPage> {
         // Activity Feed
         Expanded(
           child: weeklyLogs.isEmpty
-              ? const Center(
+              ? Center(
                   child: Text(
                     'No activity this week. 🍻',
-                    style: TextStyle(color: Colors.white24),
+                    style: TextStyle(
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withValues(alpha: 0.24),
+                    ),
                   ),
                 )
               : Padding(
@@ -392,7 +423,7 @@ class _WeeklyPageState extends State<WeeklyPage> {
 
                       // HISTORY LIST
                       if (history.isNotEmpty) ...[
-                        const Padding(
+                        Padding(
                           padding: EdgeInsets.only(left: 8, top: 16, bottom: 8),
                           child: Align(
                             alignment: Alignment.centerLeft,
@@ -402,7 +433,9 @@ class _WeeklyPageState extends State<WeeklyPage> {
                                 fontSize: 10,
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: 1.5,
-                                color: Colors.white24,
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurface.withValues(alpha: 0.24),
                               ),
                             ),
                           ),
@@ -587,16 +620,18 @@ class _ActiveCard extends StatelessWidget {
                     children: [
                       Text(
                         label,
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface,
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
                         'Logged at ${item.timestamp.hour}:${item.timestamp.minute.toString().padLeft(2, '0')}',
-                        style: const TextStyle(
-                          color: Colors.white38,
+                        style: TextStyle(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withValues(alpha: 0.38),
                           fontSize: 12,
                         ),
                       ),
@@ -678,11 +713,21 @@ class _HistoryTile extends StatelessWidget {
             ),
       title: Text(
         label,
-        style: const TextStyle(color: Colors.white70, fontSize: 14),
+        style: TextStyle(
+          color: Theme.of(
+            context,
+          ).colorScheme.onSurface.withValues(alpha: 0.70),
+          fontSize: 14,
+        ),
       ),
       trailing: Text(
         '${item.timestamp.hour}:${item.timestamp.minute.toString().padLeft(2, '0')}',
-        style: const TextStyle(color: Colors.white24, fontSize: 12),
+        style: TextStyle(
+          color: Theme.of(
+            context,
+          ).colorScheme.onSurface.withValues(alpha: 0.24),
+          fontSize: 12,
+        ),
       ),
     );
   }

@@ -25,11 +25,17 @@ class EarnYourBeersApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Earn Your Beers',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.darkTheme,
-      home: const DashboardScreen(),
+    return Consumer<AppState>(
+      builder: (context, appState, child) {
+        return MaterialApp(
+          title: 'Earn Your Vices',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: appState.themeMode,
+          home: const DashboardScreen(),
+        );
+      },
     );
   }
 }

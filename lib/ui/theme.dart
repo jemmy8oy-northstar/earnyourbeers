@@ -23,4 +23,20 @@ class AppTheme {
       elevation: 0,
     ),
   );
+
+  static ThemeData lightTheme = ThemeData(
+    useMaterial3: true,
+    brightness: Brightness.light,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: primaryBeer,
+      brightness: Brightness.light,
+      primary: primaryBeer,
+      secondary: deepAmber,
+    ),
+    scaffoldBackgroundColor: foamWhite,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+    ),
+  );
 }
