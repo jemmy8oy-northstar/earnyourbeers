@@ -5,23 +5,24 @@
 
 ## The Authorized Vices 📝
 
-The user can select one of the following "Currencies" to track their rewards in.
+## The Emoji Freedom Concept 🤠
 
-### 1. The Food Vices (Default) 🍕
-*For the foodie - prioritized as requested.*
-*   **Takeaway**: 1 Slice/Item (Icon: � Pizza)
-*   **Sweet Treat**: 1 Donut/Cake (Icon: 🍩 Donut)
+Instead of us defining what a "Vice" is, **the user defines it**.
 
-### 2. The Digital Vices 🎮
-*Safe, universally appealing, and "time-based" logic.*
-*   **Gaming**: 30 mins (Icon: � Gamepad)
-*   **Netflix**: 1 Episode (Icon: 📺 TV)
+*   **Mechanism**: "Pick an Emoji to represent your reward."
+*   **User Choice**:
+    *   User selects: 🍺 -> We display "3.5 🍺".
+    *   User selects: 🍰 -> We display "3.5 🍰".
+    *   User selects: 🍆 -> We display "3.5 🍆" (We don't judge).
+*   **Measurement**: We stick to a standard "Credit" (1 Credit = 5km). Currently 1 Credit = 1 Emoji Unit.
 
-### 3. The Liquid Vices 🥤
-*Includes non-alcoholic options first.*
-*   **Soda**: 1 Can/Glass (Icon: 🥤 Cup)
-*   **Pint**: 1 Pint (Icon: 🍺 Beer Mug)
-*   **Wine**: 1 Glass (Icon: 🍷 Wine Glass)
+### Benefits 🌟
+1.  **Ultimate Safety**: We aren't promoting alcohol. The *user* is choosing an emoji. We are just a calculator.
+2.  **Zero Maintenance**: No need to add "Soda" or "Vape" or "Books".
+3.  **Global Appeal**: Emojis are universal.
+
+### The "Default"
+*   We can still provide presets for quick selection (e.g. "Gaming 🎮", "Treat 🍩", "Drink 🍺"), but the core data model is just `String emoji`.
 
 ---
 

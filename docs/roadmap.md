@@ -18,10 +18,10 @@ We follow a staged iterative approach, focusing on the "Logic First" engineering
 - **History View**: Review past logs and weekly performance.
 
 ## Stage 3: Earn Your Vices Rebrand 😈
-**Goal**: Pivot to "Earn Your Vices" with customizable guilt-free rewards.
-- **Vice System**: Select your vice: Gaming, Netflix, Takeaway, Sweet Threats, Pints, or Wine.
-- **Vice Selection**: User picks their vice (Default: Gaming/Non-Alcohol).
-- **Measurement**: Generic "Credits" system adaptable to any vice.
+**Goal**: Pivot to "Earn Your Vices" where the user defines their reward.
+- **Emoji Freedom**: User selects ANY emoji to represent their vice (e.g., 🍺, 🎮, 🍰).
+- **Customization**: No hardcoded lists. User defines "What's your Poison?".
+- **Compliance**: Safety by design—we don't promote specific substances.
 
 ## Stage 4: The Vice Vault 🏦
 **Goal**: Progression, Strategic Tiering, and Logic.
