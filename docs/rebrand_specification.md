@@ -1,4 +1,4 @@
-# Rebrand Specification: Earn Your Vices 😈
+# Rebrand Specification: Earn Your Vices
 
 ## 1. Vision & Strategy
 **Concept**: "Earn Your Vices" acknowledges that we run to enjoy our guilty pleasures guilt-free.
@@ -16,15 +16,18 @@
 *   **New Table**: `Settings`
     *   `key` (Text, Primary Key).
     *   `value` (Text).
+    *   **Keys**: `vice_name`, `vice_emoji`, `theme_mode` (system/light/dark).
 
 ### App State (`app_state.dart`)
-*   Add `viceEmoji` property (and `viceName` as backup, but UI focuses on emoji).
+*   Add `viceEmoji` property.
+*   Add `themeMode` property (ThemeMode).
 *   Initialized from Database on launch.
 *   `updateVice(String name, String emoji)`: Persists to DB.
+*   `updateTheme(ThemeMode mode)`: Persists to DB.
 
 ## 4. UI Overhaul (Frontend)
 ### General
-*   **App Bar**: "Earn Your Vices 😈".
+*   **App Bar**: "Earn Your Vices".
 
 ### Dashboard Screen
 1.  **Header/AppBar**: Add **Settings Icon** action -> Opens `ViceSettingsDialog`.
@@ -40,6 +43,7 @@
 *   "Edit Your Vice".
 *   "Pick Emoji": TextField (Emoji input).
 *   "Quick Picks": Row of Chips (🍕, 🎮, 🍩, 🥤).
+*   **Appearance**: Segmented Button (System | Light | Dark).
 
 ## 5. App Store Metadata
 *   **Name**: Earn Your Vices

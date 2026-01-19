@@ -1,7 +1,7 @@
 # Onboarding Flow: Choose Your Vice 🍕
 
 ## 1. Welcome Screen
-*   **Headline**: Earn Your Vices 😈
+*   **Headline**: Earn Your Vices
 *   **Safety**: Default VP (Vice Profile) is **Pizza** 🍕.
 *   **Logic**: "Run 5km. Earn 1 Slice. Guilt-free."
 

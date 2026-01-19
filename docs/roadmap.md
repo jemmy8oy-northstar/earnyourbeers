@@ -17,7 +17,7 @@ We follow a staged iterative approach, focusing on the "Logic First" engineering
 - **Running & Cycling**: Refined tracking for the two primary disciplines.
 - **History View**: Review past logs and weekly performance.
 
-## Stage 3: Earn Your Vices Rebrand 😈
+## Stage 3: Earn Your Vices Rebrand
 **Goal**: Pivot to "Earn Your Vices" where the user defines their reward.
 - **Emoji Freedom**: User selects ANY emoji to represent their vice (e.g., 🍺, 🎮, 🍰).
 - **Customization**: No hardcoded lists. User defines "What's your Poison?".

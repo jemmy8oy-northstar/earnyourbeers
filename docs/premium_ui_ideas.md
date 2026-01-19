@@ -25,3 +25,8 @@ Instead of simple arrows, implement a horizontal date picker/strip at the top of
 
 ### 4. Confetti / Particles
 - Trigger a particle explosion (beer bubbles?) when the user gets "Square" or reaches a milestone.
+
+### 5. Seamless Theme Switching 🌓
+- Support **System Theme** auto-detection.
+- Allow manual override (Light/Dark).
+- Ensure transitions between themes are smooth and instant.
