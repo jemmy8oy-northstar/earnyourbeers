@@ -17,13 +17,6 @@ We follow a staged iterative approach, focusing on the "Logic First" engineering
 - **Running & Cycling**: Refined tracking for the two primary disciplines.
 - **History View**: Review past logs and weekly performance.
 
-## Stage 3: Rebrand & Multi-Rewards 🎯
-**Goal**: Pivot to "Run for Fun" with multiple reward options.
-- **Multi-Reward System**: Pints, Treats, or Gaming as reward currencies.
-- **Reward Selection**: User picks their reward type at onboarding.
-- **Neutral Messaging**: App Store-friendly language throughout.
-- **See [Pivot Documentation](pivot.md) for details.**
-
 ## Stage 3: The Brewery Bank 🏦
 **Goal**: Progression, Strategic Bottling, and the "Bottled It" mechanic.
 - **12-Tier Master Brewer Journey**: Implementation of levels from **Yeast** to **Olympian**.
@@ -31,17 +24,24 @@ We follow a staged iterative approach, focusing on the "Logic First" engineering
 - **The Cellar (Vault)**: A trophy room for your earned bottles.
 - **Bottled It (Demotions)**: Automatic safety net logic for excessive debt.
 
-## Stage 4: Simple Onboarding 📋
+## Stage 4: Rebrand & Multi-Rewards 🎯
+**Goal**: Pivot to "Run for Fun" with multiple reward options.
+- **Multi-Reward System**: Pints, Treats, or Gaming as reward currencies.
+- **Reward Selection**: User picks their reward type at onboarding.
+- **Neutral Messaging**: App Store-friendly language throughout.
+- **See [Pivot Documentation](pivot.md) for details.**
+
+## Stage 5: Simple Onboarding 📋
 **Goal**: Get users into the right league from Day 1.
 - **Questionnaire**: Simple 3-question flow to seed initial state.
 - **Initial Migration**: Transitioning users from "Base" to their estimated tier.
 
-## Stage 5: Additional Activities 🏊‍♂️
+## Stage 6: Additional Activities 🏊‍♂️
 **Goal**: Expand the variety of training.
 - **New Tracks**: Support for Walking, Swimming, and Gym sessions.
 - **Novelty Bonus**: Multipliers for cross-training.
 
-## Stage 6: Premium Polish ✨
+## Stage 7: Premium Polish ✨
 **Goal**: Visual excellence and high-end UX.
 - **Vibrant UI/UX**: Glassmorphism, animations, and high-end themes.
 - **Promotion/"Bottled It" Scenes**: High-reward feedback loops.
