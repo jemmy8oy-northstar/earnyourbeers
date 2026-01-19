@@ -51,16 +51,19 @@ void main() {
 
     // 3. Verify Current Week
     expect(find.text('Run'), findsOneWidget);
-    expect(find.text('Cycle'), findsNothing); // Should be on next page
+    expect(find.text('Cycle'), findsNothing);
+    expect(find.text('CURRENT WEEK'), findsOneWidget);
 
-    // 4. Swipe to Previous Week
-    // PageView(reverse: true) means Index 0 is right-most. Index 1 is to the left.
-    // To see Index 1, we pull from Left to Right.
-    await tester.drag(find.byType(PageView), const Offset(500.0, 0.0));
+    // 4. Navigate to Previous Week via Header Arrow
+    await tester.tap(find.byTooltip('Previous Week'));
     await tester.pumpAndSettle();
 
     // 5. Verify Last Week
     expect(find.text('Cycle'), findsOneWidget);
-    expect(find.text('Run'), findsNothing); // 5km Run is on page 0
+    expect(find.text('Run'), findsNothing);
+
+    // 6. Verify Header Date (Last Week)
+    expect(find.text('CURRENT WEEK'), findsNothing);
+    expect(find.textContaining('WEEK OF'), findsOneWidget);
   });
 }

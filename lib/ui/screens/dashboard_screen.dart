@@ -13,17 +13,57 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  late PageController _pageController;
+  int _currentPageIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _onPageChanged(int index) {
+    setState(() {
+      _currentPageIndex = index;
+    });
+  }
+
+  void _goNextWeek() {
+    if (_currentPageIndex > 0) {
+      _pageController.previousPage(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
+  void _goPreviousWeek() {
+    _pageController.nextPage(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // Stage 2: Use Weekly Balance logic with Time Travel
     final state = context.watch<AppState>();
 
-    // PageView logic
-    // Index 0 = Current Week
-    // Index 1 = Last Week
-    // ...
-    // We want [Past (1)] [Current (0)], and we show 0. We swipe Right to see 1.
-    // PageView(reverse: true) does exactly this. Index 0 is right-most. Index 1 is to the left.
+    // Calculate Date range for header
+    // Index 0 = Current, Index 1 = Last week
+    final now = state.simulatedNow;
+    final pageNow = now.subtract(Duration(days: 7 * _currentPageIndex));
+    final monday = pageNow.subtract(Duration(days: pageNow.weekday - 1));
+    final dateStr = '${monday.day}/${monday.month}';
+    final headerText = _currentPageIndex == 0
+        ? 'CURRENT WEEK'
+        : 'WEEK OF $dateStr';
 
     return Scaffold(
       appBar: AppBar(
@@ -47,26 +87,62 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ],
       ),
-      body: PageView.builder(
-        reverse: true, // Allows swiping Right to see "Past" (Index 1)
-        itemBuilder: (context, index) {
-          // Index 0 = Current, Index 1 = Last week, etc.
-          final weekOffset = index;
-          // Calculate "Now" for this specific page
-          // If index is 0, we use state.simulatedNow
-          // If index is 1, we subtract 7 days
-          final pageNow = state.simulatedNow.subtract(
-            Duration(days: 7 * weekOffset),
-          );
+      body: Column(
+        children: [
+          // STICKY HEADER
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.chevron_left, color: Colors.white54),
+                  onPressed: _goPreviousWeek,
+                  tooltip: 'Previous Week',
+                ),
+                Text(
+                  headerText,
+                  style: const TextStyle(
+                    color: Colors.white38,
+                    letterSpacing: 1.5,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.chevron_right, color: Colors.white54),
+                  onPressed: _currentPageIndex > 0 ? _goNextWeek : null,
+                  tooltip: 'Next Week',
+                  color: _currentPageIndex > 0
+                      ? Colors.white54
+                      : Colors.transparent, // Hide if disabled
+                ),
+              ],
+            ),
+          ),
 
-          return WeeklyPage(
-            weekOffset: weekOffset,
-            pageNow: pageNow,
-            key: ValueKey(
-              weekOffset,
-            ), // Key changes when offset changes? No, key should be stable for offset.
-          );
-        },
+          Expanded(
+            child: PageView.builder(
+              controller: _pageController,
+              reverse: true, // Allows swiping Right to see "Past" (Index 1)
+              onPageChanged: _onPageChanged,
+              itemBuilder: (context, index) {
+                // Index 0 = Current, Index 1 = Last week, etc.
+                final weekOffset = index;
+                // Calculate "Now" for this specific page
+                final pageNow = state.simulatedNow.subtract(
+                  Duration(days: 7 * weekOffset),
+                );
+
+                return WeeklyPage(
+                  weekOffset: weekOffset,
+                  pageNow: pageNow,
+                  key: ValueKey(weekOffset),
+                );
+              },
+            ),
+          ),
+        ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: Column(
@@ -183,27 +259,9 @@ class _WeeklyPageState extends State<WeeklyPage> {
     final activeItem = weeklyLogs.isNotEmpty ? weeklyLogs[0] : null;
     final history = _getHistory(weeklyLogs);
 
-    // Date Header Text
-    final monday = widget.pageNow.subtract(
-      Duration(days: widget.pageNow.weekday - 1),
-    );
-    final dateStr = '${monday.day}/${monday.month}';
-    final headerText = widget.weekOffset == 0
-        ? 'CURRENT WEEK'
-        : 'WEEK OF $dateStr';
-
     return Column(
       children: [
         const SizedBox(height: 20),
-        Text(
-          headerText,
-          style: const TextStyle(
-            color: Colors.white38,
-            letterSpacing: 1.5,
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
         const SizedBox(height: 10),
         Text(
           balance.toStringAsFixed(1),
