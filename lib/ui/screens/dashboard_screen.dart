@@ -350,7 +350,7 @@ class _WeeklyPageState extends State<WeeklyPage> {
           child: weeklyLogs.isEmpty
               ? Center(
                   child: Text(
-                    'No activity this week. 🍻',
+                    'No activity this week.',
                     style: TextStyle(
                       color: Theme.of(
                         context,

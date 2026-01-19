@@ -40,7 +40,7 @@ class _ViceSettingsDialogState extends State<ViceSettingsDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Edit Your Vice 😈'),
+      title: const Text('Edit Your Vice'),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
