@@ -44,6 +44,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void _goPreviousWeek() {
+    // Need access to limit check here, but safe to just try next page if constrained by PageView
     _pageController.nextPage(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
@@ -54,6 +55,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     // Stage 2: Use Weekly Balance logic with Time Travel
     final state = context.watch<AppState>();
+    final maxPages = state.historyPageCount;
+    final canGoBack = _currentPageIndex < maxPages - 1;
 
     // Calculate Date range for header
     // Index 0 = Current, Index 1 = Last week
@@ -97,8 +100,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
               children: [
                 IconButton(
                   icon: const Icon(Icons.chevron_left, color: Colors.white54),
-                  onPressed: _goPreviousWeek,
+                  onPressed: canGoBack ? _goPreviousWeek : null,
                   tooltip: 'Previous Week',
+                  color: canGoBack ? Colors.white54 : Colors.transparent,
                 ),
                 Text(
                   headerText,
@@ -124,6 +128,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Expanded(
             child: PageView.builder(
               controller: _pageController,
+              itemCount: maxPages,
               reverse: true, // Allows swiping Right to see "Past" (Index 1)
               onPageChanged: _onPageChanged,
               itemBuilder: (context, index) {

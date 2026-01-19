@@ -65,5 +65,19 @@ void main() {
     // 6. Verify Header Date (Last Week)
     expect(find.text('CURRENT WEEK'), findsNothing);
     expect(find.textContaining('WEEK OF'), findsOneWidget);
+
+    // 7. Verify Cannot Go Back Further (Constraint Logic)
+    // We added data 1 week ago. Page count should be 2.
+    // We are at Index 1 (Last Week). Next arrow (Previous Week) should be disabled/gone.
+    // "Previous Week" arrow is the LEFT arrow.
+    // In our UI code: onPressed: canGoBack ? ... : null
+
+    // Attempt to tap Previous Week again
+    await tester.tap(find.byTooltip('Previous Week'));
+    await tester.pumpAndSettle();
+
+    // Should still be on Last Week (Cycle visible)
+    expect(find.text('Cycle'), findsOneWidget);
+    // Should NOT have moved to a 3rd page (empty)
   });
 }

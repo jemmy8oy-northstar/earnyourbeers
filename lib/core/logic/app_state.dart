@@ -33,6 +33,29 @@ class AppState extends ChangeNotifier {
     return combined;
   }
 
+  int get historyPageCount {
+    if (_activities.isEmpty && _drinks.isEmpty) return 1;
+
+    final oldestItem = logs.last;
+    final DateTime oldestDate = (oldestItem as dynamic).timestamp;
+
+    final currentMon = simulatedNow.subtract(
+      Duration(days: simulatedNow.weekday - 1),
+    );
+    final startOfCurrentWeek = DateTime(
+      currentMon.year,
+      currentMon.month,
+      currentMon.day,
+    );
+
+    final oldMon = oldestDate.subtract(Duration(days: oldestDate.weekday - 1));
+    final startOfOldWeek = DateTime(oldMon.year, oldMon.month, oldMon.day);
+
+    final weekDiff = startOfCurrentWeek.difference(startOfOldWeek).inDays ~/ 7;
+
+    return weekDiff + 1; // +1 for the current week itself
+  }
+
   AppState(this._database) {
     _init();
   }
