@@ -73,7 +73,7 @@ class PintCalculator {
         .toList();
     final weeklyDrinks = drinks
         .where(
-          (d) =>
+          (Drink d) =>
               d.timestamp.isAfter(startOfWeek) ||
               d.timestamp.isAtSameMomentAs(startOfWeek),
         )

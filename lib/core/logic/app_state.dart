@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:drift/drift.dart' show Value;
 import '../services/database.dart';
 import 'pint_calculator.dart';
@@ -56,20 +56,63 @@ class AppState extends ChangeNotifier {
     return weekDiff + 1; // +1 for the current week itself
   }
 
+  // Rebrand State
+  String _viceName = 'Pizza';
+  String _viceEmoji = '🍕';
+  ThemeMode _themeMode = ThemeMode.system;
+
+  String get viceName => _viceName;
+  String get viceEmoji => _viceEmoji;
+  ThemeMode get themeMode => _themeMode;
+
+  late Future<void> initializationDone;
+
   AppState(this._database) {
-    _init();
+    initializationDone = _init();
   }
 
-  void _init() {
+  Future<void> _init() async {
+    // Load Activities
     _database.watchActivities().listen((activities) {
       _activities = activities;
       _calculateBalance();
     });
 
+    // Load Drinks
     _database.watchDrinks().listen((drinks) {
       _drinks = drinks;
       _calculateBalance();
     });
+
+    // Load Settings
+    final savedName = await _database.getSetting('vice_name');
+    if (savedName != null) _viceName = savedName;
+
+    final savedEmoji = await _database.getSetting('vice_emoji');
+    if (savedEmoji != null) _viceEmoji = savedEmoji;
+
+    final savedTheme = await _database.getSetting('theme_mode');
+    if (savedTheme != null) {
+      _themeMode = ThemeMode.values.firstWhere(
+        (e) => e.toString() == savedTheme,
+        orElse: () => ThemeMode.system,
+      );
+    }
+    notifyListeners();
+  }
+
+  Future<void> updateVice(String name, String emoji) async {
+    _viceName = name;
+    _viceEmoji = emoji;
+    notifyListeners();
+    await _database.saveSetting('vice_name', name);
+    await _database.saveSetting('vice_emoji', emoji);
+  }
+
+  Future<void> updateTheme(ThemeMode mode) async {
+    _themeMode = mode;
+    notifyListeners();
+    await _database.saveSetting('theme_mode', mode.toString());
   }
 
   Future<void> addActivity(String type, double amount) async {

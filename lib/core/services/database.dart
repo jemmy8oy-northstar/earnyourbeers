@@ -19,12 +19,31 @@ class Drinks extends Table {
   DateTimeColumn get timestamp => dateTime()();
 }
 
-@DriftDatabase(tables: [Activities, Drinks])
+class Settings extends Table {
+  TextColumn get key => text()();
+  TextColumn get value => text()();
+  @override
+  Set<Column> get primaryKey => {key};
+}
+
+@DriftDatabase(tables: [Activities, Drinks, Settings])
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? e]) : super(e ?? _openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+    onCreate: (Migrator m) {
+      return m.createAll();
+    },
+    onUpgrade: (Migrator m, int from, int to) async {
+      if (from < 2) {
+        await m.createTable(settings);
+      }
+    },
+  );
 
   // Activities CRUD
   Future<List<Activity>> getAllActivities() => select(activities).get();
@@ -48,6 +67,20 @@ class AppDatabase extends _$AppDatabase {
 
   Future<int> deleteDrink(int id) {
     return (delete(drinks)..where((t) => t.id.equals(id))).go();
+  }
+
+  // Settings CRUD
+  Future<String?> getSetting(String key) async {
+    final query = select(settings)..where((s) => s.key.equals(key));
+    final result = await query.getSingleOrNull();
+    return result?.value;
+  }
+
+  Future<void> saveSetting(String key, String value) {
+    return into(settings).insert(
+      SettingsCompanion(key: Value(key), value: Value(value)),
+      mode: InsertMode.insertOrReplace,
+    );
   }
 }
 

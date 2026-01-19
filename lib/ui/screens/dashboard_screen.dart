@@ -4,6 +4,7 @@ import '../../core/logic/app_state.dart';
 import '../../core/services/database.dart';
 import '../../core/logic/pint_calculator.dart';
 import '../theme.dart';
+import '../dialogs/vice_settings_dialog.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -70,8 +71,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Earn Your Beers 🍻'),
+        title: const Text('Earn Your Vices'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              final appState = context.read<AppState>();
+              showDialog(
+                context: context,
+                builder: (dialogContext) =>
+                    ChangeNotifierProvider<AppState>.value(
+                      value: appState,
+                      child: const ViceSettingsDialog(),
+                    ),
+              );
+            },
+          ),
           // DEV: Time Travel Button
           IconButton(
             icon: const Icon(Icons.fast_forward),
@@ -169,8 +184,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             onPressed: () {
               context.read<AppState>().addDrink(1.0);
             },
-            label: const Text('Pint'),
-            icon: const Icon(Icons.sports_bar),
+            label: Text('Log ${state.viceEmoji}'),
+            icon: Text(state.viceEmoji, style: const TextStyle(fontSize: 24)),
             backgroundColor: AppTheme.primaryBeer,
           ),
           const SizedBox(height: 12),
@@ -280,7 +295,7 @@ class _WeeklyPageState extends State<WeeklyPage> {
         const SizedBox(height: 20),
         const SizedBox(height: 10),
         Text(
-          balance.toStringAsFixed(1),
+          '${balance.toStringAsFixed(1)} ${state.viceEmoji}',
           style: const TextStyle(
             fontSize: 80,
             fontWeight: FontWeight.bold,
@@ -475,7 +490,11 @@ class _WeeklyPageState extends State<WeeklyPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Edit ${isActivity ? '$type ($unit)' : 'Pints'}'),
+        title: Text(
+          isActivity
+              ? 'Edit $type ($unit)'
+              : 'Edit ${context.read<AppState>().viceEmoji}',
+        ),
         content: TextField(
           controller: controller,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -532,7 +551,7 @@ class _ActiveCard extends StatelessWidget {
 
     final label = isActivity
         ? '${amount.toStringAsFixed(1)} ${(item).type == 'Swim' ? 'lengths' : 'km'} ${(item).type}'
-        : '${amount % 1 == 0 ? amount.toInt() : amount.toStringAsFixed(1)} Pint${amount == 1 ? '' : 's'}';
+        : '${amount % 1 == 0 ? amount.toInt() : amount.toStringAsFixed(1)} ${state.viceEmoji}';
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
@@ -547,17 +566,20 @@ class _ActiveCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(
-                  !isActivity
-                      ? Icons.sports_bar
-                      : ((item).type == 'Cycle'
+                !isActivity
+                    ? Text(
+                        state.viceEmoji,
+                        style: const TextStyle(fontSize: 28),
+                      )
+                    : Icon(
+                        (item).type == 'Cycle'
                             ? Icons.directions_bike
                             : ((item).type == 'Swim'
                                   ? Icons.pool
-                                  : Icons.directions_run)),
-                  color: AppTheme.primaryBeer,
-                  size: 28,
-                ),
+                                  : Icons.directions_run),
+                        color: AppTheme.primaryBeer,
+                        size: 28,
+                      ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
@@ -635,22 +657,25 @@ class _HistoryTile extends StatelessWidget {
 
     final label = isActivity
         ? '${amount.toStringAsFixed(1)} ${(item).type == 'Swim' ? 'lengths' : 'km'} ${(item).type}'
-        : '${amount % 1 == 0 ? amount.toInt() : amount.toStringAsFixed(1)} Pint${amount == 1 ? '' : 's'}';
+        : '${amount % 1 == 0 ? amount.toInt() : amount.toStringAsFixed(1)} ${context.read<AppState>().viceEmoji}';
 
     return ListTile(
       dense: true,
       contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-      leading: Icon(
-        !isActivity
-            ? Icons.sports_bar
-            : ((item).type == 'Cycle'
+      leading: !isActivity
+          ? Text(
+              context.read<AppState>().viceEmoji,
+              style: const TextStyle(fontSize: 20),
+            )
+          : Icon(
+              ((item).type == 'Cycle'
                   ? Icons.directions_bike
                   : ((item).type == 'Swim'
                         ? Icons.pool
                         : Icons.directions_run)),
-        color: AppTheme.primaryBeer.withOpacity(0.7),
-        size: 20,
-      ),
+              color: AppTheme.primaryBeer.withOpacity(0.7),
+              size: 20,
+            ),
       title: Text(
         label,
         style: const TextStyle(color: Colors.white70, fontSize: 14),
