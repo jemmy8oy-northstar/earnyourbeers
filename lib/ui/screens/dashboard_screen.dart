@@ -13,123 +13,17 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  final GlobalKey<AnimatedListState> _historyListKey =
-      GlobalKey<AnimatedListState>();
-  List<dynamic> _previousHistory = [];
-  bool _isDeleting =
-      false; // Track if last action was delete (for rotation direction)
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _syncHistoryList();
-  }
-
-  /// Get history items (all except the most recent)
-  List<dynamic> _getHistory(List<dynamic> logs) {
-    return logs.length > 1 ? logs.sublist(1) : [];
-  }
-
-  void _syncHistoryList() {
-    final logs = context.read<AppState>().logs;
-    final currentHistory = _getHistory(logs);
-
-    // Find new items in history (items that weren't there before)
-    for (int i = 0; i < currentHistory.length; i++) {
-      final item = currentHistory[i];
-      final itemId = item is Activity ? item.id : (item as Drink).id;
-      final wasInPrevious = _previousHistory.any((prev) {
-        final prevId = prev is Activity ? prev.id : (prev as Drink).id;
-        return prevId == itemId;
-      });
-      if (!wasInPrevious) {
-        _historyListKey.currentState?.insertItem(
-          i,
-          duration: const Duration(milliseconds: 400),
-        );
-      }
-    }
-
-    _previousHistory = List.from(currentHistory);
-  }
-
-  void _deleteItem(dynamic item) {
-    setState(() => _isDeleting = true); // Set delete direction for animation
-    final logs = context.read<AppState>().logs;
-    final isActive = logs.isNotEmpty && logs[0] == item;
-    final id = item is Activity ? item.id : (item as Drink).id;
-    final history = _getHistory(logs);
-
-    if (isActive) {
-      // Deleting the active item
-      // The top history item will become the new active, so animate it out of history
-      if (history.isNotEmpty) {
-        final topHistoryItem = history[0];
-        _historyListKey.currentState?.removeItem(
-          0,
-          (context, animation) =>
-              _buildHistoryTile(topHistoryItem, animation, isRemoving: true),
-          duration: const Duration(milliseconds: 400),
-        );
-      }
-
-      // Actually delete from state
-      if (item is Activity) {
-        context.read<AppState>().deleteActivity(id);
-      } else {
-        context.read<AppState>().deleteDrink(id);
-      }
-      // Update history tracking (new history is logs[1:] after active is removed)
-      _previousHistory = _getHistory(context.read<AppState>().logs);
-    } else {
-      // Deleting from history list - animate out
-      final historyIndex = history.indexOf(item);
-      if (historyIndex >= 0) {
-        _historyListKey.currentState?.removeItem(
-          historyIndex,
-          (context, animation) =>
-              _buildHistoryTile(item, animation, isRemoving: true),
-          duration: const Duration(milliseconds: 400),
-        );
-      }
-      // Actually delete from state
-      if (item is Activity) {
-        context.read<AppState>().deleteActivity(id);
-      } else {
-        context.read<AppState>().deleteDrink(id);
-      }
-      _previousHistory = _getHistory(context.read<AppState>().logs);
-    }
-  }
-
-  Widget _buildHistoryTile(
-    dynamic item,
-    Animation<double> animation, {
-    bool isRemoving = false,
-  }) {
-    return SizeTransition(
-      sizeFactor: animation,
-      axisAlignment: -1.0,
-      child: FadeTransition(
-        opacity: animation,
-        child: _HistoryTile(item: item),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     // Stage 2: Use Weekly Balance logic with Time Travel
     final state = context.watch<AppState>();
-    final balance = PintCalculator.getWeeklyBalance(
-      state.activities,
-      state.drinks,
-      now: state.simulatedNow,
-    );
 
-    final logs = state.logs;
-    final activeItem = logs.isNotEmpty ? logs[0] : null;
-    final history = _getHistory(logs);
+    // PageView logic
+    // Index 0 = Current Week
+    // Index 1 = Last Week
+    // ...
+    // We want [Past (1)] [Current (0)], and we show 0. We swipe Right to see 1.
+    // PageView(reverse: true) does exactly this. Index 0 is right-most. Index 1 is to the left.
 
     return Scaffold(
       appBar: AppBar(
@@ -146,179 +40,33 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   content: Text(
                     'Simulated Time: ${context.read<AppState>().simulatedNow.toString().split('.')[0]}',
                   ),
-                  behavior: SnackBarBehavior
-                      .fixed, // Fixed to avoid off-screen floating issues with tall FABs
+                  behavior: SnackBarBehavior.fixed,
                 ),
               );
             },
           ),
         ],
       ),
-      body: Column(
-        children: [
-          const SizedBox(height: 40),
-          Text(
-            balance.toStringAsFixed(1),
-            style: const TextStyle(
-              fontSize: 80,
-              fontWeight: FontWeight.bold,
-              color: AppTheme.primaryBeer,
-            ),
-          ),
-          Text(
-            balance > 0
-                ? 'WEEKLY POINTS IN CREDIT'
-                : balance < 0
-                ? 'WEEKLY POINTS IN DEBT'
-                : 'SQUARE FOR THE WEEK',
-            style: const TextStyle(
-              fontSize: 18,
-              letterSpacing: 2,
-              color: Colors.white54,
-            ),
-          ),
-          const SizedBox(height: 30),
-          const Divider(indent: 32, endIndent: 32),
+      body: PageView.builder(
+        reverse: true, // Allows swiping Right to see "Past" (Index 1)
+        itemBuilder: (context, index) {
+          // Index 0 = Current, Index 1 = Last week, etc.
+          final weekOffset = index;
+          // Calculate "Now" for this specific page
+          // If index is 0, we use state.simulatedNow
+          // If index is 1, we subtract 7 days
+          final pageNow = state.simulatedNow.subtract(
+            Duration(days: 7 * weekOffset),
+          );
 
-          // Activity Feed
-          Expanded(
-            child: logs.isEmpty
-                ? const Center(
-                    child: Text(
-                      'No activity yet. Get moving! 🍻',
-                      style: TextStyle(color: Colors.white24),
-                    ),
-                  )
-                : Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      children: [
-                        // ACTIVE CARD - Fixed height, TRUE CUBOID rotation
-                        SizedBox(
-                          height:
-                              140, // Fixed height so history list doesn't jump
-                          child: AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 500),
-                            switchInCurve: Curves.easeInOut,
-                            switchOutCurve: Curves.easeInOut,
-                            transitionBuilder: (child, animation) {
-                              // TRUE CUBOID ROTATION
-                              const double halfHeight = 70.0;
-
-                              // Detect if this is the entering (new) or exiting (old) widget
-                              // by checking if animation is driving forward or dismissed/reversing
-                              final isEntering =
-                                  animation.status == AnimationStatus.forward ||
-                                  animation.status == AnimationStatus.completed;
-
-                              return AnimatedBuilder(
-                                animation: animation,
-                                child: child,
-                                builder: (context, child) {
-                                  // Flip rotation direction based on add vs delete
-                                  final direction = _isDeleting ? 1.0 : -1.0;
-                                  double angle;
-                                  if (isEntering) {
-                                    angle =
-                                        -direction *
-                                        (1.0 - animation.value) *
-                                        1.5708;
-                                  } else {
-                                    angle =
-                                        direction *
-                                        (1.0 - animation.value) *
-                                        1.5708;
-                                  }
-
-                                  final transform = Matrix4.identity()
-                                    ..setEntry(3, 2, 0.001)
-                                    ..translate(
-                                      0.0,
-                                      0.0,
-                                      halfHeight,
-                                    ) // Push axis FORWARD
-                                    ..rotateX(angle)
-                                    ..translate(
-                                      0.0,
-                                      0.0,
-                                      -halfHeight,
-                                    ); // Push card BACK
-
-                                  return Transform(
-                                    transform: transform,
-                                    alignment: Alignment.center,
-                                    child: child,
-                                  );
-                                },
-                              );
-                            },
-                            layoutBuilder: (currentChild, previousChildren) {
-                              return Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  ...previousChildren,
-                                  if (currentChild != null) currentChild,
-                                ],
-                              );
-                            },
-                            child: activeItem != null
-                                ? _ActiveCard(
-                                    key: ValueKey(
-                                      activeItem is Activity
-                                          ? activeItem.id
-                                          : (activeItem as Drink).id,
-                                    ),
-                                    item: activeItem,
-                                    onDelete: () => _deleteItem(activeItem),
-                                    onEdit: () =>
-                                        _showEditDialog(context, activeItem),
-                                  )
-                                : const SizedBox.shrink(),
-                          ),
-                        ),
-
-                        // HISTORY LIST - AnimatedList of tiles only
-                        if (history.isNotEmpty) ...[
-                          const Padding(
-                            padding: EdgeInsets.only(
-                              left: 8,
-                              top: 16,
-                              bottom: 8,
-                            ),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                'TODAY',
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 1.5,
-                                  color: Colors.white24,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: AnimatedList(
-                              key: _historyListKey,
-                              initialItemCount: history.length,
-                              itemBuilder: (context, index, animation) {
-                                if (index >= history.length)
-                                  return const SizedBox.shrink();
-                                return _buildHistoryTile(
-                                  history[index],
-                                  animation,
-                                );
-                              },
-                            ),
-                          ),
-                        ] else
-                          const Spacer(),
-                      ],
-                    ),
-                  ),
-          ),
-        ],
+          return WeeklyPage(
+            weekOffset: weekOffset,
+            pageNow: pageNow,
+            key: ValueKey(
+              weekOffset,
+            ), // Key changes when offset changes? No, key should be stable for offset.
+          );
+        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: Column(
@@ -327,11 +75,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         children: [
           FloatingActionButton.extended(
             onPressed: () {
-              setState(() => _isDeleting = false);
               context.read<AppState>().addDrink(1.0);
-              WidgetsBinding.instance.addPostFrameCallback(
-                (_) => _syncHistoryList(),
-              );
             },
             label: const Text('Pint'),
             icon: const Icon(Icons.sports_bar),
@@ -340,14 +84,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           const SizedBox(height: 12),
           FloatingActionButton.extended(
             onPressed: () {
-              setState(() => _isDeleting = false);
-              context.read<AppState>().addActivity(
-                'Run',
-                5.0,
-              ); // Default 5km Run
-              WidgetsBinding.instance.addPostFrameCallback(
-                (_) => _syncHistoryList(),
-              );
+              context.read<AppState>().addActivity('Run', 5.0);
             },
             label: const Text('Run (5k)'),
             icon: const Icon(Icons.directions_run),
@@ -356,14 +93,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           const SizedBox(height: 12),
           FloatingActionButton.extended(
             onPressed: () {
-              setState(() => _isDeleting = false);
-              context.read<AppState>().addActivity(
-                'Cycle',
-                15.0,
-              ); // Default 15km Cycle
-              WidgetsBinding.instance.addPostFrameCallback(
-                (_) => _syncHistoryList(),
-              );
+              context.read<AppState>().addActivity('Cycle', 15.0);
             },
             label: const Text('Cycle (15k)'),
             icon: const Icon(Icons.directions_bike),
@@ -372,20 +102,287 @@ class _DashboardScreenState extends State<DashboardScreen> {
           const SizedBox(height: 12),
           FloatingActionButton.extended(
             onPressed: () {
-              setState(() => _isDeleting = false);
-              context.read<AppState>().addActivity(
-                'Swim',
-                30.0,
-              ); // Default 30 lengths?
-              WidgetsBinding.instance.addPostFrameCallback(
-                (_) => _syncHistoryList(),
-              );
+              context.read<AppState>().addActivity('Swim', 30.0);
             },
             label: const Text('Swim (30)'),
             icon: const Icon(Icons.pool),
             backgroundColor: AppTheme.primaryBeer,
           ),
         ],
+      ),
+    );
+  }
+}
+
+class WeeklyPage extends StatefulWidget {
+  final int weekOffset;
+  final DateTime pageNow;
+
+  const WeeklyPage({
+    super.key,
+    required this.weekOffset,
+    required this.pageNow,
+  });
+
+  @override
+  State<WeeklyPage> createState() => _WeeklyPageState();
+}
+
+class _WeeklyPageState extends State<WeeklyPage> {
+  final GlobalKey<AnimatedListState> _historyListKey =
+      GlobalKey<AnimatedListState>();
+  List<dynamic> _previousHistory = [];
+  bool _isDeleting = false;
+
+  /// Filter logs for THIS week
+  List<dynamic> _getWeeklyLogs(List<dynamic> allLogs) {
+    final now = widget.pageNow;
+    final monday = now.subtract(Duration(days: now.weekday - 1));
+    final startOfWeek = DateTime(monday.year, monday.month, monday.day);
+    final endOfWeek = startOfWeek.add(
+      const Duration(days: 7),
+    ); // The following Monday
+
+    return allLogs.where((item) {
+      final ts = (item as dynamic).timestamp;
+      return (ts.isAfter(startOfWeek) || ts.isAtSameMomentAs(startOfWeek)) &&
+          ts.isBefore(endOfWeek);
+    }).toList();
+  }
+
+  /// Get history items (all except the most recent OF THIS WEEK)
+  List<dynamic> _getHistory(List<dynamic> weeklyLogs) {
+    return weeklyLogs.length > 1 ? weeklyLogs.sublist(1) : [];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final state = context.watch<AppState>();
+
+    // 1. Get ALL logs from state (State has everything)
+    final allLogs = state.logs;
+
+    // 2. Filter for THIS page's week
+    final weeklyLogs = _getWeeklyLogs(allLogs);
+
+    // 3. Calculate Balance for THIS page's week
+    final weeklyActivities = weeklyLogs.whereType<Activity>().toList();
+    final weeklyDrinks = weeklyLogs.whereType<Drink>().toList();
+    final balance = PintCalculator.calculateBalance(
+      weeklyActivities,
+      weeklyDrinks,
+    );
+
+    // 4. Handle List Sync using addPostFrameCallback to avoid build-time side effects
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _syncHistoryList(weeklyLogs);
+      }
+    });
+
+    final activeItem = weeklyLogs.isNotEmpty ? weeklyLogs[0] : null;
+    final history = _getHistory(weeklyLogs);
+
+    // Date Header Text
+    final monday = widget.pageNow.subtract(
+      Duration(days: widget.pageNow.weekday - 1),
+    );
+    final dateStr = '${monday.day}/${monday.month}';
+    final headerText = widget.weekOffset == 0
+        ? 'CURRENT WEEK'
+        : 'WEEK OF $dateStr';
+
+    return Column(
+      children: [
+        const SizedBox(height: 20),
+        Text(
+          headerText,
+          style: const TextStyle(
+            color: Colors.white38,
+            letterSpacing: 1.5,
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          balance.toStringAsFixed(1),
+          style: const TextStyle(
+            fontSize: 80,
+            fontWeight: FontWeight.bold,
+            color: AppTheme.primaryBeer,
+          ),
+        ),
+        Text(
+          balance > 0
+              ? 'POINTS IN CREDIT'
+              : balance < 0
+              ? 'POINTS IN DEBT'
+              : 'SQUARE',
+          style: const TextStyle(
+            fontSize: 18,
+            letterSpacing: 2,
+            color: Colors.white54,
+          ),
+        ),
+        const SizedBox(height: 30),
+        const Divider(indent: 32, endIndent: 32),
+
+        // Activity Feed
+        Expanded(
+          child: weeklyLogs.isEmpty
+              ? const Center(
+                  child: Text(
+                    'No activity this week. 🍻',
+                    style: TextStyle(color: Colors.white24),
+                  ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    children: [
+                      // ACTIVE CARD
+                      SizedBox(
+                        height: 140,
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 500),
+                          switchInCurve: Curves.easeInOut,
+                          switchOutCurve: Curves.easeInOut,
+                          transitionBuilder: (child, animation) {
+                            // TRUE CUBOID ROTATION Logic
+                            final isEntering =
+                                animation.status == AnimationStatus.forward ||
+                                animation.status == AnimationStatus.completed;
+
+                            return AnimatedBuilder(
+                              animation: animation,
+                              child: child,
+                              builder: (context, child) {
+                                final direction = _isDeleting ? 1.0 : -1.0;
+                                double angle;
+                                if (isEntering) {
+                                  angle =
+                                      -direction *
+                                      (1.0 - animation.value) *
+                                      1.5708;
+                                } else {
+                                  angle =
+                                      direction *
+                                      (1.0 - animation.value) *
+                                      1.5708;
+                                }
+                                final transform = Matrix4.identity()
+                                  ..setEntry(3, 2, 0.001)
+                                  ..translate(0.0, 0.0, 70.0)
+                                  ..rotateX(angle)
+                                  ..translate(0.0, 0.0, -70.0);
+                                return Transform(
+                                  transform: transform,
+                                  alignment: Alignment.center,
+                                  child: child,
+                                );
+                              },
+                            );
+                          },
+                          child: activeItem != null
+                              ? _ActiveCard(
+                                  key: ValueKey(
+                                    activeItem is Activity
+                                        ? activeItem.id
+                                        : (activeItem as Drink).id,
+                                  ),
+                                  item: activeItem,
+                                  onDelete: () =>
+                                      _deleteItem(context, activeItem),
+                                  onEdit: () =>
+                                      _showEditDialog(context, activeItem),
+                                )
+                              : const SizedBox.shrink(),
+                        ),
+                      ),
+
+                      // HISTORY LIST
+                      if (history.isNotEmpty) ...[
+                        const Padding(
+                          padding: EdgeInsets.only(left: 8, top: 16, bottom: 8),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'HISTORY',
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.5,
+                                color: Colors.white24,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: AnimatedList(
+                            key: _historyListKey,
+                            initialItemCount: history.length,
+                            itemBuilder: (context, index, animation) {
+                              if (index >= history.length)
+                                return const SizedBox.shrink();
+                              return _buildHistoryTile(
+                                history[index],
+                                animation,
+                              );
+                            },
+                          ),
+                        ),
+                      ] else
+                        const Spacer(),
+                    ],
+                  ),
+                ),
+        ),
+      ],
+    );
+  }
+
+  void _syncHistoryList(List<dynamic> currentWeeklyLogs) {
+    final currentHistory = _getHistory(currentWeeklyLogs);
+
+    // Sync insert
+    for (int i = 0; i < currentHistory.length; i++) {
+      final item = currentHistory[i];
+      final itemId = item is Activity ? item.id : (item as Drink).id;
+      final wasInPrevious = _previousHistory.any((prev) {
+        final prevId = prev is Activity ? prev.id : (prev as Drink).id;
+        return prevId == itemId;
+      });
+      if (!wasInPrevious) {
+        _historyListKey.currentState?.insertItem(
+          i,
+          duration: const Duration(milliseconds: 400),
+        );
+      }
+    }
+    _previousHistory = List.from(currentHistory);
+  }
+
+  void _deleteItem(BuildContext context, dynamic item) {
+    setState(() => _isDeleting = true);
+    final id = item is Activity ? item.id : (item as Drink).id;
+    if (item is Activity) {
+      context.read<AppState>().deleteActivity(id);
+    } else {
+      context.read<AppState>().deleteDrink(id);
+    }
+    // We rely on rebuild to update UI, but AnimatedList might need manual removal?
+    // Since we destroy the list on page change, or rebuild significantly,
+    // minimal support here is fine for now as long as it doesn't crash.
+  }
+
+  Widget _buildHistoryTile(dynamic item, Animation<double> animation) {
+    return SizeTransition(
+      sizeFactor: animation,
+      axisAlignment: -1.0,
+      child: FadeTransition(
+        opacity: animation,
+        child: _HistoryTile(item: item),
       ),
     );
   }
@@ -520,11 +517,13 @@ class _ActiveCard extends StatelessWidget {
                   icon: Icons.remove,
                   onPressed: () {
                     if (isActivity) {
-                      if (amount > 0.5)
+                      if (amount > 0.5) {
                         state.updateActivity(item, amount - 0.5);
+                      }
                     } else {
-                      if (amount > 1)
+                      if (amount > 1) {
                         state.updateDrink(item as Drink, amount - 1);
+                      }
                     }
                   },
                 ),
@@ -553,7 +552,7 @@ class _ActiveCard extends StatelessWidget {
 class _HistoryTile extends StatelessWidget {
   final dynamic item;
 
-  const _HistoryTile({required this.item});
+  const _HistoryTile({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -561,7 +560,7 @@ class _HistoryTile extends StatelessWidget {
     final amount = isActivity ? item.amount : (item as Drink).amount;
 
     final label = isActivity
-        ? '${amount.toStringAsFixed(1)} km Run'
+        ? '${amount.toStringAsFixed(1)} ${(item).type == 'Swim' ? 'lengths' : 'km'} ${(item).type}'
         : '${amount % 1 == 0 ? amount.toInt() : amount.toStringAsFixed(1)} Pint${amount == 1 ? '' : 's'}';
 
     return ListTile(
