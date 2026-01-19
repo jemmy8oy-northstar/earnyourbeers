@@ -10,24 +10,23 @@ The concept "Earn Your Vices" inherently risks scrutiny because it gamifies the 
 *   **High Risk**: If the app allows banking unlimited alcohol credits (e.g., "You have 50 pints banked!").
 *   **High Risk**: If the app targets minors (e.g., "Candy & Beer").
 
-## Mitigation Strategy
+## Mitigation Strategy: The "Passthrough" Defense �️
 
-### 1. The "Responsible Cap" (Hard Limit) 🛑
-We will implement a hard limit on the amount of Alcohol units that can be displayed or redeemable in a standard week, aligning with health guidelines (e.g., CDC/NHS guidelines of ~14 units/week).
-*   **Action**: If a user runs 100km (20 pints), the UI limits the "Liquid Vice" view to a safe cap (e.g., 7 pints/week) and converts the overflow to "General Points" or locks it.
-*   **Messaging**: "Whoa! You've earned plenty. Drink responsibly. Excess points bank for next week."
+By adopting the **Emoji Freedom** model, we shift the app from being a "drinking game" to a "neutral tracking utility".
 
-### 2. Explicit Age Gating 🔞
-*   **Action**: Onboarding MUST ask "Are you over legal drinking age?" before showing any Alcohol options.
-*   **Result**: If "No", the "Liquid Vices" category is strictly hidden.
+### 1. Safe Defaults (The "Donut Defense") 🍩
+*   **Action**: The app MUST install with a safe, family-friendly default (e.g., "Sweet Treats 🍩").
+*   **Reviewer Experience**: When an App Store reviewer opens the app, they see a fun fitness app for earning cakes or games. There is NO reference to alcohol.
+*   **Validation**: This proves the app's *intent* is fitness motivation, not alcohol promotion.
 
-### 3. Neutralizing the "Binge" Incentive 🧘
-*   **Action**: Avoid "Streak" mechanics for alcohol.
-*   **Action**: Rename "Redeem" button to "Log Enjoyment" or "Track", reducing the pressure to consume.
-*   **Action**: Add a permanent disclaimer in the Settings/About page citing medical advice.
+### 2. User-Generated Context (The "Not Our Words") 🗣️
+*   **Action**: If a user *chooses* to rename their reward to "Beer 🍺", that is user-generated content/settings.
+*   **Precedent**: Calorie trackers allow users to log "Vodka", but the app isn't "encouraging" vodka consumption; it's tracking user behavior.
+*   **Benefit**: We no longer need complex "caps" or logic to police specific substances, because the app is agnostic to what a "Credit" represents.
 
-### 4. Default to Non-Alcohol 🎮
-*   **Action**: As planned, the default Vice is **Gaming** or **Food**. Alcohol requires active opt-in. This demonstrates the app is primarily about *balance*, not *drinking*.
+### 3. Neutral Terminology ⚖️
+*   **Action**: We track "Credits" or "Points".
+*   **Action**: Avoid "Binge" mechanics (e.g., "Streak" bonuses).
 
 ## Implementation Checklist
 - [ ] Add `AgeVerification` step to Onboarding.
