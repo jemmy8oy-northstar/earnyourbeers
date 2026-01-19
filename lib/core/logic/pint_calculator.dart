@@ -50,11 +50,14 @@ class PintCalculator {
   /// Returns the balance for the current week (starting Monday).
   static double getWeeklyBalance(
     List<Activity> activities,
-    List<Drink> drinks,
-  ) {
-    final now = DateTime.now();
+    List<Drink> drinks, {
+    DateTime? now, // Dependency Injection for Time Travel
+  }) {
+    final effectiveNow = now ?? DateTime.now();
     // Monday = 1. Subtract (weekday - 1) days to get to Monday.
-    final monday = now.subtract(Duration(days: now.weekday - 1));
+    final monday = effectiveNow.subtract(
+      Duration(days: effectiveNow.weekday - 1),
+    );
     final startOfWeek = DateTime(
       monday.year,
       monday.month,

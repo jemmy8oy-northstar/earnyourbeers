@@ -9,6 +9,16 @@ class AppState extends ChangeNotifier {
   double _balance = 0.0;
   double get balance => _balance;
 
+  // Debug: Time Travel
+  Duration _debugTimeOffset = Duration.zero;
+  DateTime get simulatedNow => DateTime.now().add(_debugTimeOffset);
+
+  void simulateAdvanceWeek() {
+    _debugTimeOffset += const Duration(days: 7);
+    _calculateBalance(); // Recalculate with new "now"
+    notifyListeners();
+  }
+
   List<Activity> _activities = [];
   List<Drink> _drinks = [];
 

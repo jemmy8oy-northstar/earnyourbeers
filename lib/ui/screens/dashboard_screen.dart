@@ -119,17 +119,41 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Stage 2: Use Weekly Balance logic
-    final activities = context.watch<AppState>().activities;
-    final drinks = context.watch<AppState>().drinks;
-    final balance = PintCalculator.getWeeklyBalance(activities, drinks);
+    // Stage 2: Use Weekly Balance logic with Time Travel
+    final state = context.watch<AppState>();
+    final balance = PintCalculator.getWeeklyBalance(
+      state.activities,
+      state.drinks,
+      now: state.simulatedNow,
+    );
 
-    final logs = context.watch<AppState>().logs;
+    final logs = state.logs;
     final activeItem = logs.isNotEmpty ? logs[0] : null;
     final history = _getHistory(logs);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Earn Your Beers 🍻')),
+      appBar: AppBar(
+        title: const Text('Earn Your Beers 🍻'),
+        actions: [
+          // DEV: Time Travel Button
+          IconButton(
+            icon: const Icon(Icons.fast_forward),
+            tooltip: 'Simulate +1 Week',
+            onPressed: () {
+              context.read<AppState>().simulateAdvanceWeek();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Simulated Time: ${context.read<AppState>().simulatedNow.toString().split('.')[0]}',
+                  ),
+                  behavior: SnackBarBehavior
+                      .fixed, // Fixed to avoid off-screen floating issues with tall FABs
+                ),
+              );
+            },
+          ),
+        ],
+      ),
       body: Column(
         children: [
           const SizedBox(height: 40),
