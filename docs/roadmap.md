@@ -62,3 +62,4 @@ We follow a staged iterative approach, focusing on the "Logic First" engineering
 - **Beer Clubs**: Create groups to compete on "Net Savings" over a month.
 - **Local Brewery Sync**: Integration with real-world brewery data.
 - **Master Prestige (T20+)**: Endgame progression where Legends earn infinite prestige levels with unique visual flairs.
+- **Maintenance**: Remove "Redo Onboarding" button from settings once onboarding is finalized.

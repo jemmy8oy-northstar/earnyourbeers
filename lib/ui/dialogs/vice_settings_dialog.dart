@@ -114,6 +114,23 @@ class _ViceSettingsDialogState extends State<ViceSettingsDialog> {
                 });
               },
             ),
+            const SizedBox(height: 32),
+            const Text(
+              'Management',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: () {
+                  context.read<AppState>().resetOnboarding();
+                  Navigator.of(context).pop();
+                },
+                icon: const Icon(Icons.refresh),
+                label: const Text('Redo Onboarding'),
+              ),
+            ),
           ],
         ),
       ),

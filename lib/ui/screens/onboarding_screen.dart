@@ -18,6 +18,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   double _weeklyRunKm = 0.0;
   String _selectedVice = '🍕';
   bool _isEditingVice = false;
+  String _startingVice = '🍕';
   final TextEditingController _viceController = TextEditingController(
     text: '🍕',
   );
@@ -94,21 +95,36 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                   children: [
                     if (_currentPage > 0)
                       TextButton(
-                        onPressed: () => _pageController.previousPage(
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeInOut,
+                        onPressed: () {
+                          if (_currentPage == 2 && _isEditingVice) {
+                            setState(() {
+                              _isEditingVice = false;
+                              _selectedVice = _startingVice;
+                              _viceController.text = _startingVice;
+                            });
+                          } else {
+                            _pageController.previousPage(
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.easeInOut,
+                            );
+                          }
+                        },
+                        child: Text(
+                          (_currentPage == 2 && _isEditingVice)
+                              ? 'DISCARD'
+                              : 'Back',
                         ),
-                        child: const Text('Back'),
                       )
                     else
                       const SizedBox.shrink(),
-                    FilledButton.icon(
-                      onPressed: _nextPage,
-                      label: Text(
-                        _currentPage == 2 ? 'CALCULATE RANK' : 'NEXT',
+                    if (!_isEditingVice)
+                      FilledButton.icon(
+                        onPressed: _nextPage,
+                        label: Text(
+                          _currentPage == 2 ? 'CALCULATE RANK' : 'NEXT',
+                        ),
+                        icon: const Icon(Icons.arrow_forward),
                       ),
-                      icon: const Icon(Icons.arrow_forward),
-                    ),
                   ],
                 ),
               ),
@@ -230,44 +246,51 @@ class _OnboardingScreenState extends State<OnboardingScreen>
             style: TextStyle(fontSize: 18),
           ),
           const SizedBox(height: 40),
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              if (!_isEditingVice)
-                Text(_selectedVice, style: const TextStyle(fontSize: 120))
-              else
-                SizedBox(
-                  width: 200,
-                  child: TextField(
-                    controller: _viceController,
-                    autofocus: true,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 80),
-                    decoration: const InputDecoration(hintText: 'Emoji...'),
-                    onChanged: (val) {
-                      if (val.isNotEmpty) {
-                        setState(() => _selectedVice = val);
-                      }
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 40),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                if (!_isEditingVice)
+                  Text(_selectedVice, style: const TextStyle(fontSize: 120))
+                else
+                  SizedBox(
+                    width: 200,
+                    child: TextField(
+                      controller: _viceController,
+                      autofocus: true,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 80),
+                      decoration: const InputDecoration(hintText: ''),
+                      onChanged: (val) {
+                        if (val.isNotEmpty) {
+                          setState(() => _selectedVice = val);
+                        }
+                      },
+                      onSubmitted: (val) {
+                        setState(() => _isEditingVice = false);
+                      },
+                    ),
+                  ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: IconButton.filledTonal(
+                    onPressed: () {
+                      setState(() {
+                        if (_isEditingVice) {
+                          _isEditingVice = false;
+                        } else {
+                          _startingVice = _selectedVice;
+                          _isEditingVice = true;
+                        }
+                      });
                     },
-                    onSubmitted: (val) {
-                      setState(() => _isEditingVice = false);
-                    },
+                    icon: Icon(_isEditingVice ? Icons.check : Icons.edit),
                   ),
                 ),
-              Positioned(
-                bottom: 0,
-                right: -40,
-                child: IconButton.filledTonal(
-                  onPressed: () {
-                    setState(() {
-                      _isEditingVice = !_isEditingVice;
-                    });
-                  },
-                  icon: Icon(_isEditingVice ? Icons.check : Icons.edit),
-                ),
-              ),
-            ],
-            clipBehavior: Clip.none,
+              ],
+            ),
           ),
           const SizedBox(height: 40),
           if (!_isEditingVice)

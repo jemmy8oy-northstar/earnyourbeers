@@ -465,6 +465,12 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> resetOnboarding() async {
+    _isOnboarded = false;
+    await _database.saveSetting('onboarding_completed', 'false');
+    notifyListeners();
+  }
+
   Future<void> updateTheme(ThemeMode mode) async {
     _themeMode = mode;
     notifyListeners();
