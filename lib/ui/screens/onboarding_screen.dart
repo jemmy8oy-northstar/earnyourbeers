@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/logic/app_state.dart';
-import '../dialogs/weekly_settlement_dialog.dart'; // We'll use the scanner here too
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});

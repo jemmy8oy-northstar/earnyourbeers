@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:async';
+import 'dart:math' as math;
 import 'package:drift/drift.dart' show Value;
 import '../services/database.dart';
 import 'pint_calculator.dart';
@@ -261,9 +262,9 @@ class AppState extends ChangeNotifier {
   int get currentLevel => _currentLevel;
   double get leagueTally => _leagueTally;
 
-  // Granular Difficulty Formula: 1.0 - (Level * 0.015)
-  double get currentDifficulty =>
-      (1.0 - (_currentLevel * 0.015)).clamp(0.1, 1.0);
+  // Exponential Difficulty Formula: 5.0 * (0.7943 ^ Level)
+  // This ensures Tier 0 = 5.0 (5km = 25pts) and Tier 20 = 0.05 (500km = 25pts)
+  double get currentDifficulty => 5.0 * (math.pow(0.794328, _currentLevel));
   // Progress from -25 to +25 mapped to 0 to 1
   double get tallyProgress => ((_leagueTally + 25) / 50).clamp(0.0, 1.0);
   LeagueTier get currentTier =>

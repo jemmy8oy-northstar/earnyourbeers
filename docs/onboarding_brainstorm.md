@@ -34,38 +34,30 @@ We project their current volume into a "Standard Week" (Tier 0 difficulty).
 
 ---
 
-## 📈 The "Progressive Standard" (Full 20-Tier Ratios)
+## 📈 The "Extreme 100:1" Scaling (Exponential)
 
-To ensure every rank feels harder than the last, the reward multiplier decreases by **0.015 (1.5%)** for every single tier gain.
+To capture the vast difference between a beginner's 5km and an elite's 500km, the reward multiplier now decays exponentially by **~20.6% per level**.
 
-### Multiplier Table
+### Multiplier Table (100:1 Range)
 
-| Tier | Rank Name | Multiplier | Run (pts/km) | Cycle (pts/km) | Swim (pts/30L) |
+| Tier | Rank Name | Multiplier (pts/km) | 5km Earns | 50km Earns | 500km Earns |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **0** | Noob | **1.000x** | 0.500 | 0.066 | 1.000 |
-| **1** | Novice | **0.985x** | 0.492 | 0.065 | 0.985 |
-| **2** | Weekender | **0.970x** | 0.485 | 0.064 | 0.970 |
-| **3** | Rookie | **0.955x** | 0.477 | 0.063 | 0.955 |
-| **4** | Apprentice | **0.940x** | 0.470 | 0.062 | 0.940 |
-| **5** | Regular | **0.925x** | 0.462 | 0.061 | 0.925 |
-| **6** | Grinder | **0.910x** | 0.455 | 0.060 | 0.910 |
-| **7** | Athlete | **0.895x** | 0.447 | 0.059 | 0.895 |
-| **8** | Competitor | **0.880x** | 0.440 | 0.058 | 0.880 |
-| **9** | Professional | **0.865x** | 0.432 | 0.057 | 0.865 |
-| **10** | Specialist | **0.850x** | 0.425 | 0.056 | 0.850 |
-| **11** | Relentless | **0.835x** | 0.417 | 0.055 | 0.835 |
-| **12** | Veteran | **0.820x** | 0.410 | 0.054 | 0.820 |
-| **13** | Expert | **0.805x** | 0.402 | 0.053 | 0.805 |
-| **14** | Champion | **0.790x** | 0.395 | 0.052 | 0.790 |
-| **15** | Master | **0.775x** | 0.387 | 0.051 | 0.775 |
-| **16** | Grandmaster | **0.760x** | 0.380 | 0.050 | 0.760 |
-| **17** | Elite | **0.745x** | 0.372 | 0.049 | 0.745 |
-| **18** | Titan | **0.730x** | 0.365 | 0.048 | 0.730 |
-| **19** | Titan+ | **0.715x** | 0.357 | 0.047 | 0.715 |
-| **20** | Legend | **0.700x** | 0.350 | 0.046 | 0.700 |
+| **0** | Noob | **5.000** | **25.0 pts** | 250 pts | 2,500 pts |
+| **1** | Novice | **3.972** | 19.9 pts | 199 pts | 1,986 pts |
+| **5** | Regular | **1.585** | 7.9 pts | **79.2 pts** | 792 pts |
+| **10** | Specialist | **0.501** | 2.5 pts | **25.1 pts** | 251 pts |
+| **15** | Master | **0.158** | 0.8 pts | 7.9 pts | **79.2 pts** |
+| **20** | Legend | **0.050** | 0.25 pts | 2.5 pts | **25.0 pts** |
 
-> [!NOTE]
-> The **Cycle** value is based on the 15km = 1pt rule. The **Swim** value is based on 30 lengths = 1pt. These are then scaled by the multiplier.
+> [!IMPORTANT]
+> - **5km for a Noob** earns exactly 25 points (one full promotion).
+> - **500km for a Legend** earns exactly 25 points (one full prestige tier).
+
+---
+
+## 🏗️ Seeding Logic & Mapping (Volume Based)
+
+Seeding is now based on the "Effort Parity" principle. We place users where their current volume would earn them a rank-appropriate reward.
 
 ---
 
