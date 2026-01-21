@@ -6,28 +6,55 @@ Now that we have pivoted to **"Earn Your Vices"**, we need a progression system 
 
 The progression system should reflect the user's journey of "earning" their rewards through physical discipline.
 
-### The 12 Tiers (Leagues)
+### The 12 Tier Iteration (Current Preferences)
 
-Instead of beer-themed tiers (e.g., Lager, Ale, Stout), we move towards titles that reflect **Sophistication** and **Mastery**.
+You liked: **Apprentice, Regular, Expert, Master, Elite**.
+Let's build a cohesive 12-tier journey around these. Here are three "Families" to choose from. 
+
+### � The Final 15 (Expanded Journey)
+
+We've expanded to 15 tiers to allow for a more granular sense of progression, especially in the early and high-level stages.
 
 | Tier | Name | Vibe |
 | :--- | :--- | :--- |
-| **1** | **The Seeker** | Just starting the journey. |
-| **2** | **The Apprentice** | Learning the ropes of discipline. |
-| **3** | **The Regular** | Making activity a habit. |
-| **4** | **The Enthusiast** | Gaining momentum and confidence. |
-| **5** | **The Collector** | Starting to accumulate earned vices. |
-| **6** | **The Connoisseur** | Refined taste in rewards. |
-| **7** | **The Specialist** | Focused and dedicated training. |
-| **8** | **The Aficionado** | High-level consistency. |
-| **9** | **The Expert** | Mastering the balance of effort and reward. |
-| **10** | **The Master** | A high-tier level of personal discipline. |
-| **11** | **The Elite** | Near the top of the league. |
-| **12** | **The Sovereign** | Absolute mastery over the "Earn Your Vices" loop. |
+| **1** | **Noob** | Just downloaded. Welcome to the grind. |
+| **2** | **Novice** | Breaking the seal on discipline. |
+| **3** | **Rookie** | Consistency is starting to show. |
+| **4** | **Apprentice** | Learning the "Earn Your Vices" logic. |
+| **5** | **Regular** | A familiar face in the league of effort. |
+| **6** | **Athlete** | Performance is becoming a priority. |
+| **7** | **Competitor** | Pushing for personal bests. |
+| **8** | **Professional** | Efficiency and discipline at scale. |
+| **9** | **Specialist** | Master of a particular activity or cycle. |
+| **10** | **Veteran** | Battle-hardened by months of consistency. |
+| **11** | **Expert** | Deep understanding of the reward-effort balance. |
+| **12** | **Champion** | A top-tier performer with sustained excellence. |
+| **13** | **Master** | Total psychological command over the vice loop. |
+| **14** | **Elite** | Among the top 1% of the disciplined. |
+| **15** | **Legend** | Eternal residency in the Hall of Vices. |
+
+---
+
+## Probing for 15:
+1. **The "Noob" Factor**: Do you like "Noob" or should we use something slightly more prestigious but still low-tier like "Initiate" or "Trialist"?
+2. **The "Professional" Jump**: Does T8 (Professional) into T9 (Specialist) feel right, or should they swap?
+3. **League Branding**: With 15 tiers, we could group them into **Divisions** (e.g., T1-T5 = *Bronze League*, T6-T10 = *Silver League*, T11-T15 = *Gold League*). Interest in that?
+
+---
+
+## Probing Questions for You:
+1. **Tier 1 (The Start)**: Does "Novice" feel more accurate than "Seeker"? Or should we go with something like "Unranked"?
+2. **The "Mid-Tier" Grind (4-8)**: 
+   - Does **Journeyman/Craftsman** feel too "old world"?
+   - Does **Athlete/Competitor** feel too "gym-focused"?
+   - Does **Practitioner/Scholar** feel too "monk-like"?
+3. **Tier 12 (The Peak)**: If "Sovereign" was just 'ok', do you prefer **Legend**, **Paragon**, or **Apex**?
+4. **The Name "Leagues"**: Should it be called "Leagues" or something more vice-neutral like "Tiers", "Ranks", or "Circles"?
 
 ---
 
 ## The XP Logic: "The 25-Point Rule"
+... (remains unchanged) ...
 
 Based on the roadmap: *"The 25-point 'Savings' requirement to level up."*
 
