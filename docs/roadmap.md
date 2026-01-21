@@ -59,7 +59,7 @@ We follow a staged iterative approach, focusing on the "Logic First" engineering
 **Goal**: Move beyond a standalone tool into a connected ecosystem.
 - **Wearable Integration**: Sync activities directly from **Strava**, **Garmin**, **Apple Health**, and **Nike Run Club**.
 - **Social Cellars**: Share your "Cellar" with friends or join a global leaderboard.
-- **Beer Clubs**: Create groups to compete on "Net Savings" over a month.
-- **Local Brewery Sync**: Integration with real-world brewery data.
+- **Multi-Discipline Rank System**: Separate ranks for Running, Cycling, and Swimming. Your overall profile rank is your highest discipline.
+- **Hybrid Athlete Badges**: Special recognition (e.g., "Hybrid Warrior") for users with multiple disciplines within 5 levels of each other above a certain baseline.
 - **Master Prestige (T20+)**: Endgame progression where Legends earn infinite prestige levels with unique visual flairs.
 - **Maintenance**: Remove "Redo Onboarding" button from settings once onboarding is finalized.

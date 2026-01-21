@@ -513,6 +513,13 @@ class AppState extends ChangeNotifier {
     await _database.deleteDrink(id);
   }
 
+  Future<void> debugSetLevel(int level) async {
+    _currentLevel = level.clamp(0, 20);
+    await _database.saveSetting('current_level', _currentLevel.toString());
+    _calculateBalance();
+    notifyListeners();
+  }
+
   void _calculateBalance() {
     _balance = PintCalculator.calculateBalance(
       _activities,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 import 'package:provider/provider.dart';
 import '../../core/logic/app_state.dart';
 
@@ -15,7 +16,9 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   int _currentPage = 0;
 
   // Selections
-  double _weeklyRunKm = 0.0;
+  String _selectedSport = 'Run';
+  double _weeklyVolume = 0.0;
+  double _weeklyViceCount = 0.0;
   String _selectedVice = '🍕';
   bool _isEditingVice = false;
   String _startingVice = '🍕';
@@ -45,7 +48,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   }
 
   void _nextPage() {
-    if (_currentPage < 2) {
+    if (_currentPage < 3) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
@@ -82,7 +85,9 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                 onPageChanged: (page) => setState(() => _currentPage = page),
                 children: [
                   _buildIntroPage(),
+                  _buildDisciplinePage(),
                   _buildVolumePage(),
+                  _buildAuditPage(),
                   _buildVicePage(),
                 ],
               ),
@@ -96,7 +101,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                     if (_currentPage > 0)
                       TextButton(
                         onPressed: () {
-                          if (_currentPage == 2 && _isEditingVice) {
+                          if (_currentPage == 4 && _isEditingVice) {
                             setState(() {
                               _isEditingVice = false;
                               _selectedVice = _startingVice;
@@ -110,7 +115,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                           }
                         },
                         child: Text(
-                          (_currentPage == 2 && _isEditingVice)
+                          (_currentPage == 4 && _isEditingVice)
                               ? 'DISCARD'
                               : 'Back',
                         ),
@@ -121,7 +126,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                       FilledButton.icon(
                         onPressed: _nextPage,
                         label: Text(
-                          _currentPage == 2 ? 'CALCULATE RANK' : 'NEXT',
+                          _currentPage == 4 ? 'CALCULATE RANK' : 'NEXT',
                         ),
                         icon: const Icon(Icons.arrow_forward),
                       ),
@@ -166,29 +171,103 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     );
   }
 
-  Widget _buildVolumePage() {
+  Widget _buildDisciplinePage() {
     return Padding(
       padding: const EdgeInsets.all(32.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Text(
-            '1. VOLUME Check',
+            '1. PRIMARY ENGINE',
             style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 2),
           ),
           const SizedBox(height: 48),
-          Text(
-            '${_weeklyRunKm.toInt()} KM',
-            style: const TextStyle(fontSize: 64, fontWeight: FontWeight.w900),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _disciplineButton('Run', '🏃'),
+              _disciplineButton('Cycle', '🚴'),
+              _disciplineButton('Swim', '🏊'),
+            ],
           ),
-          const Text('average weekly running distance'),
+        ],
+      ),
+    );
+  }
+
+  Widget _disciplineButton(String label, String emoji) {
+    bool isSelected = _selectedSport == label;
+    return InkWell(
+      onTap: () => setState(() => _selectedSport = label),
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)
+              : null,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: isSelected
+                ? Theme.of(context).colorScheme.primary
+                : Colors.grey.shade300,
+            width: 2,
+          ),
+        ),
+        child: Column(
+          children: [
+            Text(emoji, style: const TextStyle(fontSize: 40)),
+            const SizedBox(height: 8),
+            Text(
+              label.toUpperCase(),
+              style: TextStyle(
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                color: isSelected
+                    ? Theme.of(context).colorScheme.primary
+                    : null,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildVolumePage() {
+    String unit = 'KM';
+    double maxVol = 100.0;
+    if (_selectedSport == 'Cycle') {
+      unit = 'KM';
+      maxVol = 300.0;
+    } else if (_selectedSport == 'Swim') {
+      unit = 'LENGTHS';
+      maxVol = 3000.0;
+    }
+
+    return Padding(
+      padding: const EdgeInsets.all(32.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            '2. ${_selectedSport.toUpperCase()} VOLUME',
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              letterSpacing: 2,
+            ),
+          ),
+          const SizedBox(height: 48),
+          Text(
+            '${_weeklyVolume.toInt()} $unit',
+            style: const TextStyle(fontSize: 48, fontWeight: FontWeight.w900),
+          ),
+          const Text('average weekly output'),
           Slider(
-            value: _weeklyRunKm,
+            value: _weeklyVolume.clamp(0.0, maxVol),
             min: 0,
-            max: 100, // We keep it at 100 for onboarding simplicity
+            max: maxVol,
             divisions: 20,
-            label: '${_weeklyRunKm.toInt()} km',
-            onChanged: (val) => setState(() => _weeklyRunKm = val),
+            label: '${_weeklyVolume.toInt()} $unit',
+            onChanged: (val) => setState(() => _weeklyVolume = val),
           ),
           const SizedBox(height: 24),
           _buildVolumeBadge(),
@@ -200,16 +279,22 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   Widget _buildVolumeBadge() {
     String label = 'BEGINNER';
     Color color = Colors.grey;
-    if (_weeklyRunKm >= 80) {
+
+    // Normalize to Running KM for badge logic
+    double normKm = _weeklyVolume;
+    if (_selectedSport == 'Cycle') normKm = _weeklyVolume / 3.0;
+    if (_selectedSport == 'Swim') normKm = _weeklyVolume / 30.0;
+
+    if (normKm >= 80) {
       label = 'LEGENDARY';
       color = Colors.black;
-    } else if (_weeklyRunKm >= 50) {
+    } else if (normKm >= 50) {
       label = 'ELITE';
       color = Colors.purple;
-    } else if (_weeklyRunKm >= 30) {
+    } else if (normKm >= 30) {
       label = 'ATHLETE';
       color = Colors.blue;
-    } else if (_weeklyRunKm >= 10) {
+    } else if (normKm >= 10) {
       label = 'CONSISTENT';
       color = Colors.green;
     }
@@ -228,6 +313,52 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     );
   }
 
+  Widget _buildAuditPage() {
+    return Padding(
+      padding: const EdgeInsets.all(32.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text(
+            '3. VICE AUDIT',
+            style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 2),
+          ),
+          const SizedBox(height: 32),
+          const Text(
+            'Be honest: how many vices do you typically have in a week?',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 18),
+          ),
+          const SizedBox(height: 48),
+          Text(
+            '${_weeklyViceCount.toInt()}',
+            style: const TextStyle(fontSize: 80, fontWeight: FontWeight.w900),
+          ),
+          const Text('vices per week'),
+          Slider(
+            value: _weeklyViceCount,
+            min: 0,
+            max: 40,
+            divisions: 20,
+            label: '${_weeklyViceCount.toInt()}',
+            onChanged: (val) => setState(() => _weeklyViceCount = val),
+          ),
+          const SizedBox(height: 24),
+          if (_weeklyViceCount > 25)
+            const Text(
+              '⚠️ HIGH VICE LOAD: WE\'LL ADJUST RATIOS FOR SUSTAINABILITY',
+              style: TextStyle(
+                color: Colors.orange,
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+              ),
+              textAlign: TextAlign.center,
+            ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildVicePage() {
     final quickPicks = ['🍕', '🎮', '🍩', '🥤', '🍫', '☕', '🍰', '🍟'];
     return Padding(
@@ -236,7 +367,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Text(
-            '2. VICE Setup',
+            '4. VICE Setup',
             style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 2),
           ),
           const SizedBox(height: 24),
@@ -336,23 +467,27 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   }
 
   Widget _buildFinalRankReveal() {
-    // Determine level from runVolume
-    int seededLevel = 0;
-    if (_weeklyRunKm >= 100)
-      seededLevel = 20;
-    else if (_weeklyRunKm >= 60)
-      seededLevel = 15;
-    else if (_weeklyRunKm >= 40)
-      seededLevel = 10;
-    else if (_weeklyRunKm >= 20)
-      seededLevel = 5;
-    else
-      seededLevel = 0;
+    // Calculate Seeded Level
+    double basePoints = 0.5; // Run
+    if (_selectedSport == 'Cycle') basePoints = 1.0 / 6.0;
+    if (_selectedSport == 'Swim') basePoints = 1.0 / 60.0;
 
-    // Use dummy display logic since we haven't onboarded yet
-    // In a real app we'd fetch this from the LeagueTier list
+    double pointsAtT0 = _weeklyVolume * basePoints * 10.0;
+    // log(pts/25) / 0.23025 (which is -log(0.7943))
+    int seededLevel = 0;
+    if (pointsAtT0 > 0) {
+      double calculated = (math.log(pointsAtT0 / 25.0) / 0.23025);
+      seededLevel = calculated.round().clamp(0, 20);
+    }
+
+    // Sustainability Adjustment: If projected balance is too low, suggest starting lower
+    bool needsOffset = (pointsAtT0 - _weeklyViceCount) < -15;
+    if (needsOffset) {
+      seededLevel = (seededLevel - 5).clamp(0, 20);
+    }
+
     return Scaffold(
-      backgroundColor: Colors.black, // High contrast reveal
+      backgroundColor: Colors.black,
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(40.0),
@@ -383,6 +518,13 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                   fontWeight: FontWeight.w900,
                 ),
               ),
+              const SizedBox(height: 24),
+              if (needsOffset)
+                const Text(
+                  'BALANCE TUNED: We adjusted your tier for sustainability based on your vice audit.',
+                  style: TextStyle(color: Colors.orange, fontSize: 12),
+                  textAlign: TextAlign.center,
+                ),
               const SizedBox(height: 40),
               const Text(
                 'We have skipped the initial grind for you based on your performance history.',
@@ -395,9 +537,11 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                 child: FilledButton(
                   onPressed: () {
                     context.read<AppState>().completeOnboarding(
-                      runVolume: _weeklyRunKm,
+                      runVolume: _selectedSport == 'Run' ? _weeklyVolume : 0,
                       viceEmoji: _selectedVice,
                     );
+                    // Force a level update in AppState for seeding
+                    context.read<AppState>().debugSetLevel(seededLevel);
                   },
                   child: const Text('ENTER THE ARENA'),
                 ),

@@ -2,35 +2,34 @@
 
 This document outlines the strategy for seeding new users into the correct league and maintaining long-term challenge through dynamic difficulty.
 
-## 🧠 Questionnaire Design (Volume-Based)
+## 🧠 Questionnaire Design (Adaptive Logic)
 
-Instead of vague buttons, we use interactive sliders to capture the user's current fitness baseline.
+We use a 4-step interactive flow to build the user's "Fitness Economy."
 
-### 1. The Volume Check
+### 1. The Core Engine (Sport Choice)
+**Question**: "What's your primary discipline?"
+- **Running 🏃** (Unit: KM)
+- **Cycling 🚴** (Unit: KM)
+- **Swimming 🏊** (Unit: Lengths)
+*Purpose*: Tailors the units and ranges for the Volume slider.
+
+### 2. The Volume Check
 **Question**: "On average, how much do you do per week?"
 - **Run**: `0 - 100+ km`
 - **Cycle**: `0 - 300+ km`
-- **Swim**: `0 - 500+ lengths`
+- **Swim**: `0 - 1000+ lengths`
+*Seeding Logic*: Finds the Tier where this volume = **25 Points** (Our Par Achievement).
 
-**Initial Seeding Logic**:
-We project their current volume into a "Standard Week" (Tier 0 difficulty).
+### 3. The Vice Audit
+**Question**: "Be honest: how many [Vices] do you typically have a week?"
+*Range*: `0 - 40+`
+*Sustainability Logic*: 
+- If `(Volume Points) - (Vice Count) < -15`, the user is in a "Death Spiral."
+- **Nudge**: We recommend starting **5 levels lower** than their seeded tier to give them "Growth Room."
 
-| Weekly Volume (Run) | Est. Points (Standard) | Seeded Tier | Division |
-| :--- | :--- | :--- | :--- |
-| < 10 km | < 5 pts | **Tier 0 (Noob)** | Apprenticeship |
-| 10 - 30 km | 5 - 15 pts | **Tier 5 (Regular)** | Practice |
-| 30 - 60 km | 15 - 30 pts | **Tier 10 (Specialist)** | Mastery |
-| 60+ km | 30+ pts | **Tier 15 (Master)** | Legacy |
-
-### 2. The Primary Discipline
-**Question**: "Which is your primary focus?"
-- **Running 🏃** (Multiplier: 1.0)
-- **Cycling 🚴** (Multiplier: 0.8 - adjusted for transit convenience)
-- **Swimming 🏊** (Multiplier: 1.1 - adjusted for technical friction)
-
-### 3. The Vice Selection
+### 4. The Rebrand (Vice Selection)
 **Question**: "What are we working for today?"
-- Select first vice emoji (e.g., 🍕, 🎮, 🍩).
+- Choose emoji and custom name (e.g., "Craft Beer", "Pizza").
 
 ---
 
