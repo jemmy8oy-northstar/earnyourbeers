@@ -27,7 +27,7 @@ We follow a staged iterative approach, focusing on the "Logic First" engineering
 
 ## Stage 4: Leagues & Progression 📊
 **Goal**: Progression, Strategic Tiering, and Logic.
-- **15-Tier XP Journey**: From "Noob" to "Legend".
+- **20-Tier XP Journey**: From "Noob" to "Legend" across 4 Divisions.
 - **Banking (Promotions)**: The 25-point "Savings" requirement to level up.
 - **The Vault**: A trophy room for your earned vices.
 
