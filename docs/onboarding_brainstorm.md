@@ -34,24 +34,38 @@ We project their current volume into a "Standard Week" (Tier 0 difficulty).
 
 ---
 
-## 📈 Granular Tier Scaling (The "Standard" Shift)
+## 📈 The "Progressive Standard" (Full 20-Tier Ratios)
 
-To ensure every rank feels harder than the last, the reward multiplier now decreases by **0.015 (1.5%)** for every single tier gain. This creates a smooth gradient from **1.0x (Noob)** to **0.7x (Legend)**.
+To ensure every rank feels harder than the last, the reward multiplier decreases by **0.015 (1.5%)** for every single tier gain.
 
-### Difficulty Formula
-`Multiplier = 1.0 - (CurrentLevel * 0.015)`
+### Multiplier Table
 
-### Level-by-Level Breakdown (Sample)
+| Tier | Rank Name | Multiplier | Run (pts/km) | Cycle (pts/km) | Swim (pts/30L) |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **0** | Noob | **1.000x** | 0.500 | 0.066 | 1.000 |
+| **1** | Novice | **0.985x** | 0.492 | 0.065 | 0.985 |
+| **2** | Weekender | **0.970x** | 0.485 | 0.064 | 0.970 |
+| **3** | Rookie | **0.955x** | 0.477 | 0.063 | 0.955 |
+| **4** | Apprentice | **0.940x** | 0.470 | 0.062 | 0.940 |
+| **5** | Regular | **0.925x** | 0.462 | 0.061 | 0.925 |
+| **6** | Grinder | **0.910x** | 0.455 | 0.060 | 0.910 |
+| **7** | Athlete | **0.895x** | 0.447 | 0.059 | 0.895 |
+| **8** | Competitor | **0.880x** | 0.440 | 0.058 | 0.880 |
+| **9** | Professional | **0.865x** | 0.432 | 0.057 | 0.865 |
+| **10** | Specialist | **0.850x** | 0.425 | 0.056 | 0.850 |
+| **11** | Relentless | **0.835x** | 0.417 | 0.055 | 0.835 |
+| **12** | Veteran | **0.820x** | 0.410 | 0.054 | 0.820 |
+| **13** | Expert | **0.805x** | 0.402 | 0.053 | 0.805 |
+| **14** | Champion | **0.790x** | 0.395 | 0.052 | 0.790 |
+| **15** | Master | **0.775x** | 0.387 | 0.051 | 0.775 |
+| **16** | Grandmaster | **0.760x** | 0.380 | 0.050 | 0.760 |
+| **17** | Elite | **0.745x** | 0.372 | 0.049 | 0.745 |
+| **18** | Titan | **0.730x** | 0.365 | 0.048 | 0.730 |
+| **19** | Titan+ | **0.715x** | 0.357 | 0.047 | 0.715 |
+| **20** | Legend | **0.700x** | 0.350 | 0.046 | 0.700 |
 
-| Level | Rank | Multiplier | Run (pts/km) |
-| :--- | :--- | :--- | :--- |
-| **0** | Noob | **1.000x** | 0.500 |
-| **1** | Novice | **0.985x** | 0.492 |
-| **2** | Weekender | **0.970x** | 0.485 |
-| **5** | Regular | **0.925x** | 0.462 |
-| **10** | Specialist | **0.850x** | 0.425 |
-| **15** | Master | **0.775x** | 0.387 |
-| **20** | Legend | **0.700x** | 0.350 |
+> [!NOTE]
+> The **Cycle** value is based on the 15km = 1pt rule. The **Swim** value is based on 30 lengths = 1pt. These are then scaled by the multiplier.
 
 ---
 

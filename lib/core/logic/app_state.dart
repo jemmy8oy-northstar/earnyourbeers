@@ -243,6 +243,9 @@ class AppState extends ChangeNotifier {
     return weekDiff + 1; // +1 for the current week itself
   }
 
+  bool _isOnboarded = false;
+  bool get isOnboarded => _isOnboarded;
+
   // Rebrand State
   String _viceEmoji = '🍕';
   ThemeMode _themeMode = ThemeMode.system;
@@ -257,6 +260,10 @@ class AppState extends ChangeNotifier {
 
   int get currentLevel => _currentLevel;
   double get leagueTally => _leagueTally;
+
+  // Granular Difficulty Formula: 1.0 - (Level * 0.015)
+  double get currentDifficulty =>
+      (1.0 - (_currentLevel * 0.015)).clamp(0.1, 1.0);
   // Progress from -25 to +25 mapped to 0 to 1
   double get tallyProgress => ((_leagueTally + 25) / 50).clamp(0.0, 1.0);
   LeagueTier get currentTier =>
@@ -303,7 +310,12 @@ class AppState extends ChangeNotifier {
     if (savedTally != null) _leagueTally = double.parse(savedTally);
 
     final savedSettled = await _database.getSetting('last_settled_date');
-    if (savedSettled != null) _lastSettledDate = DateTime.parse(savedSettled);
+    if (savedSettled != null && savedSettled.isNotEmpty) {
+      _lastSettledDate = DateTime.parse(savedSettled);
+    }
+
+    final savedOnboarded = await _database.getSetting('onboarding_completed');
+    _isOnboarded = savedOnboarded == 'true';
 
     // Initial settlement check
     _checkSettlement();
@@ -358,7 +370,11 @@ class AppState extends ChangeNotifier {
 
     final activities = intervalLogs.whereType<Activity>().toList();
     final drinks = intervalLogs.whereType<Drink>().toList();
-    final weeklyNet = PintCalculator.calculateBalance(activities, drinks);
+    final weeklyNet = PintCalculator.calculateBalance(
+      activities,
+      drinks,
+      difficultyMultiplier: currentDifficulty,
+    );
 
     final double previousTally = _leagueTally;
     final int previousLevel = _currentLevel;
@@ -412,6 +428,41 @@ class AppState extends ChangeNotifier {
     await _database.saveSetting('vice_emoji', emoji);
   }
 
+  Future<void> completeOnboarding({
+    required double runVolume,
+    required String viceEmoji,
+  }) async {
+    // Seeding logic based on onboarding_brainstorm.md
+    int seededLevel = 0;
+    if (runVolume >= 100) {
+      seededLevel = 20;
+    } else if (runVolume >= 60) {
+      seededLevel = 15;
+    } else if (runVolume >= 40) {
+      seededLevel = 10;
+    } else if (runVolume >= 20) {
+      seededLevel = 5;
+    } else {
+      seededLevel = 0;
+    }
+
+    _currentLevel = seededLevel;
+    _viceEmoji = viceEmoji;
+    _isOnboarded = true;
+    _lastSettledDate = simulatedNow;
+
+    await _database.saveSetting('current_level', _currentLevel.toString());
+    await _database.saveSetting('vice_emoji', _viceEmoji);
+    await _database.saveSetting('onboarding_completed', 'true');
+    await _database.saveSetting(
+      'last_settled_date',
+      _lastSettledDate!.toIso8601String(),
+    );
+
+    _calculateBalance();
+    notifyListeners();
+  }
+
   Future<void> updateTheme(ThemeMode mode) async {
     _themeMode = mode;
     notifyListeners();
@@ -455,7 +506,11 @@ class AppState extends ChangeNotifier {
   }
 
   void _calculateBalance() {
-    _balance = PintCalculator.calculateBalance(_activities, _drinks);
+    _balance = PintCalculator.calculateBalance(
+      _activities,
+      _drinks,
+      difficultyMultiplier: currentDifficulty,
+    );
     notifyListeners();
   }
 }

@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'ui/theme.dart';
 import 'ui/screens/dashboard_screen.dart';
+import 'ui/screens/onboarding_screen.dart';
 import 'core/services/database.dart';
 import 'core/logic/app_state.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final database = AppDatabase();
 
@@ -33,7 +34,9 @@ class EarnYourBeersApp extends StatelessWidget {
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
           themeMode: appState.themeMode,
-          home: const DashboardScreen(),
+          home: appState.isOnboarded
+              ? const DashboardScreen()
+              : const OnboardingScreen(),
         );
       },
     );
