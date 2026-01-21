@@ -17,11 +17,13 @@ We follow a staged iterative approach, focusing on the "Logic First" engineering
 - **Running & Cycling**: Refined tracking for the two primary disciplines.
 - **History View**: Review past logs and weekly performance.
 
-## Stage 3: Earn Your Vices Rebrand
+## Stage 3: Earn Your Vices (rebranded) ✅
 **Goal**: Pivot to "Earn Your Vices" where the user defines their reward.
-- **Emoji Freedom**: User selects ANY emoji to represent their vice (e.g., 🍺, 🎮, 🍰).
+- **Emoji Freedom**: User selects ANY emoji to represent their vice (e.g., 🍕, 🎮, 🍰).
 - **Customization**: No hardcoded lists. User defines "What's your Poison?".
-- **Compliance**: Safety by design—we don't promote specific substances.
+- **Compliance**: Safety by design—we don't promote alcohol or specific substances.
+- **Theme Support**: Integrated Light/Dark/System theme switching.
+- **Read-Only History**: Improved navigation for past weeks.
 
 ## Stage 4: The Vice Vault 🏦
 **Goal**: Progression, Strategic Tiering, and Logic.
@@ -41,9 +43,10 @@ We follow a staged iterative approach, focusing on the "Logic First" engineering
 
 ## Stage 7: Premium Polish ✨
 **Goal**: Visual excellence and high-end UX.
-- **Vibrant UI/UX**: Glassmorphism, animations, and high-end themes.
+- **FAB to Card Migration**: Move activity logging buttons into the active card for better proximity and reachability.
+- **Vibrant UI/UX**: Glassmorphism, animations, and high-end themes (WIP).
 - **Promotion/"Bottled It" Scenes**: High-reward feedback loops.
-- **Asset Polish**: Custom icons and beer-themed graphics.
+- **Asset Polish**: Custom icons and neutral vice-themed graphics.
 
 ## Future Vision: Expansion & Integration 🚀
 **Goal**: Move beyond a standalone tool into a connected ecosystem.
