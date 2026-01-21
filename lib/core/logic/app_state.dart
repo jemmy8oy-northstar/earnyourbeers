@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'dart:async';
 import 'package:drift/drift.dart' show Value;
 import '../services/database.dart';
@@ -171,9 +172,11 @@ class AppState extends ChangeNotifier {
 
   // Debug: Time Travel
   Duration _debugTimeOffset = Duration.zero;
-  DateTime get simulatedNow => DateTime.now().add(_debugTimeOffset);
+  DateTime get simulatedNow =>
+      kDebugMode ? DateTime.now().add(_debugTimeOffset) : DateTime.now();
 
   void simulateAdvanceWeek() {
+    if (!kDebugMode) return;
     _debugTimeOffset += const Duration(days: 7);
     _checkSettlement(); // Trigger settlement with new date
     _calculateBalance();
@@ -181,6 +184,7 @@ class AppState extends ChangeNotifier {
   }
 
   Future<void> resetTimeTravel() async {
+    if (!kDebugMode) return;
     _debugTimeOffset = Duration.zero;
 
     // Clear future logs from DB

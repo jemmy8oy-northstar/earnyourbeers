@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import '../../core/logic/app_state.dart';
 import '../../core/services/database.dart';
@@ -104,34 +105,35 @@ class _DashboardScreenState extends State<DashboardScreen> {
             },
           ),
           // DEV: Time Travel Button (tap = +1 week, long-press = reset)
-          InkWell(
-            onTap: () {
-              context.read<AppState>().simulateAdvanceWeek();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    'Simulated: ${context.read<AppState>().simulatedNow.toString().split('.')[0]}',
+          if (kDebugMode)
+            InkWell(
+              onTap: () {
+                context.read<AppState>().simulateAdvanceWeek();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Simulated: ${context.read<AppState>().simulatedNow.toString().split('.')[0]}',
+                    ),
+                    behavior: SnackBarBehavior.fixed,
                   ),
-                  behavior: SnackBarBehavior.fixed,
-                ),
-              );
-            },
-            onLongPress: () async {
-              final messenger = ScaffoldMessenger.of(context);
-              await context.read<AppState>().resetTimeTravel();
-              messenger.showSnackBar(
-                const SnackBar(
-                  content: Text('Time Travel Reset ⏱️'),
-                  behavior: SnackBarBehavior.fixed,
-                ),
-              );
-            },
-            borderRadius: BorderRadius.circular(20),
-            child: const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Icon(Icons.fast_forward),
+                );
+              },
+              onLongPress: () async {
+                final messenger = ScaffoldMessenger.of(context);
+                await context.read<AppState>().resetTimeTravel();
+                messenger.showSnackBar(
+                  const SnackBar(
+                    content: Text('Time Travel Reset ⏱️'),
+                    behavior: SnackBarBehavior.fixed,
+                  ),
+                );
+              },
+              borderRadius: BorderRadius.circular(20),
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Icon(Icons.fast_forward),
+              ),
             ),
-          ),
         ],
       ),
       body: Column(
