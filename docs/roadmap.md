@@ -25,28 +25,35 @@ We follow a staged iterative approach, focusing on the "Logic First" engineering
 - **Theme Support**: Integrated Light/Dark/System theme switching.
 - **Read-Only History**: Improved navigation for past weeks.
 
-## Stage 4: Leagues & Progression 📊
+## Stage 4: Leagues & Progression ✅
 **Goal**: Progression, Strategic Tiering, and Logic.
 - **20-Tier XP Journey**: From "Noob" to "Legend" across 4 Divisions.
-- **Banking (Promotions)**: The 25-point "Savings" requirement to level up.
-- **The Vault**: A trophy room for your earned vices.
+- **Banking (Promotions)**: The 25-point requirement to level up.
+- **Weekly Settlement**: High-impact "Performance Analysis" scanner and outcome reveal.
+- **Clean Time Travel**: Debug-only tools for rapid testing and "slate-wiping."
 
-## Stage 5: Simple Onboarding 📋
+## Stage 5: The Vault & History 🏆
+**Goal**: Persistent rewards and lifetime accomplishment.
+- **Lifetime Vault**: See all points "burnt" during promotions turned into lifetime XP.
+- **Vice Trophies**: A visual shelf showing all the emojis you've earned/conquered over time.
+- **League History**: Review your rank climb over previous months.
+
+## Stage 6: Simple Onboarding 📋
 **Goal**: Get users into the right league from Day 1.
-- **Questionnaire**: Simple 3-question flow to seed initial state.
+- **Questionnaire**: Simple 3-question flow to seed initial state (beginner, athlete, pro).
 - **Initial Migration**: Transitioning users from "Base" to their estimated tier.
 
-## Stage 6: Additional Activities 🏊‍♂️
-**Goal**: Expand the variety of training.
-- **New Tracks**: Support for Walking, Swimming, and Gym sessions.
-- **Novelty Bonus**: Multipliers for cross-training.
+## Stage 7: FAB to Card Migration 🏗️
+**Goal**: Clean up the Dashboard UX.
+- **Contextual Logging**: Move the floating "+" buttons into the "Current Week" card.
+- **Micro-interactions**: High-end reveal animations for logging inputs.
 
-## Stage 7: Premium Polish ✨
+## Stage 8: Premium Polish ✨
 **Goal**: Visual excellence and high-end UX.
-- **FAB to Card Migration**: Move activity logging buttons into the active card for better proximity and reachability.
-- **Vibrant UI/UX**: Glassmorphism, animations, and high-end themes (WIP).
-- **Promotion/"Bottled It" Scenes**: High-reward feedback loops.
-- **Asset Polish**: Custom icons and neutral vice-themed graphics.
+- **Glassmorphism**: Implement frosted-glass effects for cards and headers.
+- **Vibrant Theming**: Dynamic background gradients based on current league division.
+- **Haptic Feedback**: Add subtle haptics for "Log" and "Level Up" events.
+- **Advanced Animations**: Smoother transitions between dashboard weeks.
 
 ## Future Vision: Expansion & Integration 🚀
 **Goal**: Move beyond a standalone tool into a connected ecosystem.
