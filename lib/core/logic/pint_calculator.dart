@@ -16,8 +16,9 @@ class PintCalculator {
 
   static double calculateBalance(
     List<Activity> activities,
-    List<Drink> drinks,
-  ) {
+    List<Drink> drinks, {
+    double difficultyMultiplier = 1.0,
+  }) {
     double totalEarned = 0;
     for (var activity in activities) {
       switch (activity.type) {
@@ -44,7 +45,7 @@ class PintCalculator {
       totalConsumed += drink.amount;
     }
 
-    return totalEarned - totalConsumed;
+    return (totalEarned * difficultyMultiplier) - totalConsumed;
   }
 
   /// Returns the balance for the current week (starting Monday).
@@ -52,6 +53,7 @@ class PintCalculator {
     List<Activity> activities,
     List<Drink> drinks, {
     DateTime? now, // Dependency Injection for Time Travel
+    double difficultyMultiplier = 1.0,
   }) {
     final effectiveNow = now ?? DateTime.now();
     // Monday = 1. Subtract (weekday - 1) days to get to Monday.
@@ -79,6 +81,10 @@ class PintCalculator {
         )
         .toList();
 
-    return calculateBalance(weeklyActivities, weeklyDrinks);
+    return calculateBalance(
+      weeklyActivities,
+      weeklyDrinks,
+      difficultyMultiplier: difficultyMultiplier,
+    );
   }
 }
