@@ -36,22 +36,21 @@ We project their current volume into a "Standard Week" (Tier 0 difficulty).
 
 ## 📈 The "Extreme 100:1" Scaling (Exponential)
 
-To capture the vast difference between a beginner's 5km and an elite's 500km, the reward multiplier now decays exponentially by **~20.6% per level**.
+To capture the vast difference between a beginner's 5km and an elite's 500km, the reward multiplier now decays exponentially from **10.0x (Noob)** to **0.1x (Legend)** relative to the standard 0.5 pts/km base.
 
 ### Multiplier Table (100:1 Range)
 
-| Tier | Rank Name | Multiplier (pts/km) | 5km Earns | 50km Earns | 500km Earns |
+| Tier | Rank Name | Multiplier | Run (25pts @) | Cycle (25pts @) | Swim (25pts @) |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **0** | Noob | **5.000** | **25.0 pts** | 250 pts | 2,500 pts |
-| **1** | Novice | **3.972** | 19.9 pts | 199 pts | 1,986 pts |
-| **5** | Regular | **1.585** | 7.9 pts | **79.2 pts** | 792 pts |
-| **10** | Specialist | **0.501** | 2.5 pts | **25.1 pts** | 251 pts |
-| **15** | Master | **0.158** | 0.8 pts | 7.9 pts | **79.2 pts** |
-| **20** | Legend | **0.050** | 0.25 pts | 2.5 pts | **25.0 pts** |
+| **0** | Noob | **10.000x** | **5 km** | **15 km** | **150 lengths** |
+| **5** | Regular | **3.162x** | 15.8 km | 47.4 km | 474 lengths |
+| **10** | Specialist| **1.000x** | 50 km | 150 km | 1,500 lengths |
+| **15** | Master | **0.316x** | 158 km | 474 km | 4,740 lengths |
+| **20** | Legend | **0.100x** | **500 km** | **1,500 km** | **15,000 lengths** |
 
 > [!IMPORTANT]
-> - **5km for a Noob** earns exactly 25 points (one full promotion).
-> - **500km for a Legend** earns exactly 25 points (one full prestige tier).
+> - **Relative Parity**: Cycling is exactly **3x** the distance of Running. Swimming is exactly **10 lengths** per km of Cycling.
+> - **The Goal**: Whether you're a Noob doing a 5k run/15km cycle or a Legend doing a 500k run/1500km cycle, you earn exactly **25 points**.
 
 ---
 

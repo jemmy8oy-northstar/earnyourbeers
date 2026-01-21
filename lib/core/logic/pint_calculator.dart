@@ -11,8 +11,8 @@ class PintCalculator {
   // Bike: 1 km = 1 Point
   // Swim: 10 lengths = 1 Point (so 1 length = 0.1 Point)
   static const double pointsPerKmRun = 0.5;
-  static const double pointsPerKmCycle = 1.0 / 15.0;
-  static const double pointsPerLengthSwim = 1.0 / 30.0;
+  static const double pointsPerKmCycle = 1.0 / 6.0;
+  static const double pointsPerLengthSwim = 1.0 / 60.0;
 
   static double calculateBalance(
     List<Activity> activities,

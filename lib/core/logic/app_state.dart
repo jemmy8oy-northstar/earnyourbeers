@@ -262,9 +262,10 @@ class AppState extends ChangeNotifier {
   int get currentLevel => _currentLevel;
   double get leagueTally => _leagueTally;
 
-  // Exponential Difficulty Formula: 5.0 * (0.7943 ^ Level)
-  // This ensures Tier 0 = 5.0 (5km = 25pts) and Tier 20 = 0.05 (500km = 25pts)
-  double get currentDifficulty => 5.0 * (math.pow(0.794328, _currentLevel));
+  // Exponential Difficulty Formula: 10.0 * (0.7943 ^ Level)
+  // This ensures Tier 0: 5km = 25pts (1km = 5.0)
+  // This ensures Tier 20: 500km = 25pts (1km = 0.05)
+  double get currentDifficulty => 10.0 * (math.pow(0.794328, _currentLevel));
   // Progress from -25 to +25 mapped to 0 to 1
   double get tallyProgress => ((_leagueTally + 25) / 50).clamp(0.0, 1.0);
   LeagueTier get currentTier =>
