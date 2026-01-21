@@ -17,6 +17,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   // Selections
   double _weeklyRunKm = 0.0;
   String _selectedVice = '🍕';
+  bool _isEditingVice = false;
+  final TextEditingController _viceController = TextEditingController(
+    text: '🍕',
+  );
 
   // Animation for scanner reveal
   late AnimationController _revealController;
@@ -226,39 +230,83 @@ class _OnboardingScreenState extends State<OnboardingScreen>
             style: TextStyle(fontSize: 18),
           ),
           const SizedBox(height: 40),
-          Text(_selectedVice, style: const TextStyle(fontSize: 120)),
-          const SizedBox(height: 40),
-          GridView.count(
-            shrinkWrap: true,
-            crossAxisCount: 4,
-            mainAxisSpacing: 16,
-            crossAxisSpacing: 16,
-            children: quickPicks
-                .map(
-                  (e) => InkWell(
-                    onTap: () => setState(() => _selectedVice = e),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: _selectedVice == e
-                            ? Theme.of(
-                                context,
-                              ).colorScheme.primary.withValues(alpha: 0.2)
-                            : null,
-                        borderRadius: BorderRadius.circular(16),
-                        border: _selectedVice == e
-                            ? Border.all(
-                                color: Theme.of(context).colorScheme.primary,
-                                width: 2,
-                              )
-                            : null,
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(e, style: const TextStyle(fontSize: 32)),
-                    ),
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              if (!_isEditingVice)
+                Text(_selectedVice, style: const TextStyle(fontSize: 120))
+              else
+                SizedBox(
+                  width: 200,
+                  child: TextField(
+                    controller: _viceController,
+                    autofocus: true,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 80),
+                    decoration: const InputDecoration(hintText: 'Emoji...'),
+                    onChanged: (val) {
+                      if (val.isNotEmpty) {
+                        setState(() => _selectedVice = val);
+                      }
+                    },
+                    onSubmitted: (val) {
+                      setState(() => _isEditingVice = false);
+                    },
                   ),
-                )
-                .toList(),
+                ),
+              Positioned(
+                bottom: 0,
+                right: -40,
+                child: IconButton.filledTonal(
+                  onPressed: () {
+                    setState(() {
+                      _isEditingVice = !_isEditingVice;
+                    });
+                  },
+                  icon: Icon(_isEditingVice ? Icons.check : Icons.edit),
+                ),
+              ),
+            ],
+            clipBehavior: Clip.none,
           ),
+          const SizedBox(height: 40),
+          if (!_isEditingVice)
+            GridView.count(
+              shrinkWrap: true,
+              crossAxisCount: 4,
+              mainAxisSpacing: 16,
+              crossAxisSpacing: 16,
+              children: quickPicks
+                  .map(
+                    (e) => InkWell(
+                      onTap: () {
+                        setState(() {
+                          _selectedVice = e;
+                          _viceController.text = e;
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: _selectedVice == e
+                              ? Theme.of(
+                                  context,
+                                ).colorScheme.primary.withValues(alpha: 0.2)
+                              : null,
+                          borderRadius: BorderRadius.circular(16),
+                          border: _selectedVice == e
+                              ? Border.all(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  width: 2,
+                                )
+                              : null,
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(e, style: const TextStyle(fontSize: 32)),
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
         ],
       ),
     );
