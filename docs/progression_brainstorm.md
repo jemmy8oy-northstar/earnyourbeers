@@ -79,8 +79,34 @@ Upon promotion, the points used (25 or 50) are "burnt" and added to your **Lifet
 
 ---
 
-## Visual Language
-- **The Weekly Report**: A summary card showing "Weekly Delta" and "Tally Progress".
-- **Colors**: Tiers transition through gemstone palettes (Quartz → Emerald → Sapphire → Amethyst → Obsidian).
-- **Celebration**: If a promotion occurs during settlement, show a high-energy "Rank Up" animation.
-- **Warning**: If the tally is near -25, show a "Danger of Demotion" warning on the dashboard.
+## The UI/UX Experience
+
+The progression system should feel like a premium, persistent part of the user's journey, not just a hidden stat.
+
+### 1. Dashboard Visibility (Always-On)
+- **Rank Header**: A dedicated "League Banner" at the top of the main dashboard showing your Division and Title (e.g., "Practice II: Athlete").
+- **Tally Progress Bar**: A sleek, persistent bar that tracks the `-25 to +25` range. 
+  - **Visual Feedback**: The bar glows gold as it nears +25 (Promotion Zone) and pulses red as it nears -25 (Danger Zone).
+- **Division Theming**: The entire dashboard (or parts of it) should subtly shift colors based on your Division:
+  - **I: Apprenticeship** (Quartz)
+  - **II: Practice** (Emerald)
+  - **III: Mastery** (Sapphire)
+  - **IV: Legacy** (Amethyst/Obsidion)
+
+### 2. The Weekly Settlement Sequence
+When the user first logs in during a new week, we present a high-energy **Settlement Report**:
+
+1. **Step 1: The Recap**: "Last week you clocked 25km and earned 5.0 Vices."
+2. **Step 2: The Tally Drop**: An animation showing the last week's net points "falling" into the League Tally progress bar.
+3. **Step 3: The Outcome**:
+   - **Stable**: "Position Secured."
+   - **Promotion**: A high-impact "Rank Up" screen with confetti and sound effects.
+   - **Double Promotion**: A special "Ascension" screen for the +50 point tier-skip.
+   - **Demotion**: A supportive "Regroup" summary for a fresh start.
+4. **Step 4: Completion**: Clear "Start New Week" button to transition to the current active dashboard.
+
+---
+
+## Technical Feasibility
+- **Detection**: Use `AppState` to compare `lastSettledDate` with `currentWeekStart`.
+- **Logic**: Process the settlement *before* updating the active week UI to ensure the report uses correct "Last Week" data.

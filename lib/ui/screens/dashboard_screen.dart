@@ -5,6 +5,8 @@ import '../../core/services/database.dart';
 import '../../core/logic/pint_calculator.dart';
 import '../theme.dart';
 import '../dialogs/vice_settings_dialog.dart';
+import '../dialogs/weekly_settlement_dialog.dart';
+import 'dart:async';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -16,16 +18,30 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   late PageController _pageController;
   int _currentPageIndex = 0;
+  StreamSubscription? _settlementSubscription;
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController();
+
+    // Listen for settlements
+    final appState = context.read<AppState>();
+    _settlementSubscription = appState.settlementStream.listen((report) {
+      if (mounted) {
+        showDialog(
+          context: context,
+          barrierDismissible: false, // Force them to see the report
+          builder: (dialogContext) => WeeklySettlementDialog(report: report),
+        );
+      }
+    });
   }
 
   @override
   void dispose() {
     _pageController.dispose();
+    _settlementSubscription?.cancel();
     super.dispose();
   }
 
@@ -119,6 +135,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       body: Column(
         children: [
+          const _LeagueBanner(),
           // STICKY HEADER
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
@@ -759,5 +776,90 @@ class _ActionButton extends StatelessWidget {
         onPressed: onPressed,
       ),
     );
+  }
+}
+
+class _LeagueBanner extends StatelessWidget {
+  const _LeagueBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    final state = context.watch<AppState>();
+    final tier = state.currentTier;
+
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: tier.color.withValues(alpha: 0.1),
+        border: Border(
+          bottom: BorderSide(
+            color: tier.color.withValues(alpha: 0.2),
+            width: 1,
+          ),
+        ),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: tier.color.withValues(alpha: 0.2),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.shield, color: tier.color, size: 16),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${tier.division.toUpperCase()} ${(_stateToDivisionRank(state.currentLevel) + 1)}',
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.2,
+                        color: tier.color,
+                      ),
+                    ),
+                    Text(
+                      tier.name,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Text(
+                '${state.leagueTally.toStringAsFixed(1)} pts',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(2),
+            child: LinearProgressIndicator(
+              value: state.tallyProgress,
+              backgroundColor: tier.color.withValues(alpha: 0.1),
+              valueColor: AlwaysStoppedAnimation<Color>(tier.color),
+              minHeight: 4,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  int _stateToDivisionRank(int level) {
+    return level % 5;
   }
 }

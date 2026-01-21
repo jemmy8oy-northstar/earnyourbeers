@@ -1,7 +1,167 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'package:drift/drift.dart' show Value;
 import '../services/database.dart';
 import 'pint_calculator.dart';
+
+class LeagueTier {
+  final String name;
+  final String division;
+  final String vibe;
+  final Color color;
+
+  const LeagueTier({
+    required this.name,
+    required this.division,
+    required this.vibe,
+    required this.color,
+  });
+}
+
+const List<LeagueTier> leagueTiers = [
+  // Division I: The Apprenticeship (Quartz)
+  LeagueTier(
+    name: 'Noob',
+    division: 'Apprenticeship',
+    vibe: 'Entry level.',
+    color: Color(0xFF9E9E9E),
+  ),
+  LeagueTier(
+    name: 'Novice',
+    division: 'Apprenticeship',
+    vibe: 'Breaking the seal.',
+    color: Color(0xFF9E9E9E),
+  ),
+  LeagueTier(
+    name: 'Weekender',
+    division: 'Apprenticeship',
+    vibe: 'Finding rhythm.',
+    color: Color(0xFF9E9E9E),
+  ),
+  LeagueTier(
+    name: 'Rookie',
+    division: 'Apprenticeship',
+    vibe: 'Early consistency.',
+    color: Color(0xFF9E9E9E),
+  ),
+  LeagueTier(
+    name: 'Apprentice',
+    division: 'Apprenticeship',
+    vibe: 'Learning the architecture.',
+    color: Color(0xFF9E9E9E),
+  ),
+  // Division II: The Practice (Emerald)
+  LeagueTier(
+    name: 'Regular',
+    division: 'Practice',
+    vibe: 'Familiar face.',
+    color: Color(0xFF2ECC71),
+  ),
+  LeagueTier(
+    name: 'Grinder',
+    division: 'Practice',
+    vibe: 'Pure volume.',
+    color: Color(0xFF2ECC71),
+  ),
+  LeagueTier(
+    name: 'Athlete',
+    division: 'Practice',
+    vibe: 'Performance focus.',
+    color: Color(0xFF2ECC71),
+  ),
+  LeagueTier(
+    name: 'Competitor',
+    division: 'Practice',
+    vibe: 'Pushing limits.',
+    color: Color(0xFF2ECC71),
+  ),
+  LeagueTier(
+    name: 'Professional',
+    division: 'Practice',
+    vibe: 'Mastery of foundational cycle.',
+    color: Color(0xFF2ECC71),
+  ),
+  // Division III: The Mastery (Sapphire)
+  LeagueTier(
+    name: 'Specialist',
+    division: 'Mastery',
+    vibe: 'Refined focus.',
+    color: Color(0xFF3498DB),
+  ),
+  LeagueTier(
+    name: 'Relentless',
+    division: 'Mastery',
+    vibe: 'Unstoppable consistency.',
+    color: Color(0xFF3498DB),
+  ),
+  LeagueTier(
+    name: 'Veteran',
+    division: 'Mastery',
+    vibe: 'Proven performance.',
+    color: Color(0xFF3498DB),
+  ),
+  LeagueTier(
+    name: 'Expert',
+    division: 'Mastery',
+    vibe: 'Deep intuition.',
+    color: Color(0xFF3498DB),
+  ),
+  LeagueTier(
+    name: 'Champion',
+    division: 'Mastery',
+    vibe: 'Sustained peak.',
+    color: Color(0xFF3498DB),
+  ),
+  // Division IV: The Legacy (Amethyst -> Obsidian)
+  LeagueTier(
+    name: 'Master',
+    division: 'Legacy',
+    vibe: 'Total command.',
+    color: Color(0xFF9B59B6),
+  ),
+  LeagueTier(
+    name: 'Grandmaster',
+    division: 'Legacy',
+    vibe: 'Technical insight.',
+    color: Color(0xFF9B59B6),
+  ),
+  LeagueTier(
+    name: 'Elite',
+    division: 'Legacy',
+    vibe: 'Top 1%.',
+    color: Color(0xFF9B59B6),
+  ),
+  LeagueTier(
+    name: 'Titan',
+    division: 'Legacy',
+    vibe: 'Monumental presence.',
+    color: Color(0xFF8E44AD),
+  ),
+  LeagueTier(
+    name: 'Legend',
+    division: 'Legacy',
+    vibe: 'Eternal residency.',
+    color: Color(0xFF2C3E50),
+  ),
+];
+
+class SettlementReport {
+  final double weeklyNet;
+  final int levelChange;
+  final double previousTally;
+  final double newTally;
+  final LeagueTier oldTier;
+  final LeagueTier newTier;
+
+  SettlementReport({
+    required this.weeklyNet,
+    required this.levelChange,
+    required this.previousTally,
+    required this.newTally,
+    required this.oldTier,
+    required this.newTier,
+  });
+}
 
 class AppState extends ChangeNotifier {
   final AppDatabase _database;
@@ -15,12 +175,14 @@ class AppState extends ChangeNotifier {
 
   void simulateAdvanceWeek() {
     _debugTimeOffset += const Duration(days: 7);
-    _calculateBalance(); // Recalculate with new "now"
+    _checkSettlement(); // Trigger settlement with new date
+    _calculateBalance();
     notifyListeners();
   }
 
   void resetTimeTravel() {
     _debugTimeOffset = Duration.zero;
+    _checkSettlement();
     _calculateBalance();
     notifyListeners();
   }
@@ -63,15 +225,28 @@ class AppState extends ChangeNotifier {
   }
 
   // Rebrand State
-  String _viceName = 'Pizza';
   String _viceEmoji = '🍕';
   ThemeMode _themeMode = ThemeMode.system;
 
-  String get viceName => _viceName;
   String get viceEmoji => _viceEmoji;
   ThemeMode get themeMode => _themeMode;
 
+  // League State
+  int _currentLevel = 0;
+  double _leagueTally = 0.0;
+  DateTime? _lastSettledDate;
+
+  int get currentLevel => _currentLevel;
+  double get leagueTally => _leagueTally;
+  // Progress from -25 to +25 mapped to 0 to 1
+  double get tallyProgress => ((_leagueTally + 25) / 50).clamp(0.0, 1.0);
+  LeagueTier get currentTier =>
+      leagueTiers[_currentLevel.clamp(0, leagueTiers.length - 1)];
+
   late Future<void> initializationDone;
+
+  final _settlementController = StreamController<SettlementReport>.broadcast();
+  Stream<SettlementReport> get settlementStream => _settlementController.stream;
 
   AppState(this._database) {
     initializationDone = _init();
@@ -91,9 +266,6 @@ class AppState extends ChangeNotifier {
     });
 
     // Load Settings
-    final savedName = await _database.getSetting('vice_name');
-    if (savedName != null) _viceName = savedName;
-
     final savedEmoji = await _database.getSetting('vice_emoji');
     if (savedEmoji != null) _viceEmoji = savedEmoji;
 
@@ -104,6 +276,114 @@ class AppState extends ChangeNotifier {
         orElse: () => ThemeMode.system,
       );
     }
+
+    final savedLevel = await _database.getSetting('current_level');
+    if (savedLevel != null) _currentLevel = int.parse(savedLevel);
+
+    final savedTally = await _database.getSetting('league_tally');
+    if (savedTally != null) _leagueTally = double.parse(savedTally);
+
+    final savedSettled = await _database.getSetting('last_settled_date');
+    if (savedSettled != null) _lastSettledDate = DateTime.parse(savedSettled);
+
+    // Initial settlement check
+    _checkSettlement();
+
+    notifyListeners();
+  }
+
+  void _checkSettlement() {
+    final now = simulatedNow;
+    if (_lastSettledDate == null) {
+      _lastSettledDate = now;
+      _database.saveSetting('last_settled_date', now.toIso8601String());
+      return;
+    }
+
+    // Start of this week
+    final currentMon = now.subtract(Duration(days: now.weekday - 1));
+    final startOfThisWeek = DateTime(
+      currentMon.year,
+      currentMon.month,
+      currentMon.day,
+    );
+
+    // Start of last settled week
+    final settledMon = _lastSettledDate!.subtract(
+      Duration(days: _lastSettledDate!.weekday - 1),
+    );
+    final startOfSettledWeek = DateTime(
+      settledMon.year,
+      settledMon.month,
+      settledMon.day,
+    );
+
+    if (startOfThisWeek.isAfter(startOfSettledWeek)) {
+      _processWeeklySettlement(startOfSettledWeek, startOfThisWeek);
+    }
+  }
+
+  @override
+  void dispose() {
+    _settlementController.close();
+    super.dispose();
+  }
+
+  Future<void> _processWeeklySettlement(DateTime from, DateTime to) async {
+    // 1. Calculate balance for the interval (usually just the previous week)
+    // For simplicity, we calculate the balance of ALL items between from and to
+    final intervalLogs = logs.where((log) {
+      final ts = (log as dynamic).timestamp as DateTime;
+      return ts.isAtSameMomentAs(from) || (ts.isAfter(from) && ts.isBefore(to));
+    }).toList();
+
+    final activities = intervalLogs.whereType<Activity>().toList();
+    final drinks = intervalLogs.whereType<Drink>().toList();
+    final weeklyNet = PintCalculator.calculateBalance(activities, drinks);
+
+    final double previousTally = _leagueTally;
+    final int previousLevel = _currentLevel;
+
+    // 2. Update Tally
+    _leagueTally += weeklyNet;
+
+    // 3. Process Promotions/Demotions
+    int levelChange = 0;
+    if (_leagueTally >= 50) {
+      levelChange = 2;
+      _leagueTally -= 50;
+    } else if (_leagueTally >= 25) {
+      levelChange = 1;
+      _leagueTally -= 25;
+    } else if (_leagueTally <= -25) {
+      levelChange = -1;
+      _leagueTally += 25;
+    }
+
+    if (levelChange != 0) {
+      _currentLevel = (_currentLevel + levelChange).clamp(
+        0,
+        leagueTiers.length - 1,
+      );
+      await _database.saveSetting('current_level', _currentLevel.toString());
+    }
+
+    _lastSettledDate = to;
+    await _database.saveSetting('league_tally', _leagueTally.toString());
+    await _database.saveSetting('last_settled_date', to.toIso8601String());
+
+    // Emit Report
+    _settlementController.add(
+      SettlementReport(
+        weeklyNet: weeklyNet,
+        levelChange: levelChange,
+        previousTally: previousTally,
+        newTally: _leagueTally,
+        oldTier: leagueTiers[previousLevel],
+        newTier: leagueTiers[_currentLevel],
+      ),
+    );
+
     notifyListeners();
   }
 
@@ -124,14 +404,14 @@ class AppState extends ChangeNotifier {
       ActivitiesCompanion.insert(
         type: type,
         amount: amount,
-        timestamp: DateTime.now(),
+        timestamp: simulatedNow,
       ),
     );
   }
 
   Future<void> addDrink([double units = 1.0]) async {
     await _database.saveDrink(
-      DrinksCompanion.insert(amount: units, timestamp: DateTime.now()),
+      DrinksCompanion.insert(amount: units, timestamp: simulatedNow),
     );
   }
 

@@ -24,7 +24,6 @@ void main() {
   group('AppState Vice Settings', () {
     test('defaults to Pizza emoji', () {
       expect(appState.viceEmoji, '🍕');
-      expect(appState.viceName, 'Pizza');
     });
 
     test('updates vice and persists to database', () async {
@@ -91,15 +90,16 @@ void main() {
       await tester.pump(const Duration(milliseconds: 300));
 
       // Verify dialog opened
-      expect(find.text('Edit Your Vice 😈'), findsOneWidget);
+      expect(find.text('Edit Your Vice'), findsOneWidget);
       expect(find.text('Pick an Emoji'), findsOneWidget);
       expect(find.text('Appearance'), findsOneWidget);
 
       // Verify quick picks exist by finding ActionChips with those labels
-      expect(find.widgetWithText(ActionChip, 'Pizza'), findsOneWidget);
-      expect(find.widgetWithText(ActionChip, 'Gaming'), findsOneWidget);
-      expect(find.widgetWithText(ActionChip, 'Treat'), findsOneWidget);
-      expect(find.widgetWithText(ActionChip, 'Soda'), findsOneWidget);
+      // Verify quick picks exist
+      expect(find.widgetWithText(ActionChip, '🍕'), findsOneWidget);
+      expect(find.widgetWithText(ActionChip, '🎮'), findsOneWidget);
+      expect(find.widgetWithText(ActionChip, '🍩'), findsOneWidget);
+      expect(find.widgetWithText(ActionChip, '🥤'), findsOneWidget);
     });
 
     testWidgets('tapping quick pick updates appState', (
@@ -117,14 +117,13 @@ void main() {
 
       // Verify initial state
       expect(appState.viceEmoji, '🍕');
-      expect(appState.viceName, 'Pizza');
 
       // Open settings
       await tester.tap(find.byIcon(Icons.settings));
       await tester.pump(const Duration(milliseconds: 300));
 
-      // Tap Gaming quick pick (updates the text controllers)
-      await tester.tap(find.widgetWithText(ActionChip, 'Gaming'));
+      // Tap Gaming quick pick
+      await tester.tap(find.widgetWithText(ActionChip, '🎮'));
       await tester.pump(const Duration(milliseconds: 100));
 
       // Tap Save button - this should call updateVice on AppState
@@ -135,7 +134,6 @@ void main() {
 
       // Verify AppState was updated
       expect(appState.viceEmoji, '🎮');
-      expect(appState.viceName, 'Gaming');
     });
   });
 }
