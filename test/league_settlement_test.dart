@@ -87,5 +87,29 @@ void main() {
       expect(appState.currentLevel, 0); // Demoted
       expect(appState.leagueTally, 0.0);
     });
+
+    test('resetTimeTravel clears future logs and league status', () async {
+      // 1. Advance to future and get promoted
+      await appState.addActivity('Run', 50.0); // 50km = 25 points
+      await Future.delayed(const Duration(milliseconds: 100));
+      appState.simulateAdvanceWeek();
+      await Future.delayed(const Duration(milliseconds: 100));
+      expect(appState.currentLevel, 1);
+
+      // 2. Log something in the future
+      await appState.addActivity('Run', 20.0); // 20km * 0.5 = 10.0 points
+      await Future.delayed(const Duration(milliseconds: 100));
+      expect(appState.balance, 35.0); // 25.0 (past) + 10.0 (future)
+
+      // 3. Reset Time Travel
+      await appState.resetTimeTravel();
+      await Future.delayed(const Duration(milliseconds: 100));
+
+      // 4. Verify everything is reset
+      expect(appState.currentLevel, 0);
+      expect(appState.leagueTally, 0.0);
+      expect(appState.balance, 25.0); // Only the future 10.0 should be gone
+      expect(appState.activities.length, 1); // Only the first run remains
+    });
   });
 }

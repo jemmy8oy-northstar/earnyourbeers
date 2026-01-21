@@ -180,8 +180,23 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void resetTimeTravel() {
+  Future<void> resetTimeTravel() async {
     _debugTimeOffset = Duration.zero;
+
+    // Clear future logs from DB
+    final threshold = DateTime.now();
+    await _database.clearFutureActivities(threshold);
+    await _database.clearFutureDrinks(threshold);
+
+    // Reset League Status to force re-evaluation from current date
+    _currentLevel = 0;
+    _leagueTally = 0.0;
+    _lastSettledDate = null;
+
+    await _database.saveSetting('current_level', '0');
+    await _database.saveSetting('league_tally', '0.0');
+    await _database.saveSetting('last_settled_date', '');
+
     _checkSettlement();
     _calculateBalance();
     notifyListeners();

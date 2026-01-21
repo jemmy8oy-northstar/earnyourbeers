@@ -57,6 +57,12 @@ class AppDatabase extends _$AppDatabase {
     return (delete(activities)..where((t) => t.id.equals(id))).go();
   }
 
+  Future<void> clearFutureActivities(DateTime threshold) {
+    return (delete(
+      activities,
+    )..where((t) => t.timestamp.isBiggerThanValue(threshold))).go();
+  }
+
   // Drinks CRUD
   Future<List<Drink>> getAllDrinks() => select(drinks).get();
   Stream<List<Drink>> watchDrinks() => select(drinks).watch();
@@ -67,6 +73,12 @@ class AppDatabase extends _$AppDatabase {
 
   Future<int> deleteDrink(int id) {
     return (delete(drinks)..where((t) => t.id.equals(id))).go();
+  }
+
+  Future<void> clearFutureDrinks(DateTime threshold) {
+    return (delete(
+      drinks,
+    )..where((t) => t.timestamp.isBiggerThanValue(threshold))).go();
   }
 
   // Settings CRUD

@@ -116,9 +116,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               );
             },
-            onLongPress: () {
-              context.read<AppState>().resetTimeTravel();
-              ScaffoldMessenger.of(context).showSnackBar(
+            onLongPress: () async {
+              final messenger = ScaffoldMessenger.of(context);
+              await context.read<AppState>().resetTimeTravel();
+              messenger.showSnackBar(
                 const SnackBar(
                   content: Text('Time Travel Reset ⏱️'),
                   behavior: SnackBarBehavior.fixed,
