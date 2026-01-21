@@ -25,7 +25,7 @@ We follow a staged iterative approach, focusing on the "Logic First" engineering
 - **Theme Support**: Integrated Light/Dark/System theme switching.
 - **Read-Only History**: Improved navigation for past weeks.
 
-## Stage 4: The Vice Vault 🏦
+## Stage 4: Leagues & Progression 📊
 **Goal**: Progression, Strategic Tiering, and Logic.
 - **12-Tier XP Journey**: From "Novice" to "Debaucher"? (TBD).
 - **Banking (Promotions)**: The 25-point "Savings" requirement to level up.
