@@ -94,6 +94,14 @@ class AppDatabase extends _$AppDatabase {
       mode: InsertMode.insertOrReplace,
     );
   }
+
+  Future<void> clearAllData() async {
+    await transaction(() async {
+      await delete(activities).go();
+      await delete(drinks).go();
+      await delete(settings).go();
+    });
+  }
 }
 
 LazyDatabase _openConnection() {

@@ -20,16 +20,17 @@ We use a 4-step interactive flow to build the user's "Fitness Economy."
 - **Swim**: `0 - 1000+ lengths`
 *Seeding Logic*: Finds the Tier where this volume = **25 Points** (Our Par Achievement).
 
-### 3. The Vice Audit
-**Question**: "Be honest: how many [Vices] do you typically have a week?"
+### 3. The Rebrand (Vice Selection) 🎨
+**Question**: "What are we working for today?"
+- Choose emoji and custom name (e.g., "Craft Beer", "Pizza").
+*Purpose*: Personalizes the experience before the "Sustainability Check."
+
+### 4. The Vice Audit ⚖️
+**Question**: "Be honest: how many [Selected Vice] do you typically have a week?"
 *Range*: `0 - 40+`
 *Sustainability Logic*: 
 - If `(Volume Points) - (Vice Count) < -15`, the user is in a "Death Spiral."
 - **Nudge**: We recommend starting **5 levels lower** than their seeded tier to give them "Growth Room."
-
-### 4. The Rebrand (Vice Selection)
-**Question**: "What are we working for today?"
-- Choose emoji and custom name (e.g., "Craft Beer", "Pizza").
 
 ---
 

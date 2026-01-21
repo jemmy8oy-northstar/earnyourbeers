@@ -465,9 +465,15 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> resetOnboarding() async {
+  Future<void> resetApp() async {
+    await _database.clearAllData();
     _isOnboarded = false;
-    await _database.saveSetting('onboarding_completed', 'false');
+    _currentLevel = 0;
+    _activities = [];
+    _drinks = [];
+    _leagueTally = 0;
+    _viceEmoji = '🍕';
+    _calculateBalance();
     notifyListeners();
   }
 

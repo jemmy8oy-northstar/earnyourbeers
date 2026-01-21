@@ -124,11 +124,15 @@ class _ViceSettingsDialogState extends State<ViceSettingsDialog> {
               width: double.infinity,
               child: OutlinedButton.icon(
                 onPressed: () {
-                  context.read<AppState>().resetOnboarding();
+                  context.read<AppState>().resetApp();
                   Navigator.of(context).pop();
                 },
-                icon: const Icon(Icons.refresh),
-                label: const Text('Redo Onboarding'),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Theme.of(context).colorScheme.error,
+                  side: BorderSide(color: Theme.of(context).colorScheme.error),
+                ),
+                icon: const Icon(Icons.delete_forever),
+                label: const Text('Reset App (Beta Testing)'),
               ),
             ),
           ],
