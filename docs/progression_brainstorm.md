@@ -56,21 +56,31 @@ The journey consists of **20 tiers** grouped into **4 thematic divisions**. This
 
 ---
 
-## The XP Logic: "The 25-Point Rule"
+## The XP Logic: "Weekly Settlement"
 
-### Concept: "Net Balance Locking"
-- **To Rank Up**: User must reach a "Net Savings" of **+25 points** (e.g. 25 earned vices they haven't "spent").
-- **The Promotion**: When leveling up, the 25 points are "spent" or "vacated" into the permanent XP pool (The Vault).
-- **Manual Promotion**: The user must trigger the promotion via a "Promote" button when the condition is met. This makes the level-up feel like a celebration rather than a background event.
+Progression is not manual. Instead, the "League Tally" is settled automatically the first time a user opens the app in a new week.
 
-### Banking vs. Spending
-- **Vices**: Can be spent freely for your "treats".
-- **XP**: Only earned when you choose to *sacrifice* your savings for rank.
-- **Visuals**: A sleek progress bar filling toward the 25-point mark. Once full, the "Promote" button glows.
+### 1. The Weekly Breakdown
+When the user arrives in a new week, a **Settlement Report** is shown:
+- **Last Active Week Recap**: "You earned +28.5 🍕 last week."
+- **Net Impact**: This value is added directly to your **League Tally**.
+
+### 2. Tier Shifts (Promotion/Demotion)
+Rank changes depend on the accumulated **League Tally**:
+- **Promotion (+25)**: Reaching +25 points triggers a Single Promotion.
+- **Double Promotion (+50)**: Reaching +50 points in a single settlement triggers a Double Promotion (skipping a tier). 
+- **Demotion (-25)**: If the tally drops below -25 points, the user is demoted one tier.
+
+> [!TIP]
+> **Multi-tier Logic**: +50 points is significantly harder to achieve than 25 in two separate weeks, as the difficulty of earning points effectively increases in higher tiers (implied difficulty boost). Skipping a tier honors this "high-density" effort.
+
+### 3. The "Vaulting" Mechanic
+Upon promotion, the points used (25 or 50) are "burnt" and added to your **Lifetime Vaulted XP**. Your League Tally resets (carrying over any remainder).
 
 ---
 
 ## Visual Language
+- **The Weekly Report**: A summary card showing "Weekly Delta" and "Tally Progress".
 - **Colors**: Tiers transition through gemstone palettes (Quartz → Emerald → Sapphire → Amethyst → Obsidian).
-- **The Vault**: A dedicated tab showing your lifetime progress and rank history.
-- **Celebration**: Haptic feedback and visual "Confetti" (using vice emojis) on promotion.
+- **Celebration**: If a promotion occurs during settlement, show a high-energy "Rank Up" animation.
+- **Warning**: If the tally is near -25, show a "Danger of Demotion" warning on the dashboard.
