@@ -48,7 +48,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   }
 
   void _nextPage() {
-    if (_currentPage < 3) {
+    if (_currentPage < 4) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
@@ -320,14 +320,14 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Text(
-            '3. VICE AUDIT',
+            '4. SUSTAINABILITY AUDIT',
             style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 2),
           ),
           const SizedBox(height: 32),
-          const Text(
-            'Be honest: how many vices do you typically have in a week?',
+          Text(
+            'Be honest: how many $_selectedVice do you typically have in a week?',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 18),
+            style: const TextStyle(fontSize: 18),
           ),
           const SizedBox(height: 48),
           Text(
@@ -367,7 +367,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Text(
-            '4. VICE Setup',
+            '3. VICE SETUP',
             style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 2),
           ),
           const SizedBox(height: 24),
