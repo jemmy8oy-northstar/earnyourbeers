@@ -360,6 +360,7 @@ class _WeeklyPageState extends State<WeeklyPage> {
                             return _buildHistoryTile(
                               weeklyLogs[index],
                               animation,
+                              index == 0,
                             );
                           },
                         ),
@@ -400,7 +401,11 @@ class _WeeklyPageState extends State<WeeklyPage> {
     }
   }
 
-  Widget _buildHistoryTile(dynamic item, Animation<double> animation) {
+  Widget _buildHistoryTile(
+    dynamic item,
+    Animation<double> animation,
+    bool isMostRecent,
+  ) {
     return SizeTransition(
       sizeFactor: animation,
       axisAlignment: -1.0,
@@ -410,6 +415,7 @@ class _WeeklyPageState extends State<WeeklyPage> {
           item: item,
           onDelete: () => _deleteItem(context, item),
           onEdit: () => _showEditDialog(context, item),
+          showActions: isMostRecent,
         ),
       ),
     );
@@ -472,12 +478,14 @@ class _HistoryTile extends StatelessWidget {
   final dynamic item;
   final VoidCallback onDelete;
   final VoidCallback onEdit;
+  final bool showActions;
 
   const _HistoryTile({
     super.key,
     required this.item,
     required this.onDelete,
     required this.onEdit,
+    this.showActions = false,
   });
 
   @override
@@ -524,14 +532,16 @@ class _HistoryTile extends StatelessWidget {
           fontSize: 10,
         ),
       ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _ActionButton(icon: Icons.edit_outlined, onPressed: onEdit),
-          const SizedBox(width: 4),
-          _ActionButton(icon: Icons.delete_outline, onPressed: onDelete),
-        ],
-      ),
+      trailing: showActions
+          ? Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _ActionButton(icon: Icons.edit_outlined, onPressed: onEdit),
+                const SizedBox(width: 4),
+                _ActionButton(icon: Icons.delete_outline, onPressed: onDelete),
+              ],
+            )
+          : null,
     );
   }
 }
