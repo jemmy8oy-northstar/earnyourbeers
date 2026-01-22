@@ -271,6 +271,7 @@ class _WeeklyPageState extends State<WeeklyPage> {
     final balance = PintCalculator.calculateBalance(
       weeklyActivities,
       weeklyDrinks,
+      difficultyMultiplier: state.currentDifficulty,
     );
 
     // 4. Handle List Sync using addPostFrameCallback to avoid build-time side effects
