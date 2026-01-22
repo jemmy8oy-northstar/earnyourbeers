@@ -287,7 +287,7 @@ class _WeeklyPageState extends State<WeeklyPage> {
       children: [
         const SizedBox(height: 20),
         Text(
-          '${balance.toStringAsFixed(1)} ${state.viceEmoji}',
+          '${balance.toStringAsFixed(2)} ${state.viceEmoji}',
           style: const TextStyle(
             fontSize: 80,
             fontWeight: FontWeight.bold,
@@ -365,7 +365,7 @@ class _WeeklyPageState extends State<WeeklyPage> {
                             return _buildHistoryTile(
                               weeklyLogs[index],
                               animation,
-                              index == 0,
+                              isCurrentWeek && index == 0,
                             );
                           },
                         ),
