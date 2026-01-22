@@ -484,19 +484,37 @@ class AppState extends ChangeNotifier {
   }
 
   Future<void> addActivity(String type, double amount) async {
-    await _database.saveActivity(
-      ActivitiesCompanion.insert(
-        type: type,
-        amount: amount,
-        timestamp: simulatedNow,
-      ),
-    );
+    final now = simulatedNow;
+    final oneHourAgo = now.subtract(const Duration(hours: 1));
+
+    // Check if the ABSOLUTE most recent entry is the same activity type
+    final lastEntry = logs.isEmpty ? null : logs.first;
+
+    if (lastEntry is Activity &&
+        lastEntry.type == type &&
+        lastEntry.timestamp.isAfter(oneHourAgo)) {
+      await updateActivity(lastEntry, lastEntry.amount + amount);
+    } else {
+      await _database.saveActivity(
+        ActivitiesCompanion.insert(type: type, amount: amount, timestamp: now),
+      );
+    }
   }
 
   Future<void> addDrink([double units = 1.0]) async {
-    await _database.saveDrink(
-      DrinksCompanion.insert(amount: units, timestamp: simulatedNow),
-    );
+    final now = simulatedNow;
+    final oneHourAgo = now.subtract(const Duration(hours: 1));
+
+    // Check if the ABSOLUTE most recent entry is a drink
+    final lastEntry = logs.isEmpty ? null : logs.first;
+
+    if (lastEntry is Drink && lastEntry.timestamp.isAfter(oneHourAgo)) {
+      await updateDrink(lastEntry, lastEntry.amount + units);
+    } else {
+      await _database.saveDrink(
+        DrinksCompanion.insert(amount: units, timestamp: now),
+      );
+    }
   }
 
   Future<void> updateActivity(Activity activity, double newAmount) async {

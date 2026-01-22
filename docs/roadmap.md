@@ -44,16 +44,24 @@ We follow a staged iterative approach, focusing on the "Logic First" engineering
 - **Initial Migration**: Transitioning users from "Base" to their estimated tier.
 
 ## Stage 7: FAB to Card Migration 🏗️
-**Goal**: Clean up the Dashboard UX.
-- **Contextual Logging**: Move the floating "+" buttons into the "Current Week" card.
-- **Micro-interactions**: High-end reveal animations for logging inputs.
+**Goal**: Clean up the Dashboard UX and provide contextual feedback.
+- **Action Row**: Compress logging into a space-efficient row within the dashboard.
+- **Value Feedback**: Indicators on cards showing exactly how much each contributes (e.g., "+1.5 🍺").
+- **Contextual Logging**: Move the floating "+" buttons into the "Current Week" view.
 
-## Stage 8: Premium Polish ✨
+## Stage 8: Discipline Separation 🏅
+**Goal**: Specialized tracking and multi-discipline breakdowns.
+- **Discipline isolation**: Separate statistics and progress tracking for Run, Cycle, and Swim.
+- **League Breakdown UX**: Tapping the League Banner opens a detailed modal showing your "contribution" from each sport.
+
+## Stage 9: Premium Polish ✨
 **Goal**: Visual excellence and high-end UX.
 - **Glassmorphism**: Implement frosted-glass effects for cards and headers.
 - **Vibrant Theming**: Dynamic background gradients based on current league division.
 - **Haptic Feedback**: Add subtle haptics for "Log" and "Level Up" events.
 - **Advanced Animations**: Smoother transitions between dashboard weeks.
+- **Bug Fix**: Resolve `AnimatedList` flicker when adding/removing items (Smart Aggregation sync).
+- **UX Refinement**: Performance optimization for long historical logs.
 
 ## Future Vision: Expansion & Integration 🚀
 **Goal**: Move beyond a standalone tool into a connected ecosystem.
