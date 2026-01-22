@@ -487,13 +487,13 @@ class AppState extends ChangeNotifier {
     final now = simulatedNow;
     final oneHourAgo = now.subtract(const Duration(hours: 1));
 
-    // Check if we can aggregate into the most recent activity of the same type
-    final lastActivity = _activities.isEmpty ? null : _activities.last;
+    // Check if the ABSOLUTE most recent entry is the same activity type
+    final lastEntry = logs.isEmpty ? null : logs.first;
 
-    if (lastActivity != null &&
-        lastActivity.type == type &&
-        lastActivity.timestamp.isAfter(oneHourAgo)) {
-      await updateActivity(lastActivity, lastActivity.amount + amount);
+    if (lastEntry is Activity &&
+        lastEntry.type == type &&
+        lastEntry.timestamp.isAfter(oneHourAgo)) {
+      await updateActivity(lastEntry, lastEntry.amount + amount);
     } else {
       await _database.saveActivity(
         ActivitiesCompanion.insert(type: type, amount: amount, timestamp: now),
@@ -505,10 +505,11 @@ class AppState extends ChangeNotifier {
     final now = simulatedNow;
     final oneHourAgo = now.subtract(const Duration(hours: 1));
 
-    final lastDrink = _drinks.isEmpty ? null : _drinks.last;
+    // Check if the ABSOLUTE most recent entry is a drink
+    final lastEntry = logs.isEmpty ? null : logs.first;
 
-    if (lastDrink != null && lastDrink.timestamp.isAfter(oneHourAgo)) {
-      await updateDrink(lastDrink, lastDrink.amount + units);
+    if (lastEntry is Drink && lastEntry.timestamp.isAfter(oneHourAgo)) {
+      await updateDrink(lastEntry, lastEntry.amount + units);
     } else {
       await _database.saveDrink(
         DrinksCompanion.insert(amount: units, timestamp: now),
