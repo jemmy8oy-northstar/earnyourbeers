@@ -216,48 +216,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          FloatingActionButton.extended(
-            onPressed: () {
-              context.read<AppState>().addDrink(1.0);
-            },
-            label: Text('Log ${state.viceEmoji}'),
-            icon: Text(state.viceEmoji, style: const TextStyle(fontSize: 24)),
-            backgroundColor: AppTheme.primaryBeer,
-          ),
-          const SizedBox(height: 12),
-          FloatingActionButton.extended(
-            onPressed: () {
-              context.read<AppState>().addActivity('Run', 5.0);
-            },
-            label: const Text('Run (5k)'),
-            icon: const Icon(Icons.directions_run),
-            backgroundColor: AppTheme.primaryBeer,
-          ),
-          const SizedBox(height: 12),
-          FloatingActionButton.extended(
-            onPressed: () {
-              context.read<AppState>().addActivity('Cycle', 15.0);
-            },
-            label: const Text('Cycle (15k)'),
-            icon: const Icon(Icons.directions_bike),
-            backgroundColor: AppTheme.primaryBeer,
-          ),
-          const SizedBox(height: 12),
-          FloatingActionButton.extended(
-            onPressed: () {
-              context.read<AppState>().addActivity('Swim', 30.0);
-            },
-            label: const Text('Swim (30)'),
-            icon: const Icon(Icons.pool),
-            backgroundColor: AppTheme.primaryBeer,
-          ),
-        ],
-      ),
     );
   }
 }
@@ -338,8 +296,8 @@ class _WeeklyPageState extends State<WeeklyPage> {
 
     return Column(
       children: [
+        if (isCurrentWeek) _ActionRow(state: state),
         const SizedBox(height: 20),
-        const SizedBox(height: 10),
         Text(
           '${balance.toStringAsFixed(1)} ${state.viceEmoji}',
           style: const TextStyle(
@@ -864,5 +822,220 @@ class _LeagueBanner extends StatelessWidget {
 
   int _stateToDivisionRank(int level) {
     return level % 5;
+  }
+}
+
+class _ActionRow extends StatelessWidget {
+  final AppState state;
+  const _ActionRow({required this.state});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Row(
+        children: [
+          Expanded(child: _ViceActionCard(state: state)),
+          const SizedBox(width: 8),
+          Expanded(child: _ActivityRow(state: state)),
+        ],
+      ),
+    );
+  }
+}
+
+class _ViceActionCard extends StatelessWidget {
+  final AppState state;
+  const _ViceActionCard({required this.state});
+
+  @override
+  Widget build(BuildContext context) {
+    // Count how many vices this week
+    final now = state.simulatedNow;
+    final monday = now.subtract(Duration(days: now.weekday - 1));
+    final startOfWeek = DateTime(monday.year, monday.month, monday.day);
+
+    final weeklyDrinks = state.logs
+        .whereType<Drink>()
+        .where((d) => d.timestamp.isAfter(startOfWeek))
+        .fold<double>(0, (sum, d) => sum + d.amount);
+
+    return InkWell(
+      onTap: () => state.addDrink(1.0),
+      onLongPress: () => _showCustomViceDialog(context),
+      child: Card(
+        margin: EdgeInsets.zero,
+        elevation: 0,
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide(
+            color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Row(
+            children: [
+              Text(state.viceEmoji, style: const TextStyle(fontSize: 32)),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${weeklyDrinks.toInt()}',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      'CONSUMED',
+                      style: TextStyle(
+                        fontSize: 9,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withValues(alpha: 0.4),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Icon(Icons.add_circle, size: 28),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showCustomViceDialog(BuildContext context) {
+    final controller = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Custom ${state.viceEmoji} Entry'),
+        content: TextField(
+          controller: controller,
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          autofocus: true,
+          decoration: const InputDecoration(hintText: 'Enter amount...'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('CANCEL'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              final val = double.tryParse(controller.text);
+              if (val != null && val > 0) {
+                state.addDrink(val);
+              }
+              Navigator.pop(context);
+            },
+            child: const Text('LOG'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ActivityRow extends StatelessWidget {
+  final AppState state;
+  const _ActivityRow({required this.state});
+
+  @override
+  Widget build(BuildContext context) {
+    // Current difficulty multiplier
+    final diff = state.currentDifficulty;
+
+    // Calculate reward values for standard sessions
+    // Run 5k @ (0.5 pts/km * diff)
+    final runVal = (5.0 * 0.5 * diff);
+    // Cycle 15k @ (1/6 pts/km * diff) -> (0.166... * 15 = 2.5 * diff)
+    final cycleVal = (15.0 * (1.0 / 6.0) * diff);
+    // Swim 30l @ (1/60 pts/length * diff) -> (0.5 * diff)
+    final swimVal = (30.0 * (1.0 / 60.0) * diff);
+
+    String format(double val) =>
+        '+${val % 1 == 0 ? val.toInt() : val.toStringAsFixed(1)}';
+
+    return Row(
+      children: [
+        _ActivityButton(
+          icon: Icons.directions_run,
+          value: format(runVal),
+          onTap: () => state.addActivity('Run', 5.0),
+          color: Colors.orange,
+        ),
+        const SizedBox(width: 4),
+        _ActivityButton(
+          icon: Icons.directions_bike,
+          value: format(cycleVal),
+          onTap: () => state.addActivity('Cycle', 15.0),
+          color: Colors.blue,
+        ),
+        const SizedBox(width: 4),
+        _ActivityButton(
+          icon: Icons.pool,
+          value: format(swimVal),
+          onTap: () => state.addActivity('Swim', 30.0),
+          color: Colors.cyan,
+        ),
+      ],
+    );
+  }
+}
+
+class _ActivityButton extends StatelessWidget {
+  final IconData icon;
+  final String value;
+  final VoidCallback onTap;
+  final Color color;
+
+  const _ActivityButton({
+    required this.icon,
+    required this.value,
+    required this.onTap,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          height: 64,
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: color.withValues(alpha: 0.2)),
+          ),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Icon(icon, color: color, size: 24),
+              Positioned(
+                top: 4,
+                right: 4,
+                child: Text(
+                  value,
+                  style: TextStyle(
+                    fontSize: 9,
+                    fontWeight: FontWeight.w900,
+                    color: color,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
