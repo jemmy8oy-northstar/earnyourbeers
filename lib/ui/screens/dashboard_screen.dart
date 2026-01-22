@@ -839,7 +839,7 @@ class _LeagueBanner extends StatelessWidget {
                 ),
               ),
               Text(
-                '${state.leagueTally.toStringAsFixed(1)} pts',
+                '${state.leagueTally.toStringAsFixed(2)} pts',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
