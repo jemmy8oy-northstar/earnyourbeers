@@ -60,6 +60,8 @@ We follow a staged iterative approach, focusing on the "Logic First" engineering
 - **Vibrant Theming**: Dynamic background gradients based on current league division.
 - **Haptic Feedback**: Add subtle haptics for "Log" and "Level Up" events.
 - **Advanced Animations**: Smoother transitions between dashboard weeks.
+- **Bug Fix**: Resolve `AnimatedList` flicker when adding/removing items (Smart Aggregation sync).
+- **UX Refinement**: Performance optimization for long historical logs.
 
 ## Future Vision: Expansion & Integration 🚀
 **Goal**: Move beyond a standalone tool into a connected ecosystem.

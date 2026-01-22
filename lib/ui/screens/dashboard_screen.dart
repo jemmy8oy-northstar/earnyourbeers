@@ -284,7 +284,6 @@ class _WeeklyPageState extends State<WeeklyPage> {
 
     return Column(
       children: [
-        if (isCurrentWeek) _ActionRow(state: state),
         const SizedBox(height: 20),
         Text(
           '${balance.toStringAsFixed(1)} ${state.viceEmoji}',
@@ -310,6 +309,11 @@ class _WeeklyPageState extends State<WeeklyPage> {
         ),
         const SizedBox(height: 30),
         const Divider(indent: 32, endIndent: 32),
+        if (isCurrentWeek) ...[
+          const SizedBox(height: 12),
+          _ActionRow(state: state),
+        ],
+        const SizedBox(height: 8),
 
         // Activity Feed
         Expanded(
@@ -662,14 +666,51 @@ class _ActionRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Calculate weekly totals for display
+    final now = state.simulatedNow;
+    final monday = now.subtract(Duration(days: now.weekday - 1));
+    final startOfWeek = DateTime(monday.year, monday.month, monday.day);
+
+    final weeklyActivities = state.activities.where(
+      (a) => a.timestamp.isAfter(startOfWeek),
+    );
+
+    final runTotal = weeklyActivities
+        .where((a) => a.type == 'Run')
+        .fold<double>(0, (sum, a) => sum + a.amount);
+    final cycleTotal = weeklyActivities
+        .where((a) => a.type == 'Cycle')
+        .fold<double>(0, (sum, a) => sum + a.amount);
+    final swimTotal = weeklyActivities
+        .where((a) => a.type == 'Swim')
+        .fold<double>(0, (sum, a) => sum + a.amount);
+
+    final drinkTotal = state.drinks
+        .where((d) => d.timestamp.isAfter(startOfWeek))
+        .fold<double>(0, (sum, d) => sum + d.amount);
+
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Row(
-        children: [
-          Expanded(child: _ViceActionCard(state: state)),
-          const SizedBox(width: 8),
-          Expanded(child: _ActivityRow(state: state)),
-        ],
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              flex: 2,
+              child: _ViceActionCard(state: state, currentTotal: drinkTotal),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              flex: 3,
+              child: _ActivityGrid(
+                state: state,
+                runTotal: runTotal,
+                cycleTotal: cycleTotal,
+                swimTotal: swimTotal,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -677,20 +718,11 @@ class _ActionRow extends StatelessWidget {
 
 class _ViceActionCard extends StatelessWidget {
   final AppState state;
-  const _ViceActionCard({required this.state});
+  final double currentTotal;
+  const _ViceActionCard({required this.state, required this.currentTotal});
 
   @override
   Widget build(BuildContext context) {
-    // Count how many vices this week
-    final now = state.simulatedNow;
-    final monday = now.subtract(Duration(days: now.weekday - 1));
-    final startOfWeek = DateTime(monday.year, monday.month, monday.day);
-
-    final weeklyDrinks = state.logs
-        .whereType<Drink>()
-        .where((d) => d.timestamp.isAfter(startOfWeek))
-        .fold<double>(0, (sum, d) => sum + d.amount);
-
     return InkWell(
       onTap: () => state.addDrink(1.0),
       onLongPress: () => _showCustomViceDialog(context),
@@ -706,35 +738,36 @@ class _ViceActionCard extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.all(12),
-          child: Row(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(state.viceEmoji, style: const TextStyle(fontSize: 32)),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '${weeklyDrinks.toInt()}',
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      'CONSUMED',
-                      style: TextStyle(
-                        fontSize: 9,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.onSurface.withValues(alpha: 0.4),
-                      ),
-                    ),
-                  ],
+              const SizedBox(height: 4),
+              Text(
+                '+1 ${state.viceEmoji}',
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              const Icon(Icons.add_circle, size: 28),
+              const Spacer(),
+              Text(
+                '${currentTotal.toInt()}',
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                'TOTAL',
+                style: TextStyle(
+                  fontSize: 9,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withValues(alpha: 0.4),
+                ),
+              ),
             ],
           ),
         ),
@@ -775,47 +808,74 @@ class _ViceActionCard extends StatelessWidget {
   }
 }
 
-class _ActivityRow extends StatelessWidget {
+class _ActivityGrid extends StatelessWidget {
   final AppState state;
-  const _ActivityRow({required this.state});
+  final double runTotal;
+  final double cycleTotal;
+  final double swimTotal;
+
+  const _ActivityGrid({
+    required this.state,
+    required this.runTotal,
+    required this.cycleTotal,
+    required this.swimTotal,
+  });
 
   @override
   Widget build(BuildContext context) {
-    // Current difficulty multiplier
     final diff = state.currentDifficulty;
-
-    // Calculate reward values for standard sessions (1 unit each)
-    // Run 1k @ (0.5 pts/km * diff)
     final runVal = (1.0 * 0.5 * diff);
-    // Cycle 1k @ (1/6 pts/km * diff)
     final cycleVal = (1.0 * (1.0 / 6.0) * diff);
-    // Swim 1l @ (1/60 pts/length * diff)
     final swimVal = (1.0 * (1.0 / 60.0) * diff);
 
-    String format(double val) =>
+    String formatVal(double val) =>
         '+${val % 1 == 0 ? val.toInt() : val.toStringAsFixed(2)}';
 
-    return Row(
+    return Column(
       children: [
-        _ActivityButton(
-          icon: Icons.directions_run,
-          value: format(runVal),
-          onTap: () => state.addActivity('Run', 1.0),
-          color: Colors.orange,
+        Row(
+          children: [
+            _ActivityButton(
+              icon: Icons.directions_run,
+              increment: '+1km',
+              total: runTotal,
+              value: formatVal(runVal),
+              onTap: () => state.addActivity('Run', 1.0),
+              color: Colors.orange,
+            ),
+            const SizedBox(width: 8),
+            _ActivityButton(
+              icon: Icons.directions_bike,
+              increment: '+1km',
+              total: cycleTotal,
+              value: formatVal(cycleVal),
+              onTap: () => state.addActivity('Cycle', 1.0),
+              color: Colors.blue,
+            ),
+          ],
         ),
-        const SizedBox(width: 4),
-        _ActivityButton(
-          icon: Icons.directions_bike,
-          value: format(cycleVal),
-          onTap: () => state.addActivity('Cycle', 1.0),
-          color: Colors.blue,
-        ),
-        const SizedBox(width: 4),
-        _ActivityButton(
-          icon: Icons.pool,
-          value: format(swimVal),
-          onTap: () => state.addActivity('Swim', 1.0),
-          color: Colors.cyan,
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            _ActivityButton(
+              icon: Icons.pool,
+              increment: '+1 len',
+              total: swimTotal,
+              value: formatVal(swimVal),
+              onTap: () => state.addActivity('Swim', 1.0),
+              color: Colors.cyan,
+            ),
+            const SizedBox(width: 8),
+            _ActivityButton(
+              icon: Icons.more_horiz,
+              increment: 'Coming',
+              total: 0,
+              value: 'Soon',
+              onTap: () {},
+              color: Colors.grey,
+              isEnabled: false,
+            ),
+          ],
         ),
       ],
     );
@@ -824,46 +884,81 @@ class _ActivityRow extends StatelessWidget {
 
 class _ActivityButton extends StatelessWidget {
   final IconData icon;
+  final String increment;
+  final double total;
   final String value;
   final VoidCallback onTap;
   final Color color;
+  final bool isEnabled;
 
   const _ActivityButton({
     required this.icon,
+    required this.increment,
+    required this.total,
     required this.value,
     required this.onTap,
     required this.color,
+    this.isEnabled = true,
   });
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: InkWell(
-        onTap: onTap,
-        child: Container(
-          height: 64,
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: color.withValues(alpha: 0.2)),
-          ),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Icon(icon, color: color, size: 24),
-              Positioned(
-                top: 4,
-                right: 4,
-                child: Text(
-                  value,
-                  style: TextStyle(
-                    fontSize: 9,
-                    fontWeight: FontWeight.w900,
-                    color: color,
+      child: Opacity(
+        opacity: isEnabled ? 1.0 : 0.4,
+        child: InkWell(
+          onTap: isEnabled ? onTap : null,
+          child: Container(
+            height: 72,
+            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: color.withValues(alpha: 0.2)),
+            ),
+            child: Stack(
+              children: [
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: Text(
+                    value,
+                    style: TextStyle(
+                      fontSize: 8,
+                      fontWeight: FontWeight.w900,
+                      color: color,
+                    ),
                   ),
                 ),
-              ),
-            ],
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(icon, color: color, size: 20),
+                      Text(
+                        increment,
+                        style: TextStyle(
+                          fontSize: 9,
+                          fontWeight: FontWeight.bold,
+                          color: color.withValues(alpha: 0.8),
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        total > 0
+                            ? '${total % 1 == 0 ? total.toInt() : total.toStringAsFixed(1)}'
+                            : '-',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w900,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
