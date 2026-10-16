@@ -67,6 +67,9 @@ export const eyvApi = enhancedApi.enhanceEndpoints({
     editEntry: { invalidatesTags: ['Dashboard'] },
     deleteEntry: { invalidatesTags: ['Dashboard'] },
     dismissSettlement: { invalidatesTags: ['Dashboard'] },
+    onboard: { invalidatesTags: ['Dashboard'] },
+    changeVice: { invalidatesTags: ['Dashboard'] },
+    resetProfile: { invalidatesTags: ['Dashboard'] },
   },
 });
 
@@ -79,6 +82,9 @@ export const {
   useEditEntryMutation,
   useDeleteEntryMutation,
   useDismissSettlementMutation,
+  useOnboardMutation,
+  useChangeViceMutation,
+  useResetProfileMutation,
 } = eyvApi;
 
 /** Typed wrapper: the signed-in account, or undefined while loading / signed out. */

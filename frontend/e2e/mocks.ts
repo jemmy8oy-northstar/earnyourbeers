@@ -22,6 +22,9 @@ export interface MockState {
   /** Set for the sign-in test: the only credentials the fake accepts. */
   validUser: { username: string; password: string };
   onboarded: boolean;
+  viceEmoji: string;
+  /** When set, onboarding is refused with this message (a 400 ProblemDetails). */
+  onboardError: string | null;
   settlement: { weeklyNet: number; outcome: string } | null;
   entries: MockEntry[];
   /** Entries of earlier weeks, by offset (−1, −2 …). */
@@ -40,6 +43,8 @@ export function newState(overrides: Partial<MockState> = {}): MockState {
     signedIn: false,
     validUser: { username: 'james', password: 'correct horse' },
     onboarded: true,
+    viceEmoji: '🍺',
+    onboardError: null,
     settlement: null,
     entries: [],
     history: {},
@@ -67,7 +72,7 @@ function dashboard(s: MockState, offset: number) {
   const earliest = Math.min(0, ...Object.keys(s.history).map(Number));
   return {
     onboarded: s.onboarded,
-    viceEmoji: '🍺',
+    viceEmoji: s.viceEmoji,
     league: { level: 3, tier: 'Bronze', division: 'Division 4', tally: 4.5, tallyProgress: 0.59, difficulty: 1 },
     pointsPerUnit: { Run: PER_UNIT.Run, Cycle: PER_UNIT.Cycle, Swim: PER_UNIT.Swim },
     week: {
@@ -131,6 +136,25 @@ export async function mockApi(page: Page, state: MockState = newState()): Promis
     }
     if (path === '/api/settlement/dismiss' && m === 'POST') {
       state.settlement = null;
+      return reply(route, 204);
+    }
+    if (path === '/api/profile/onboard' && m === 'POST') {
+      if (state.onboardError) return reply(route, 400, { title: 'Invalid request', status: 400, detail: state.onboardError });
+      const b = body(route);
+      state.onboarded = true;
+      state.viceEmoji = String(b.viceEmoji);
+      return reply(route, 200, { onboarded: true, level: 3, tally: 0, viceEmoji: state.viceEmoji });
+    }
+    if (path === '/api/profile/vice' && m === 'PUT') {
+      state.viceEmoji = String(body(route).viceEmoji);
+      return reply(route, 200, { onboarded: state.onboarded, level: 3, tally: 0, viceEmoji: state.viceEmoji });
+    }
+    if (path === '/api/profile/reset' && m === 'POST') {
+      if (body(route).confirm !== true) return reply(route, 400, { title: 'Invalid request', status: 400, detail: 'Send confirm: true.' });
+      state.entries = [];
+      state.history = {};
+      state.settlement = null;
+      state.onboarded = false;
       return reply(route, 204);
     }
     if (path === '/api/log/activity' && m === 'POST') {

@@ -33,7 +33,7 @@ test('sign in with wrong then right credentials reaches the dashboard, and sign 
   await expect(page.getByRole('button', { name: 'Sign in' })).toBeVisible();
 });
 
-test('creating an account lands on the onboarding placeholder; a taken name shows inline', async ({ page }) => {
+test('creating an account lands on onboarding; a taken name shows inline', async ({ page }) => {
   await mockApi(page, newState());
   await page.goto('./');
 
@@ -45,7 +45,7 @@ test('creating an account lands on the onboarding placeholder; a taken name show
 
   await page.getByLabel('Username').fill('newbie');
   await page.getByRole('button', { name: 'Create account' }).click();
-  await expect(page.getByText('Onboarding coming next')).toBeVisible();
+  await expect(page.getByText('1. PRIMARY ENGINE')).toBeVisible();
 });
 
 test('an existing session goes straight to the dashboard: balance, league, log', async ({ page }) => {
@@ -193,14 +193,8 @@ test('past weeks can be paged back through and are read-only', async ({ page }) 
   await expect(page.getByText('CURRENT WEEK')).toBeVisible();
 });
 
-test('a user who is not onboarded sees the placeholder', async ({ page }) => {
-  await mockApi(page, newState({ signedIn: true, onboarded: false }));
-  await page.goto('./');
-  await expect(page.getByText('Onboarding coming next')).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Sign out' })).toBeVisible();
-});
 
-test('the theme toggle still works', async ({ page }) => {
+test('the header theme toggle still works', async ({ page }) => {
   await mockApi(page, newState({ signedIn: true }));
   await page.goto('./');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
