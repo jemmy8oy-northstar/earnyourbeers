@@ -21,7 +21,7 @@ public interface IProfileService
     /// profile onboarded (tally 0, settled now). ValidationException on bad answers; ConflictException
     /// if already onboarded.
     /// </summary>
-    Task<IProfile> OnboardAsync(string userId, ActivityType sport, double weeklyVolume, string? viceEmoji, double weeklyViceCount, CancellationToken ct = default);
+    Task<IProfile> OnboardAsync(string userId, ActivityType sport, double weeklyVolume, string? viceEmoji, int weeklyViceCount, CancellationToken ct = default);
 
     /// <summary>BEH-VICE-1: changes the vice; empty falls back to the pizza, plain text is refused.</summary>
     Task<IProfile> ChangeViceAsync(string userId, string? viceEmoji, CancellationToken ct = default);

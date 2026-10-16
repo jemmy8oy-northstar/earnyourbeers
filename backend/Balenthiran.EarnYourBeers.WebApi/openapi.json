@@ -389,12 +389,12 @@
             ]
           },
           "weeklyViceCount": {
-            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?$",
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
             "type": [
-              "number",
+              "integer",
               "string"
             ],
-            "format": "double"
+            "format": "int32"
           }
         }
       },

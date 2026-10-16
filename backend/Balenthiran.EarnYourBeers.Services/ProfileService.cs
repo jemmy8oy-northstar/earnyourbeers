@@ -13,7 +13,7 @@ namespace Balenthiran.EarnYourBeers.Services;
 /// BEH-SETTLE-1/2, ported from lib/core/logic/app_state.dart:328-410. The phone app settled on
 /// launch; the web settles on the first dashboard request of a new week (an assumption in the spec).
 /// </summary>
-public class ProfileService(AppDbContext db, ILogService log, ILeague league, IScoring scoring, TimeProvider clock) : IProfileService
+public class ProfileService(AppDbContext db, ILogService log, ILeague league, TimeProvider clock) : IProfileService
 {
     public const string DefaultVice = "🍕";
 
@@ -54,7 +54,7 @@ public class ProfileService(AppDbContext db, ILogService log, ILeague league, IS
         await db.SaveChangesAsync(ct);
     }
 
-    public async Task<IProfile> OnboardAsync(string userId, ActivityType sport, double weeklyVolume, string? viceEmoji, double weeklyViceCount, CancellationToken ct = default)
+    public async Task<IProfile> OnboardAsync(string userId, ActivityType sport, double weeklyVolume, string? viceEmoji, int weeklyViceCount, CancellationToken ct = default)
     {
         Seeding.Validate(sport, weeklyVolume, weeklyViceCount);
         var emoji = ViceRules.Normalise(viceEmoji);
@@ -65,7 +65,7 @@ public class ProfileService(AppDbContext db, ILogService log, ILeague league, IS
         }
 
         var now = clock.GetUtcNow().UtcDateTime;
-        p.Level = Seeding.StartingLevel(scoring, sport, weeklyVolume, weeklyViceCount);
+        p.Level = league.StartingLevel(sport, weeklyVolume, weeklyViceCount);
         p.Tally = 0;
         p.ViceEmoji = emoji;
         p.OnboardedAt = now;
