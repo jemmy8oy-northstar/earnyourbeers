@@ -20,7 +20,7 @@ public class ProfileServiceTests
         var db = new AppDbContext(new DbContextOptionsBuilder<AppDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
         var scoring = new Scoring();
         _log = new LogService(db, scoring, _clock);
-        _profiles = new ProfileService(db, _log, new League(scoring), scoring, _clock);
+        _profiles = new ProfileService(db, _log, new League(scoring), _clock);
     }
 
     [Fact]
