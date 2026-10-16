@@ -7,7 +7,7 @@ namespace Balenthiran.EarnYourBeers.Tests;
 /// <summary>BEH-ONBOARD-1/2 and BEH-VICE-1 as pure functions, checked against onboarding_screen.dart:471-487 and vice_settings_dialog.dart.</summary>
 public class OnboardingTests
 {
-    private static readonly Scoring Scoring = new();
+    private static readonly League League = new(new Scoring());
 
     [Theory]
     [InlineData(ActivityType.Run, 100, 0, 13)]   // 500 points: ln(20) / 0.23025 = 13.01
@@ -20,8 +20,8 @@ public class OnboardingTests
     [InlineData(ActivityType.Cycle, 300, 0, 13)] // 300 / 6 × 10 = 500 points
     [InlineData(ActivityType.Swim, 3000, 0, 13)] // 3000 / 60 × 10 = 500 points
     [InlineData(ActivityType.Cycle, 30, 40, 3)]  // 50 points, 40 vices: 10 > -15, no offset
-    public void The_starting_tier_follows_the_flutter_formula(ActivityType sport, double volume, double vices, int tier)
-        => Assert.Equal(tier, Seeding.StartingLevel(Scoring, sport, volume, vices));
+    public void The_starting_tier_follows_the_flutter_formula(ActivityType sport, double volume, int vices, int tier)
+        => Assert.Equal(tier, League.StartingLevel(sport, volume, vices));
 
     [Theory]
     [InlineData(ActivityType.Run, -1, 0)]
@@ -31,9 +31,8 @@ public class OnboardingTests
     [InlineData(ActivityType.Run, double.NaN, 0)]
     [InlineData(ActivityType.Run, 10, -1)]
     [InlineData(ActivityType.Run, 10, 41)]
-    [InlineData(ActivityType.Run, 10, double.PositiveInfinity)]
     [InlineData((ActivityType)99, 10, 0)]
-    public void Answers_out_of_range_are_refused(ActivityType sport, double volume, double vices)
+    public void Answers_out_of_range_are_refused(ActivityType sport, double volume, int vices)
         => Assert.Throws<ValidationException>(() => Seeding.Validate(sport, volume, vices));
 
     [Fact]
