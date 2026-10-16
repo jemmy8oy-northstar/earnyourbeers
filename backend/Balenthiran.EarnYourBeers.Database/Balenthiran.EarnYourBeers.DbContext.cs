@@ -11,6 +11,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
     public DbSet<UserEntity> Users => Set<UserEntity>();
 
+    public DbSet<ProfileEntity> Profiles => Set<ProfileEntity>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -30,5 +32,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             e.HasIndex(x => new { x.UserId, x.LoggedAt });
         });
         modelBuilder.Entity<ViceEntryEntity>(e => e.HasIndex(x => new { x.UserId, x.LoggedAt }));
+        modelBuilder.Entity<ProfileEntity>(e =>
+        {
+            e.HasKey(x => x.UserId);
+            e.Property(x => x.ViceEmoji).HasMaxLength(16);
+            e.Property(x => x.ReportOutcome).HasConversion<string>().HasMaxLength(24);
+        });
     }
 }
