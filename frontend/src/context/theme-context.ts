@@ -1,9 +1,16 @@
 import { createContext, useContext } from 'react';
 
+/** What is applied to the page. */
 export type Theme = 'light' | 'dark';
+/** What the user chose (BEH-THEME-1): follow the device, or pin one. */
+export type ThemeMode = 'auto' | Theme;
 
 export interface ThemeContextType {
+    /** The resolved theme currently applied (auto already resolved against the device). */
     theme: Theme;
+    mode: ThemeMode;
+    setMode: (mode: ThemeMode) => void;
+    /** Flip to the opposite of the applied theme, pinning it. */
     toggleTheme: () => void;
 }
 

@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { Button, Card, CardBody } from '../components/ui';
+import { Button } from '../components/ui';
 import ActionRow from '../components/ActionRow';
 import LeagueBanner from '../components/LeagueBanner';
 import LogList from '../components/LogList';
+import SettingsModal from '../components/SettingsModal';
 import SettlementModal from '../components/SettlementModal';
+import Onboarding from './Onboarding';
 import { useDashboard, useLogoutMutation } from '../api/eyv';
 import { balanceLabel, formatBalance, weekHeader } from '../format';
 
@@ -12,12 +14,16 @@ export default function Dashboard({ username }: { username: string }) {
   // 0 = this week, −1 = last week … (the API's week offset).
   const [offset, setOffset] = useState(0);
   const { dashboard, isLoading, isError, refetch } = useDashboard(offset);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const [logout, logoutState] = useLogoutMutation();
 
   const header = (
     <header className="eyv-header">
       <h1 className="eyv-header__title">Earn Your Vices</h1>
       <span className="eyv-header__user">{username}</span>
+      {dashboard?.onboarded && (
+        <button type="button" className="eyv-icon-btn" aria-label="Settings" onClick={() => setSettingsOpen(true)}>⚙</button>
+      )}
       <Button size="sm" variant="secondary" loading={logoutState.isLoading} onClick={() => void logout()}>Sign out</Button>
     </header>
   );
@@ -41,8 +47,7 @@ export default function Dashboard({ username }: { username: string }) {
     return (
       <>
         {header}
-        <Card><CardBody><h2 className="eyv-form__heading">Onboarding coming next</h2>
-          <p className="eyv-muted">Choosing your vice and getting set up arrives in the next update.</p></CardBody></Card>
+        <Onboarding />
       </>
     );
   }
@@ -81,6 +86,7 @@ export default function Dashboard({ username }: { username: string }) {
       {current && <ActionRow dashboard={dashboard} />}
       <LogList dashboard={dashboard} />
 
+      {settingsOpen && <SettingsModal viceEmoji={dashboard.viceEmoji} onClose={() => setSettingsOpen(false)} />}
       {dashboard.settlement && <SettlementModal settlement={dashboard.settlement} />}
     </>
   );
