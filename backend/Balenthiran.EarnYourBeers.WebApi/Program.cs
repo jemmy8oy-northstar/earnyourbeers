@@ -80,6 +80,7 @@ app.MapGroup("/api")
     .MapStatusRoutes()
     .MapAuthRoutes()
     .MapDashboardRoutes()
+    .MapProfileRoutes()
     .WithOpenApi();
 
 app.Run();

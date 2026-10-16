@@ -231,6 +231,75 @@
           }
         }
       }
+    },
+    "/api/profile/onboard": {
+      "post": {
+        "tags": [
+          "Balenthiran.EarnYourBeers.WebApi"
+        ],
+        "operationId": "Onboard",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnboardRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/profile/vice": {
+      "put": {
+        "tags": [
+          "Balenthiran.EarnYourBeers.WebApi"
+        ],
+        "operationId": "ChangeVice",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ViceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/profile/reset": {
+      "post": {
+        "tags": [
+          "Balenthiran.EarnYourBeers.WebApi"
+        ],
+        "operationId": "ResetProfile",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -290,6 +359,67 @@
           },
           "password": {
             "type": "string"
+          }
+        }
+      },
+      "OnboardRequest": {
+        "required": [
+          "sport",
+          "weeklyVolume",
+          "viceEmoji",
+          "weeklyViceCount"
+        ],
+        "type": "object",
+        "properties": {
+          "sport": {
+            "$ref": "#/components/schemas/ActivityType"
+          },
+          "weeklyVolume": {
+            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?$",
+            "type": [
+              "number",
+              "string"
+            ],
+            "format": "double"
+          },
+          "viceEmoji": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "weeklyViceCount": {
+            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?$",
+            "type": [
+              "number",
+              "string"
+            ],
+            "format": "double"
+          }
+        }
+      },
+      "ResetRequest": {
+        "required": [
+          "confirm"
+        ],
+        "type": "object",
+        "properties": {
+          "confirm": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ViceRequest": {
+        "required": [
+          "viceEmoji"
+        ],
+        "type": "object",
+        "properties": {
+          "viceEmoji": {
+            "type": [
+              "null",
+              "string"
+            ]
           }
         }
       }
