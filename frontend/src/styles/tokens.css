@@ -11,13 +11,13 @@
 
 :root {
   /* --- Brand accent (theme-invariant) --------------------------------- */
-  --accent-primary: #6366f1;
+  --accent-primary: #F28E1C;
   /* indigo — the core of Iris        */
-  --accent-secondary: #a855f7;
+  --accent-secondary: #D97904;
   /* violet — the far end of the beam */
-  --accent-contrast: #ffffff;
+  --accent-contrast: #1A1A1A;
   /* text placed on solid accent      */
-  --accent-border: rgba(99, 102, 241, 0.3);
+  --accent-border: rgba(242, 142, 28, 0.3);
   /* accent-tinted hairlines          */
   --gradient-accent: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
 
@@ -83,7 +83,7 @@
 :root,
 [data-theme='dark'] {
   /* Surfaces */
-  --bg-page: #0a0a0c;
+  --bg-page: #1A1A1A;
   --bg-card: rgba(255, 255, 255, 0.05);
   --glass-hover-bg: rgba(255, 255, 255, 0.08);
   --gradient-opacity: 0.15;
@@ -98,9 +98,9 @@
   --border-strong: rgba(255, 255, 255, 0.2);
 
   /* Accent, themed */
-  --accent-hover: #818cf8;
-  --accent-fg: #a5b4fc;
-  --accent-soft: rgba(99, 102, 241, 0.16);
+  --accent-hover: #f5a448;
+  --accent-fg: #f7b66b;
+  --accent-soft: rgba(242, 142, 28, 0.16);
 
   /* Status */
   --success: #34d399;
@@ -116,10 +116,10 @@
   --shadow-1: 0 2px 8px rgba(0, 0, 0, 0.25);
   --shadow-2: 0 12px 28px rgba(0, 0, 0, 0.35);
   --shadow-3: 0 20px 40px rgba(0, 0, 0, 0.45);
-  --shadow-glow: 0 0 24px rgba(99, 102, 241, 0.35);
+  --shadow-glow: 0 0 24px rgba(242, 142, 28, 0.35);
 
   /* Focus */
-  --focus-ring: #818cf8;
+  --focus-ring: #f5a448;
 }
 
 /* --------------------------------------------------------------------------
@@ -127,7 +127,7 @@
    -------------------------------------------------------------------------- */
 [data-theme='light'] {
   /* Surfaces */
-  --bg-page: #f8fafc;
+  --bg-page: #F2F2F2;
   --bg-card: rgba(0, 0, 0, 0.03);
   --glass-hover-bg: rgba(0, 0, 0, 0.05);
   --gradient-opacity: 0.05;
@@ -142,9 +142,9 @@
   --border-strong: rgba(0, 0, 0, 0.16);
 
   /* Accent, themed */
-  --accent-hover: #4f46e5;
-  --accent-fg: #4338ca;
-  --accent-soft: rgba(99, 102, 241, 0.1);
+  --accent-hover: #D97904;
+  --accent-fg: #9a5503;
+  --accent-soft: rgba(242, 142, 28, 0.1);
 
   /* Status */
   --success: #059669;
@@ -160,8 +160,8 @@
   --shadow-1: 0 2px 8px rgba(15, 23, 42, 0.06);
   --shadow-2: 0 12px 28px rgba(15, 23, 42, 0.1);
   --shadow-3: 0 20px 40px rgba(15, 23, 42, 0.14);
-  --shadow-glow: 0 0 24px rgba(99, 102, 241, 0.25);
+  --shadow-glow: 0 0 24px rgba(242, 142, 28, 0.25);
 
   /* Focus */
-  --focus-ring: #4f46e5;
+  --focus-ring: #D97904;
 }
