@@ -26,5 +26,8 @@ public static class ServiceRegistration
         services.AddSingleton<ILeague, League>();
         services.AddSingleton(TimeProvider.System);
         services.AddScoped<ILogService, LogService>();
+        services.AddSingleton<IPasswordHasher, Pbkdf2PasswordHasher>();
+        services.AddScoped<IAccountService, AccountService>();
+        services.AddScoped<IProfileService, ProfileService>();
     }
 }

@@ -30,6 +30,9 @@ public interface ILogService
     /// <summary>The week (Monday 00:00 UTC) that contains <paramref name="at"/>.</summary>
     DateTime WeekStart(DateTime at);
 
+    /// <summary>When the user's oldest entry was logged, or null with none — where history paging stops.</summary>
+    Task<DateTime?> FirstLoggedAtAsync(string userId, CancellationToken ct = default);
+
     /// <summary>The user's entries in the week starting <paramref name="weekStart"/>, newest first.</summary>
     Task<IReadOnlyList<ILogEntry>> WeekAsync(string userId, DateTime weekStart, CancellationToken ct = default);
 

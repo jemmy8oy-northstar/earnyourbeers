@@ -103,6 +103,18 @@ public class LogService(AppDbContext db, IScoring scoring, TimeProvider clock) :
         return day.AddDays(-sinceMonday);
     }
 
+    public async Task<DateTime?> FirstLoggedAtAsync(string userId, CancellationToken ct = default)
+    {
+        var activity = await db.ActivityEntries.Where(a => a.UserId == userId).MinAsync(a => (DateTime?)a.LoggedAt, ct);
+        var vice = await db.ViceEntries.Where(v => v.UserId == userId).MinAsync(v => (DateTime?)v.LoggedAt, ct);
+        return (activity, vice) switch
+        {
+            (null, var v) => v,
+            (var a, null) => a,
+            var (a, v) => a < v ? a : v,
+        };
+    }
+
     public async Task<IReadOnlyList<ILogEntry>> WeekAsync(string userId, DateTime weekStart, CancellationToken ct = default)
         => (await EntriesAsync(userId, weekStart, weekStart.AddDays(7), ct))
             .OrderByDescending(e => e.LoggedAt)
