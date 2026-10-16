@@ -65,6 +65,27 @@ const injectedRtkApi = api.injectEndpoints({
         method: "DELETE",
       }),
     }),
+    onboard: build.mutation<OnboardApiResponse, OnboardApiArg>({
+      query: (queryArg) => ({
+        url: `/api/profile/onboard`,
+        method: "POST",
+        body: queryArg.onboardRequest,
+      }),
+    }),
+    changeVice: build.mutation<ChangeViceApiResponse, ChangeViceApiArg>({
+      query: (queryArg) => ({
+        url: `/api/profile/vice`,
+        method: "PUT",
+        body: queryArg.viceRequest,
+      }),
+    }),
+    resetProfile: build.mutation<ResetProfileApiResponse, ResetProfileApiArg>({
+      query: (queryArg) => ({
+        url: `/api/profile/reset`,
+        method: "POST",
+        body: queryArg.resetRequest,
+      }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -106,6 +127,18 @@ export type DeleteEntryApiResponse = unknown;
 export type DeleteEntryApiArg = {
   id: string;
 };
+export type OnboardApiResponse = unknown;
+export type OnboardApiArg = {
+  onboardRequest: OnboardRequest;
+};
+export type ChangeViceApiResponse = unknown;
+export type ChangeViceApiArg = {
+  viceRequest: ViceRequest;
+};
+export type ResetProfileApiResponse = unknown;
+export type ResetProfileApiArg = {
+  resetRequest: ResetRequest;
+};
 export type Credentials = {
   username: string;
   password: string;
@@ -117,6 +150,18 @@ export type ActivityRequest = {
 };
 export type AmountRequest = {
   amount: number | string;
+};
+export type OnboardRequest = {
+  sport: ActivityType;
+  weeklyVolume: number | string;
+  viceEmoji: null | string;
+  weeklyViceCount: number | string;
+};
+export type ViceRequest = {
+  viceEmoji: null | string;
+};
+export type ResetRequest = {
+  confirm: boolean;
 };
 export const {
   useGetStatusQuery,
@@ -130,4 +175,7 @@ export const {
   useLogViceMutation,
   useEditEntryMutation,
   useDeleteEntryMutation,
+  useOnboardMutation,
+  useChangeViceMutation,
+  useResetProfileMutation,
 } = injectedRtkApi;
