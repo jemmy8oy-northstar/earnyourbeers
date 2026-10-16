@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="../Balenthiran.EarnYourBeers.DomainModels/Balenthiran.EarnYourBeers.DomainModels.csproj" />
+    <ProjectReference Include="../Balenthiran.EarnYourBeers.Abstractions/Balenthiran.EarnYourBeers.Abstractions.csproj" />
+    <ProjectReference Include="../Balenthiran.EarnYourBeers.Database/Balenthiran.EarnYourBeers.Database.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="16.1.1" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <EnableDefaultResourceItems>false</EnableDefaultResourceItems>    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>
