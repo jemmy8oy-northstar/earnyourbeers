@@ -24,5 +24,7 @@ public static class ServiceRegistration
         services.AddScoped<IStatusService, StatusService>();
         services.AddSingleton<IScoring, Scoring>();
         services.AddSingleton<ILeague, League>();
+        services.AddSingleton(TimeProvider.System);
+        services.AddScoped<ILogService, LogService>();
     }
 }
