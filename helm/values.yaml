@@ -1,6 +1,5 @@
 # Set this to your app name at scaffold time (e.g. "macro-metrics")
 fullnameOverride: "earnyourbeers"
-
 ingress:
   enabled: true
   className: nginx
@@ -11,15 +10,13 @@ ingress:
   tls:
     - hosts:
         - balenthiran.co.uk
-      secretName: balenthiran-tls   # shared wildcard cert — no per-project TLS setup
-
-registryPrefix: "lhr.ocir.io/lr7uc6l49odc"  # shared OCIR namespace
-
+      secretName: balenthiran-tls # shared wildcard cert — no per-project TLS setup
+registryPrefix: "lhr.ocir.io/lr7uc6l49odc" # shared OCIR namespace
 apps:
   - name: backend
     image:
-      repository: lhr.ocir.io/lr7uc6l49odc/earnyourbeers-backend   # Update at scaffold time
-      tag: latest
+      repository: lhr.ocir.io/lr7uc6l49odc/earnyourbeers-backend # Update at scaffold time
+      tag: 0.2.1
       pullPolicy: Always
     containerPort: 8080
     replicas: 1
@@ -27,7 +24,7 @@ apps:
       port: 80
       targetPort: 8080
     ingress:
-      path: /earnyourbeers/api     # developer replaces 'earnyourbeers' at scaffold time
+      path: /earnyourbeers/api # developer replaces 'earnyourbeers' at scaffold time
       pathType: Prefix
     resources: {}
     nodeSelector: {}
@@ -36,12 +33,11 @@ apps:
     env:
       # The ingress routes /earnyourbeers/api here without stripping the prefix.
       - name: PathBase
-        value: "/earnyourbeers"     # developer replaces 'earnyourbeers' at scaffold time
-
+        value: "/earnyourbeers" # developer replaces 'earnyourbeers' at scaffold time
   - name: frontend
     image:
-      repository: lhr.ocir.io/lr7uc6l49odc/earnyourbeers-frontend   # Update at scaffold time
-      tag: latest
+      repository: lhr.ocir.io/lr7uc6l49odc/earnyourbeers-frontend # Update at scaffold time
+      tag: 0.2.1
       pullPolicy: Always
     containerPort: 80
     replicas: 1
@@ -49,13 +45,12 @@ apps:
       port: 80
       targetPort: 80
     ingress:
-      path: /earnyourbeers         # developer replaces 'earnyourbeers' at scaffold time
+      path: /earnyourbeers # developer replaces 'earnyourbeers' at scaffold time
       pathType: Prefix
     resources: {}
     nodeSelector: {}
     tolerations: []
     affinity: {}
-
 # App-specific secrets — add per project (none pre-scaffolded):
 # env:
 #   - name: MY_API_KEY
