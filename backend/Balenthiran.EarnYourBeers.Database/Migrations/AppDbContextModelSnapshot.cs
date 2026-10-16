@@ -50,6 +50,44 @@ namespace Balenthiran.EarnYourBeers.Database.Migrations
                     b.ToTable("ActivityEntries");
                 });
 
+            modelBuilder.Entity("Balenthiran.EarnYourBeers.EntityModels.ProfileEntity", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("LastSettledAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("OnboardedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ReportOutcome")
+                        .IsRequired()
+                        .HasMaxLength(24)
+                        .HasColumnType("character varying(24)");
+
+                    b.Property<bool>("ReportPending")
+                        .HasColumnType("boolean");
+
+                    b.Property<double>("ReportWeeklyNet")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("Tally")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("ViceEmoji")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("Profiles");
+                });
+
             modelBuilder.Entity("Balenthiran.EarnYourBeers.EntityModels.UserEntity", b =>
                 {
                     b.Property<Guid>("Id")

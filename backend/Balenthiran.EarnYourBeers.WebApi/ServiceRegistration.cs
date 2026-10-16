@@ -28,5 +28,6 @@ public static class ServiceRegistration
         services.AddScoped<ILogService, LogService>();
         services.AddSingleton<IPasswordHasher, Pbkdf2PasswordHasher>();
         services.AddScoped<IAccountService, AccountService>();
+        services.AddScoped<IProfileService, ProfileService>();
     }
 }

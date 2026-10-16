@@ -29,6 +29,9 @@ builder.Services
     });
 builder.Services.AddAuthorization();
 
+// "Run", not 0: enums cross the API as their names, both ways.
+builder.Services.ConfigureHttpJsonOptions(o => o.SerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter()));
+
 // Global exception handling: AppExceptionHandler maps thrown AppExceptions to RFC 7807
 // ProblemDetails; AddProblemDetails supplies the writer + standard fields.
 builder.Services.AddProblemDetails();
@@ -76,6 +79,7 @@ app.UseAuthorization();
 app.MapGroup("/api")
     .MapStatusRoutes()
     .MapAuthRoutes()
+    .MapDashboardRoutes()
     .WithOpenApi();
 
 app.Run();
