@@ -3,12 +3,31 @@ using Balenthiran.EarnYourBeers.WebApi;
 using Balenthiran.EarnYourBeers.WebApi.ExceptionHandling;
 using Balenthiran.EarnYourBeers.WebApi.Routes;
 using Balenthiran.EarnYourBeers.Database;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddBackendServices(builder.Configuration);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
+
+// BEH-AUTH-1: a session is an HTTP-only, SameSite=Lax cookie. Lax keeps it off cross-site POSTs,
+// and the routes take JSON only, so a cross-site form cannot reach them either. An API answers
+// 401/403 rather than redirecting to a login page it does not have.
+builder.Services
+    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(o =>
+    {
+        o.Cookie.Name = "eyb.session";
+        o.Cookie.HttpOnly = true;
+        o.Cookie.SameSite = SameSiteMode.Lax;
+        o.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+        o.ExpireTimeSpan = TimeSpan.FromDays(30);
+        o.SlidingExpiration = true;
+        o.Events.OnRedirectToLogin = ctx => { ctx.Response.StatusCode = StatusCodes.Status401Unauthorized; return Task.CompletedTask; };
+        o.Events.OnRedirectToAccessDenied = ctx => { ctx.Response.StatusCode = StatusCodes.Status403Forbidden; return Task.CompletedTask; };
+    });
+builder.Services.AddAuthorization();
 
 // Global exception handling: AppExceptionHandler maps thrown AppExceptions to RFC 7807
 // ProblemDetails; AddProblemDetails supplies the writer + standard fields.
@@ -38,8 +57,10 @@ if (!generatingOpenApiDocument)
     var dbContext = scope.ServiceProvider.GetService<AppDbContext>();
     if (dbContext is null)
         app.Logger.LogWarning("Skipping database migration — no connection string configured.");
-    else
+    else if (dbContext.Database.IsRelational())
         dbContext.Database.Migrate();
+    else
+        dbContext.Database.EnsureCreated(); // the in-memory provider in tests has no migrations
 }
 
 // The ingress routes /earnyourbeers/api here without stripping the prefix, so the app has
@@ -49,9 +70,12 @@ if (!string.IsNullOrWhiteSpace(pathBase))
     app.UsePathBase(pathBase);
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapGroup("/api")
     .MapStatusRoutes()
+    .MapAuthRoutes()
     .WithOpenApi();
 
 app.Run();

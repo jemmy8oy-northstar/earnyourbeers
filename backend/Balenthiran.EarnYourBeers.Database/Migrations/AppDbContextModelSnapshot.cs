@@ -50,6 +50,37 @@ namespace Balenthiran.EarnYourBeers.Database.Migrations
                     b.ToTable("ActivityEntries");
                 });
 
+            modelBuilder.Entity("Balenthiran.EarnYourBeers.EntityModels.UserEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("NormalisedUsername")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalisedUsername")
+                        .IsUnique();
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("Balenthiran.EarnYourBeers.EntityModels.ViceEntryEntity", b =>
                 {
                     b.Property<Guid>("Id")
