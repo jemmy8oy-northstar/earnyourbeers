@@ -37,6 +37,14 @@ apps:
       # The ingress routes /earnyourbeers/api here without stripping the prefix.
       - name: PathBase
         value: "/earnyourbeers"     # developer replaces 'earnyourbeers' at scaffold time
+      - name: ASPNETCORE_ENVIRONMENT
+        value: "Production"
+      # Created by secret-provisioner from oke-fleet secrets/earnyourbeers.json.
+      - name: ConnectionStrings__DefaultConnection
+        valueFrom:
+          secretKeyRef:
+            name: earnyourbeers-secrets
+            key: ConnectionStrings__DefaultConnection
 
   - name: frontend
     image:
