@@ -1,0 +1,27 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "Balenthiran.EarnYourBeers.WebApi | v1",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/status": {
+      "get": {
+        "tags": [
+          "Balenthiran.EarnYourBeers.WebApi"
+        ],
+        "operationId": "GetStatus",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Balenthiran.EarnYourBeers.WebApi"
+    }
+  ]
+}
