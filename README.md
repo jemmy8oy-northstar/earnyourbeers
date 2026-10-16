@@ -1,5 +1,10 @@
 # Earn Your Beers 🍻🏃‍♂️
 
+> **Moving to the web (earnyourbeers#1).** The app is being rebuilt as a React frontend
+> (`frontend/`) on a .NET backend (`backend/`), scaffolded from web-template. Its spec lives
+> in Kit (`earnyourbeers.beh`). The Flutter app (`lib/`, `ios/`, `android/`, …) is the
+> reference implementation until the web app matches it, then it is removed.
+
 A fun fitness-tracking application designed to help users "offset" their drinks through physical activity.
 
 ## Core Concept

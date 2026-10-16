@@ -1,0 +1,11 @@
+<Solution>
+  <Project Path="Balenthiran.EarnYourBeers.Abstractions/Balenthiran.EarnYourBeers.Abstractions.csproj" />
+  <Project Path="Balenthiran.EarnYourBeers.WebApi/Balenthiran.EarnYourBeers.WebApi.csproj" />
+  <Project Path="Balenthiran.EarnYourBeers.DataModels/Balenthiran.EarnYourBeers.DataModels.csproj" />
+  <Project Path="Balenthiran.EarnYourBeers.Database/Balenthiran.EarnYourBeers.Database.csproj" />
+  <Project Path="Balenthiran.EarnYourBeers.DomainModels/Balenthiran.EarnYourBeers.DomainModels.csproj" />
+  <Project Path="Balenthiran.EarnYourBeers.EntityModels/Balenthiran.EarnYourBeers.EntityModels.csproj" />
+  <Project Path="Balenthiran.EarnYourBeers.Services/Balenthiran.EarnYourBeers.Services.csproj" />
+  <Project Path="Balenthiran.EarnYourBeers.SourceGenerators/Balenthiran.EarnYourBeers.SourceGenerators.csproj" />
+  <Project Path="Balenthiran.EarnYourBeers.Tests/Balenthiran.EarnYourBeers.Tests.csproj" />
+</Solution>

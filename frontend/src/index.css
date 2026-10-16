@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@500;700;800&display=swap');
+@import './styles/tokens.css';
+
+/* ==========================================================================
+   IRIS — base styles
+   All values reference tokens from styles/tokens.css. If you find yourself
+   typing a hex colour or a px size here, it probably belongs in tokens.css.
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  line-height: var(--leading-body);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  transition: var(--theme-transition);
+}
+
+main {
+  padding-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-display);
+  transition: var(--theme-transition);
+}
+
+p,
+span,
+div {
+  transition: var(--theme-transition);
+}
+
+/* Visible focus for keyboard users, everywhere */
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* Premium Background */
+body::before {
+  content: "";
+  position: fixed;
+  top: -10%;
+  left: -10%;
+  width: 120%;
+  height: 120%;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(242, 142, 28, var(--gradient-opacity)) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(217, 121, 4, var(--gradient-opacity)) 0%, transparent 40%);
+  z-index: -1;
+  pointer-events: none;
+  transition: var(--theme-transition);
+}
+
+/* Glassmorphism Classes */
+.glass {
+  background: var(--bg-card);
+  backdrop-filter: blur(var(--blur-glass));
+  -webkit-backdrop-filter: blur(var(--blur-glass));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  transition: var(--theme-transition), transform var(--duration-base) var(--ease-standard);
+}
+
+.glass-hover:hover {
+  transform: translateY(-8px);
+  background: var(--glass-hover-bg);
+  border-color: var(--accent-border);
+  box-shadow: var(--shadow-2);
+}
+
+/* Layout Utilities */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-5);
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  color: inherit;
+  background: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: var(--theme-transition);
+}
+
+/* Respect users who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
