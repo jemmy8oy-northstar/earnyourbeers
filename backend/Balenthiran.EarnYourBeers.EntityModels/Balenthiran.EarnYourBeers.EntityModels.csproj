@@ -10,4 +10,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="../Balenthiran.EarnYourBeers.Abstractions/Balenthiran.EarnYourBeers.Abstractions.csproj" />
+  </ItemGroup>
+
 </Project>
