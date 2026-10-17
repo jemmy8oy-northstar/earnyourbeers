@@ -44,7 +44,7 @@ public class DashboardApiTests
         Assert.Equal(47, d.GetProperty("week").GetProperty("balance").GetDouble(), 9); // 10 km × 0.5 × 10 − 3
         Assert.Equal(5, d.GetProperty("pointsPerUnit").GetProperty("Run").GetDouble(), 9);
         Assert.Equal("Noob", d.GetProperty("league").GetProperty("tier").GetString());
-        Assert.Equal("🍕", d.GetProperty("viceEmoji").GetString());
+        Assert.Equal("🍺", d.GetProperty("viceEmoji").GetString());
         var entries = d.GetProperty("week").GetProperty("entries").EnumerateArray().ToList();
         Assert.Equal(["Vice", "Activity"], entries.Select(e => e.GetProperty("kind").GetString()));
         Assert.Equal([true, false], entries.Select(e => e.GetProperty("editable").GetBoolean()));

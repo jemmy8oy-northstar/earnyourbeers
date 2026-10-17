@@ -30,7 +30,7 @@ public class ProfileServiceTests
 
         Assert.Equal(0, p.Level);
         Assert.Equal(0, p.Tally);
-        Assert.Equal("🍕", p.ViceEmoji);
+        Assert.Equal("🍺", p.ViceEmoji);
         Assert.False(p.Onboarded);
         Assert.Null(p.PendingReport);
     }

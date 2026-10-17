@@ -32,9 +32,9 @@ test('onboarding walks four steps, sends the choices, and lands on the dashboard
   await next(page);
 
   await expect(page.getByText('3. VICE SETUP')).toBeVisible();
-  await expect(page.getByLabel('Vice emoji')).toHaveValue('🍕');
+  await expect(page.getByLabel('Your vice (🍺 by default)')).toHaveValue('🍺');
   await page.getByRole('button', { name: 'Pick 🎮' }).click();
-  await expect(page.getByLabel('Vice emoji')).toHaveValue('🎮');
+  await expect(page.getByLabel('Your vice (🍺 by default)')).toHaveValue('🎮');
   await next(page);
 
   await expect(page.getByText('4. SUSTAINABILITY AUDIT')).toBeVisible();

@@ -1,7 +1,7 @@
 import { Input } from './ui';
 
-export const DEFAULT_VICE = '🍕';
-const QUICK_PICKS = ['🍕', '🎮', '🍩', '🥤', '🍫', '☕', '🍰', '🍟'];
+export const DEFAULT_VICE = '🍺';
+const QUICK_PICKS = ['🍺', '🍕', '🎮', '🍩', '🥤', '🍫', '☕', '🍰', '🍟'];
 
 interface EmojiPickerProps {
   value: string;
@@ -11,7 +11,7 @@ interface EmojiPickerProps {
 }
 
 /** A free emoji field (plain keyboard characters are dropped, as in the Flutter app) plus quick picks. */
-export default function EmojiPicker({ value, onChange, error, label = 'Vice emoji' }: EmojiPickerProps) {
+export default function EmojiPicker({ value, onChange, error, label = 'Your vice (🍺 by default)' }: EmojiPickerProps) {
   return (
     <div className="eyv-emoji">
       <Input

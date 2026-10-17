@@ -19,7 +19,7 @@ export default function Dashboard({ username }: { username: string }) {
 
   const header = (
     <header className="eyv-header">
-      <h1 className="eyv-header__title">Earn Your Vices</h1>
+      <h1 className="eyv-header__title">Earn Your Beers</h1>
       <span className="eyv-header__user">{username}</span>
       {dashboard?.onboarded && (
         <button type="button" className="eyv-icon-btn" aria-label="Settings" onClick={() => setSettingsOpen(true)}>⚙</button>
