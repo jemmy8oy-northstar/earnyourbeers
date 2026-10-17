@@ -1,9 +1,8 @@
 # Earn Your Beers 🍻🏃‍♂️
 
-> **Moving to the web (earnyourbeers#1).** The app is being rebuilt as a React frontend
-> (`frontend/`) on a .NET backend (`backend/`), scaffolded from web-template. Its spec lives
-> in Kit (`earnyourbeers.beh`). The Flutter app (`lib/`, `ios/`, `android/`, …) is the
-> reference implementation until the web app matches it, then it is removed.
+> **A web app (earnyourbeers#1):** a React frontend (`frontend/`) on a .NET backend (`backend/`),
+> scaffolded from web-template. Its spec lives in Kit (`earnyourbeers.beh`). The original Flutter
+> app was retired once the web app matched it; it remains in git history.
 
 A fun fitness-tracking application designed to help users "offset" their drinks through physical activity.
 
@@ -24,7 +23,7 @@ The goal is to provide a simple way to track drinks and activities with a "conve
 - Conversion Table: Configurable set of "costs."
 
 ### Phase 2: MVP Development (Current)
-- Frontend: Simple Flutter app.
+- Frontend: React web app (formerly Flutter).
 - Manual Input: Manual entry for stats.
 - Simple UI: Clean and intuitive dashboard.
 
@@ -32,14 +31,15 @@ The goal is to provide a simple way to track drinks and activities with a "conve
 - Wearable Sync: Integration with APIs (Garmin, Strava, Apple Health).
 
 ## Project Structure
-- `lib/`: Flutter application code.
+- `backend/`: .NET API (auth, logging, scoring, league).
+- `frontend/`: React web app.
+- `helm/`: deployment chart.
 - `docs/`: Project documentation and deep dives.
 - `.antigravity/`: AI context and instructions.
 
 ## Getting Started
-1. Install Flutter.
-2. Run `flutter pub get`.
-3. Run `flutter run`.
+See `CLAUDE.md` → *Running Locally*: `dotnet run` the WebApi in `backend/`, then
+`npm run dev` in `frontend/`.
 
 ---
 *Inspired by a [YouTube video](https://www.youtube.com/watch?v=gPzL90ZtClA).*
