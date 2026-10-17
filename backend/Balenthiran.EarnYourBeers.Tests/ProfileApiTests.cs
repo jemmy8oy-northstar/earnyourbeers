@@ -68,13 +68,13 @@ public class ProfileApiTests
         using var factory = new AppApiFactory(new ManualClock(Wednesday));
         var client = await SignedUp(factory, "james");
 
-        Assert.Equal(HttpStatusCode.BadRequest, (await client.PostAsJsonAsync("/api/profile/onboard", new { sport = "Run", weeklyVolume = 101, viceEmoji = "🍕", weeklyViceCount = 0 })).StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, (await client.PostAsJsonAsync("/api/profile/onboard", new { sport = "Run", weeklyVolume = 101, viceEmoji = "🍺", weeklyViceCount = 0 })).StatusCode);
         Assert.Equal(HttpStatusCode.BadRequest, (await client.PostAsJsonAsync("/api/profile/onboard", new { sport = "Run", weeklyVolume = 10, viceEmoji = "pizza", weeklyViceCount = 0 })).StatusCode);
-        Assert.Equal(HttpStatusCode.BadRequest, (await client.PostAsJsonAsync("/api/profile/onboard", new { sport = "Hike", weeklyVolume = 10, viceEmoji = "🍕", weeklyViceCount = 0 })).StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, (await client.PostAsJsonAsync("/api/profile/onboard", new { sport = "Hike", weeklyVolume = 10, viceEmoji = "🍺", weeklyViceCount = 0 })).StatusCode);
         Assert.False((await client.GetFromJsonAsync<JsonElement>("/api/dashboard")).GetProperty("onboarded").GetBoolean());
 
-        Assert.Equal(HttpStatusCode.OK, (await client.PostAsJsonAsync("/api/profile/onboard", new { sport = "Swim", weeklyVolume = 600, viceEmoji = "🍕", weeklyViceCount = 5 })).StatusCode);
-        Assert.Equal(HttpStatusCode.Conflict, (await client.PostAsJsonAsync("/api/profile/onboard", new { sport = "Run", weeklyVolume = 10, viceEmoji = "🍕", weeklyViceCount = 5 })).StatusCode);
+        Assert.Equal(HttpStatusCode.OK, (await client.PostAsJsonAsync("/api/profile/onboard", new { sport = "Swim", weeklyVolume = 600, viceEmoji = "🍺", weeklyViceCount = 5 })).StatusCode);
+        Assert.Equal(HttpStatusCode.Conflict, (await client.PostAsJsonAsync("/api/profile/onboard", new { sport = "Run", weeklyVolume = 10, viceEmoji = "🍺", weeklyViceCount = 5 })).StatusCode);
     }
 
     [Fact]
@@ -89,7 +89,7 @@ public class ProfileApiTests
 
         Assert.Equal(HttpStatusCode.BadRequest, (await client.PutAsJsonAsync("/api/profile/vice", new { viceEmoji = "donut" })).StatusCode);
         var empty = await client.PutAsJsonAsync("/api/profile/vice", new { viceEmoji = "  " });
-        Assert.Equal("🍕", (await empty.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("viceEmoji").GetString());
+        Assert.Equal("🍺", (await empty.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("viceEmoji").GetString());
     }
 
     [Fact]
@@ -115,7 +115,7 @@ public class ProfileApiTests
         Assert.False(mine.GetProperty("onboarded").GetBoolean());
         Assert.Empty(mine.GetProperty("week").GetProperty("entries").EnumerateArray());
         Assert.Equal(0, mine.GetProperty("league").GetProperty("level").GetInt32());
-        Assert.Equal("🍕", mine.GetProperty("viceEmoji").GetString());
+        Assert.Equal("🍺", mine.GetProperty("viceEmoji").GetString());
 
         var theirs = await sam.GetFromJsonAsync<JsonElement>("/api/dashboard");
         Assert.True(theirs.GetProperty("onboarded").GetBoolean());
@@ -124,6 +124,6 @@ public class ProfileApiTests
         Assert.Equal("🎮", theirs.GetProperty("viceEmoji").GetString());
 
         // The account stayed: the same session can onboard again.
-        Assert.Equal(HttpStatusCode.OK, (await james.PostAsJsonAsync("/api/profile/onboard", new { sport = "Run", weeklyVolume = 10, viceEmoji = "🍕", weeklyViceCount = 0 })).StatusCode);
+        Assert.Equal(HttpStatusCode.OK, (await james.PostAsJsonAsync("/api/profile/onboard", new { sport = "Run", weeklyVolume = 10, viceEmoji = "🍺", weeklyViceCount = 0 })).StatusCode);
     }
 }

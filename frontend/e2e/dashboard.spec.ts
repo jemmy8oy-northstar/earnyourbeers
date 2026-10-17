@@ -16,8 +16,8 @@ test('sign in with wrong then right credentials reaches the dashboard, and sign 
   await mockApi(page, newState());
   await page.goto('./');
 
-  await expect(page.getByRole('heading', { name: 'Earn Your Vices', level: 1 })).toBeVisible();
-  await expect(page).toHaveTitle('Earn Your Vices');
+  await expect(page.getByRole('heading', { name: 'Earn Your Beers', level: 1 })).toBeVisible();
+  await expect(page).toHaveTitle('Earn Your Beers');
   await shot(page, 'sign-in');
 
   await page.getByLabel('Username').fill('james');

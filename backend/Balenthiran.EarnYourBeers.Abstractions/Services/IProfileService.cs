@@ -7,7 +7,7 @@ namespace Balenthiran.EarnYourBeers.Abstractions.Services;
 public interface IProfileService
 {
     /// <summary>
-    /// The profile, made on first use at tier 0 with 🍕. Before returning it settles any week that
+    /// The profile, made on first use at tier 0 with 🍺. Before returning it settles any week that
     /// has finished since the last settlement (BEH-SETTLE-1): several missed weeks settle as one, at
     /// the level in force, and the very first visit records the date and settles nothing.
     /// </summary>

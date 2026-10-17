@@ -10,7 +10,7 @@ namespace Balenthiran.EarnYourBeers.Services;
 /// </summary>
 public static class ViceRules
 {
-    public const string Default = "🍕";
+    public const string Default = "🍺";
     public const int MaxCharacters = 2;
 
     // Not in the Dart: one flag or family emoji is a single character but many code units, and a

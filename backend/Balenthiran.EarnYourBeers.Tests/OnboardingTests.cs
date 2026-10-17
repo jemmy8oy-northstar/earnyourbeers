@@ -48,10 +48,10 @@ public class OnboardingTests
     [InlineData("🎮", "🎮")]
     [InlineData("  🎮  ", "🎮")]
     [InlineData("☕", "☕")]
-    [InlineData("🍕🍩", "🍕🍩")] // two characters, each a surrogate pair
-    [InlineData("", "🍕")]
-    [InlineData("   ", "🍕")]
-    [InlineData(null, "🍕")]
+    [InlineData("🍺🍩", "🍺🍩")] // two characters, each a surrogate pair
+    [InlineData("", "🍺")]
+    [InlineData("   ", "🍺")]
+    [InlineData(null, "🍺")]
     public void A_vice_is_trimmed_and_empty_falls_back_to_pizza(string? input, string expected)
         => Assert.Equal(expected, ViceRules.Normalise(input));
 
@@ -59,7 +59,7 @@ public class OnboardingTests
     [InlineData("a")]
     [InlineData("🎮a")]
     [InlineData("beer")]
-    [InlineData("🍕🍩🍫")]
+    [InlineData("🍺🍩🍫")]
     [InlineData("1")]
     public void Plain_text_and_too_many_characters_are_refused(string input)
         => Assert.Throws<ValidationException>(() => ViceRules.Normalise(input));
