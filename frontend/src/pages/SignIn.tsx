@@ -28,7 +28,7 @@ export default function SignIn() {
 
   return (
     <div className="eyv-narrow">
-      <h1 className="eyv-title">Earn Your Vices</h1>
+      <h1 className="eyv-title">Earn Your Beers</h1>
       <Card>
         <CardBody>
           <form className="eyv-form" onSubmit={submit} noValidate>

@@ -15,7 +15,7 @@ namespace Balenthiran.EarnYourBeers.Services;
 /// </summary>
 public class ProfileService(AppDbContext db, ILogService log, ILeague league, TimeProvider clock) : IProfileService
 {
-    public const string DefaultVice = "🍕";
+    public const string DefaultVice = "🍺";
 
     public async Task<IProfile> GetAndSettleAsync(string userId, CancellationToken ct = default)
     {
