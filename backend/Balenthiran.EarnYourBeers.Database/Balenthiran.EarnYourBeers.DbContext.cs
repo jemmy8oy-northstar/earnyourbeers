@@ -1,10 +1,14 @@
 using Balenthiran.EarnYourBeers.EntityModels;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Balenthiran.EarnYourBeers.Database;
 
-public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
+public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options), IDataProtectionKeyContext
 {
+    // Auth-cookie encryption keys, persisted so a redeploy doesn't sign everyone out.
+    public DbSet<DataProtectionKey> DataProtectionKeys => Set<DataProtectionKey>();
+
     public DbSet<ActivityEntryEntity> ActivityEntries => Set<ActivityEntryEntity>();
 
     public DbSet<ViceEntryEntity> ViceEntries => Set<ViceEntryEntity>();
