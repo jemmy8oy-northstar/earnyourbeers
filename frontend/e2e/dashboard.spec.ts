@@ -194,6 +194,58 @@ test('past weeks can be paged back through and are read-only', async ({ page }) 
 });
 
 
+const rgb = (hex: string) => {
+  const n = parseInt(hex.slice(1), 16);
+  return `rgb(${n >> 16}, ${(n >> 8) & 255}, ${n & 255})`;
+};
+
+test('phone-first: dark by default, and the foam white #F2F2F2 in the light theme', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'light' }); // a light device must not change the default
+  await mockApi(page, newState({ signedIn: true }));
+  await page.goto('./');
+  const pageBg = () => page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await expect.poll(pageBg).toBe(rgb('#1A1A1A'));
+
+  await page.getByRole('button', { name: 'Toggle Theme' }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await expect.poll(pageBg).toBe(rgb('#F2F2F2'));
+});
+
+test('phone-first: the four log buttons are a 2x2 grid with the vice card first', async ({ page }) => {
+  await mockApi(page, newState({ signedIn: true }));
+  await page.goto('./');
+
+  const vice = page.getByRole('button', { name: 'Log 🍺' });
+  const run = page.getByRole('button', { name: /^\+0\.50 .*Run/ });
+  const cycle = page.getByRole('button', { name: /Cycle/ }).first();
+  const swim = page.getByRole('button', { name: /Swim/ }).first();
+  await expect(vice).toBeVisible();
+  const [v, r, c, s] = await Promise.all([vice, run, cycle, swim].map((l) => l.boundingBox()));
+  const box = (b: typeof v) => b!;
+
+  expect(box(v).width).toBeLessThan(390 / 2); // two columns on a phone, not four across
+  expect(box(r).y).toBeCloseTo(box(v).y, 0); // vice and run share the first row...
+  expect(box(c).y).toBeCloseTo(box(s).y, 0); // ...cycle and swim the second
+  expect(box(c).y).toBeGreaterThan(box(v).y + box(v).height - 1);
+  expect(box(r).x).toBeGreaterThan(box(v).x); // vice is top-left
+  expect(box(c).x).toBeCloseTo(box(v).x, 0);
+  expect(box(s).x).toBeCloseTo(box(r).x, 0);
+});
+
+test('log times show in the viewer local time', async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, timezoneId: 'Asia/Tokyo' });
+  const page = await context.newPage();
+  await mockApi(page, newState({
+    signedIn: true,
+    entries: [fixedEntry('a', 'Activity', 'Run', 4, '2026-10-13T07:05:00Z')],
+  }));
+  await page.goto('./');
+  await expect(page.getByText('Logged at 16:05')).toBeVisible(); // 07:05 UTC is 16:05 in Tokyo
+  await context.close();
+});
+
 test('the header theme toggle still works', async ({ page }) => {
   await mockApi(page, newState({ signedIn: true }));
   await page.goto('./');

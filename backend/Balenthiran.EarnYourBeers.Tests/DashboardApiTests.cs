@@ -51,6 +51,22 @@ public class DashboardApiTests
     }
 
     [Fact]
+    public async Task A_log_lives_on_the_server_so_a_second_device_signing_in_sees_it()
+    {
+        using var factory = new AppApiFactory(new ManualClock(Wednesday));
+        var phone = await SignedUp(factory, "james");
+        (await phone.PostAsJsonAsync("/api/log/vice", new { amount = 2 })).EnsureSuccessStatusCode();
+        (await phone.PostAsync("/api/auth/logout", null)).EnsureSuccessStatusCode();
+
+        var laptop = factory.CreateClient(); // no cookie, nothing carried over: only the server knows
+        (await laptop.PostAsJsonAsync("/api/auth/login", new { username = "james", password = "correct horse" })).EnsureSuccessStatusCode();
+        var d = await laptop.GetFromJsonAsync<JsonElement>("/api/dashboard");
+
+        Assert.Equal(-2, d.GetProperty("week").GetProperty("balance").GetDouble(), 9);
+        Assert.Single(d.GetProperty("week").GetProperty("entries").EnumerateArray());
+    }
+
+    [Fact]
     public async Task Another_users_log_is_invisible_and_untouchable()
     {
         using var factory = new AppApiFactory(new ManualClock(Wednesday));
