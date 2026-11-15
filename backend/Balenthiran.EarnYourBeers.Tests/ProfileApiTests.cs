@@ -8,7 +8,7 @@ namespace Balenthiran.EarnYourBeers.Tests;
 /// <summary>Onboarding, the vice setting and reset over HTTP (BEH-ONBOARD-1/2, BEH-VICE-1, BEH-RESET-1).</summary>
 public class ProfileApiTests
 {
-    private static readonly DateTimeOffset Wednesday = new(2026, 10, 14, 12, 0, 0, TimeSpan.Zero);
+    private static readonly DateTimeOffset Wednesday = ManualClock.NextWednesdayNoon();
 
     private static async Task<HttpClient> SignedUp(AppApiFactory factory, string username)
     {
