@@ -7,7 +7,7 @@ namespace Balenthiran.EarnYourBeers.Tests;
 /// <summary>The dashboard and log routes over HTTP, for a signed-in user (BEH-LOG-1, BEH-BALANCE-1, BEH-AUTH-2).</summary>
 public class DashboardApiTests
 {
-    private static readonly DateTimeOffset Wednesday = new(2026, 10, 14, 12, 0, 0, TimeSpan.Zero);
+    private static readonly DateTimeOffset Wednesday = ManualClock.NextWednesdayNoon();
 
     private static async Task<HttpClient> SignedUp(AppApiFactory factory, string username)
     {
